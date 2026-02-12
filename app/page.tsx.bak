@@ -1,0 +1,589 @@
+'use client';
+
+import { useState } from 'react';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import type { Idea, Project, DailyCheckin, Expense, FinanceSettings, MonthlyBudget, FinanceGoal } from './types';
+import { FinanceDashboard } from './components/FinanceDashboard';
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+
+  // 데이터 상태
+  const [ideas, setIdeas] = useLocalStorage<Idea[]>('ideas', []);
+  const [projects, setProjects] = useLocalStorage<Project[]>('projects', [
+    {
+      id: '1',
+      title: '개인 커맨드 센터',
+      status: 'in-progress',
+      progress: 50,
+      dueDate: '2026-02-13',
+      nextAction: '실제 데이터 저장 기능 완성',
+      notes: '',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+  ]);
+  const [checkins, setCheckins] = useLocalStorage<DailyCheckin[]>('checkins', []);
+  const [expenses, setExpenses] = useLocalStorage<Expense[]>('expenses', []);
+  const [settings, setSettings] = useLocalStorage<FinanceSettings>('financeSettings', {
+    monthlyFixed: 120,
+    monthlySalary: 500,
+    severance: 700,
+    startDate: '2026-02-10',
+    salaryEndDate: '2026-06-19',
+  });
+  const [budgets, setBudgets] = useLocalStorage<MonthlyBudget[]>('monthlyBudgets', []);
+  const [goals, setGoals] = useLocalStorage<FinanceGoal[]>('financeGoals', []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* 헤더 */}
+      <header className="bg-black/30 backdrop-blur-md border-b border-white/10">
+        <div className="container mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold text-white">
+            ⚡ 메이님 커맨드 센터
+          </h1>
+          <p className="text-gray-400 text-sm mt-1">
+            당신의 모든 것을 한곳에서
+          </p>
+        </div>
+      </header>
+
+      {/* 탭 네비게이션 */}
+      <nav className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex space-x-1 overflow-x-auto">
+            <TabButton active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} emoji="💰" label="재정" />
+            <TabButton active={activeTab === 'ideas'} onClick={() => setActiveTab('ideas')} emoji="💡" label="아이디어" />
+            <TabButton active={activeTab === 'projects'} onClick={() => setActiveTab('projects')} emoji="📊" label="프로젝트" />
+            <TabButton active={activeTab === 'checkin'} onClick={() => setActiveTab('checkin')} emoji="📝" label="체크인" />
+          </div>
+        </div>
+      </nav>
+
+      {/* 메인 콘텐츠 */}
+      <main className="container mx-auto px-4 py-6 pb-20">
+        {activeTab === 'dashboard' && <FinanceDashboard settings={settings} setSettings={setSettings} expenses={expenses} setExpenses={setExpenses} budgets={budgets} setBudgets={setBudgets} goals={goals} setGoals={setGoals} />}
+        {activeTab === 'ideas' && <IdeasCanvas ideas={ideas} setIdeas={setIdeas} />}
+        {activeTab === 'projects' && <ProjectTracker projects={projects} setProjects={setProjects} />}
+        {activeTab === 'checkin' && <DailyCheckin checkins={checkins} setCheckins={setCheckins} />}
+      </main>
+    </div>
+  );
+}
+
+function TabButton({ active, onClick, emoji, label }: { active: boolean; onClick: () => void; emoji: string; label: string; }) {
+  return (
+    <button onClick={onClick} className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-all ${active ? 'text-white border-b-2 border-purple-500 bg-white/5' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+      <span className="mr-2">{emoji}</span>{label}
+    </button>
+  );
+}
+
+// 💰 재정 대시보드
+function FinanceDashboard({ settings, setSettings, expenses, setExpenses }: {
+  settings: FinanceSettings;
+  setSettings: (value: FinanceSettings | ((val: FinanceSettings) => FinanceSettings)) => void;
+  expenses: Expense[];
+  setExpenses: (value: Expense[] | ((val: Expense[]) => Expense[])) => void;
+}) {
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [newExpense, setNewExpense] = useState({ amount: '', description: '', category: 'variable' as const });
+
+  const today = new Date();
+  const endDate = new Date(settings.salaryEndDate);
+  const daysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // 총 지출 계산
+  const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  const totalFunds = settings.monthlySalary * 5 + settings.severance;
+  const remainingFunds = totalFunds - totalExpenses;
+  const monthsLeft = Math.floor(remainingFunds / settings.monthlyFixed);
+
+  const handleAddExpense = () => {
+    if (!newExpense.amount || !newExpense.description) return;
+    
+    const expense: Expense = {
+      id: Date.now().toString(),
+      date: new Date().toISOString().split('T')[0],
+      category: newExpense.category,
+      amount: parseFloat(newExpense.amount),
+      description: newExpense.description,
+      createdAt: new Date().toISOString(),
+    };
+    
+    setExpenses([...expenses, expense]);
+    setNewExpense({ amount: '', description: '', category: 'variable' });
+    setShowExpenseForm(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* 런웨이 카운트다운 */}
+      <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <div className="text-center">
+          <div className="text-6xl font-bold text-white mb-2" suppressHydrationWarning>D-{daysLeft}</div>
+          <div className="text-gray-300" suppressHydrationWarning>{endDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}까지</div>
+        </div>
+      </div>
+
+      {/* 재정 요약 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard title="월 고정비" value={`${settings.monthlyFixed}만원`} subtitle="렌트 + 세금 + 통신 + 구독" emoji="💳" />
+        <StatCard title="총 가용 자금" value={`${totalFunds}만원`} subtitle="급여 + 퇴직금" emoji="💵" />
+        <StatCard title="총 지출" value={`${totalExpenses}만원`} subtitle={`남은 자금: ${remainingFunds}만원`} emoji="📊" />
+      </div>
+
+      {/* 런웨이 분석 */}
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <h3 className="text-xl font-bold text-white mb-4">💡 런웨이 분석</h3>
+        <div className="space-y-3 text-gray-300">
+          <div className="flex justify-between">
+            <span>총 가용 자금</span>
+            <span className="font-bold text-white">{totalFunds}만원</span>
+          </div>
+          <div className="flex justify-between">
+            <span>총 지출</span>
+            <span className="font-bold text-red-400">-{totalExpenses}만원</span>
+          </div>
+          <div className="flex justify-between">
+            <span>남은 자금</span>
+            <span className="font-bold text-green-400">{remainingFunds}만원</span>
+          </div>
+          <div className="h-px bg-white/20 my-2"></div>
+          <div className="flex justify-between text-lg">
+            <span className="font-bold">예상 런웨이</span>
+            <span className="font-bold text-green-400">{monthsLeft}개월</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 지출 입력 */}
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-white">📝 지출 관리</h3>
+          <button onClick={() => setShowExpenseForm(!showExpenseForm)} className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm transition-all">
+            {showExpenseForm ? '취소' : '➕ 지출 추가'}
+          </button>
+        </div>
+
+        {showExpenseForm && (
+          <div className="mb-4 space-y-3 p-4 bg-white/5 rounded-xl">
+            <input type="number" placeholder="금액 (만원)" value={newExpense.amount} onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white placeholder-gray-500" />
+            <input type="text" placeholder="내역 (예: 점심식사, 교통비)" value={newExpense.description} onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white placeholder-gray-500" />
+            <div className="flex space-x-2">
+              <button onClick={() => setNewExpense({ ...newExpense, category: 'fixed' })} className={`flex-1 py-2 rounded-lg ${newExpense.category === 'fixed' ? 'bg-purple-500 text-white' : 'bg-white/10 text-gray-400'}`}>고정비</button>
+              <button onClick={() => setNewExpense({ ...newExpense, category: 'variable' })} className={`flex-1 py-2 rounded-lg ${newExpense.category === 'variable' ? 'bg-purple-500 text-white' : 'bg-white/10 text-gray-400'}`}>가변비</button>
+            </div>
+            <button onClick={handleAddExpense} className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-3 rounded-lg font-medium">
+              저장
+            </button>
+          </div>
+        )}
+
+        {/* 최근 지출 */}
+        <div className="space-y-2">
+          {expenses.slice(-5).reverse().map(exp => (
+            <div key={exp.id} className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+              <div>
+                <div className="text-white font-medium">{exp.description}</div>
+                <div className="text-xs text-gray-400" suppressHydrationWarning>{new Date(exp.date).toLocaleDateString('ko-KR')}</div>
+              </div>
+              <div className="text-red-400 font-bold">{exp.amount}만원</div>
+            </div>
+          ))}
+          {expenses.length === 0 && (
+            <p className="text-gray-400 text-sm text-center py-4">아직 지출 기록이 없어요</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 💡 아이디어 캔버스
+function IdeasCanvas({ ideas, setIdeas }: {
+  ideas: Idea[];
+  setIdeas: (value: Idea[] | ((val: Idea[]) => Idea[])) => void;
+}) {
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    tags: '',
+    feasibility: 3,
+    profitability: 3,
+    interest: 3,
+  });
+
+  const handleSubmit = () => {
+    if (!formData.title) return;
+
+    if (editingId) {
+      // 수정
+      setIdeas(ideas.map(idea => idea.id === editingId ? { ...idea, ...formData, tags: formData.tags.split(',').map(t => t.trim()), updatedAt: new Date().toISOString() } : idea));
+      setEditingId(null);
+    } else {
+      // 추가
+      const newIdea: Idea = {
+        id: Date.now().toString(),
+        ...formData,
+        tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      setIdeas([...ideas, newIdea]);
+    }
+    
+    setFormData({ title: '', description: '', tags: '', feasibility: 3, profitability: 3, interest: 3 });
+    setShowForm(false);
+  };
+
+  const handleEdit = (idea: Idea) => {
+    setFormData({ ...idea, tags: idea.tags.join(', ') });
+    setEditingId(idea.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm('정말 삭제하시겠어요?')) {
+      setIdeas(ideas.filter(idea => idea.id !== id));
+    }
+  };
+
+  // 총점 순으로 정렬
+  const sortedIdeas = [...ideas].sort((a, b) => (b.feasibility + b.profitability + b.interest) - (a.feasibility + a.profitability + a.interest));
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-white">💡 아이디어 보드</h2>
+          <button onClick={() => setShowForm(!showForm)} className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm">
+            {showForm ? '취소' : '➕ 추가'}
+          </button>
+        </div>
+
+        {showForm && (
+          <div className="mb-6 space-y-3 p-4 bg-white/5 rounded-xl">
+            <input type="text" placeholder="아이디어 제목" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            <textarea placeholder="설명" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            <input type="text" placeholder="태그 (쉼표로 구분)" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">실현가능성: {formData.feasibility}/5</label>
+              <input type="range" min="1" max="5" value={formData.feasibility} onChange={(e) => setFormData({ ...formData, feasibility: parseInt(e.target.value) })} className="w-full" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">수익성: {formData.profitability}/5</label>
+              <input type="range" min="1" max="5" value={formData.profitability} onChange={(e) => setFormData({ ...formData, profitability: parseInt(e.target.value) })} className="w-full" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">흥미도: {formData.interest}/5</label>
+              <input type="range" min="1" max="5" value={formData.interest} onChange={(e) => setFormData({ ...formData, interest: parseInt(e.target.value) })} className="w-full" />
+            </div>
+            
+            <button onClick={handleSubmit} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-medium">
+              {editingId ? '수정' : '추가'}
+            </button>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          {sortedIdeas.map(idea => (
+            <IdeaCard key={idea.id} idea={idea} onEdit={() => handleEdit(idea)} onDelete={() => handleDelete(idea.id)} />
+          ))}
+          {ideas.length === 0 && (
+            <p className="text-gray-400 text-center py-8">아직 아이디어가 없어요. 첫 아이디어를 추가해보세요!</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IdeaCard({ idea, onEdit, onDelete }: { idea: Idea; onEdit: () => void; onDelete: () => void; }) {
+  const totalScore = idea.feasibility + idea.profitability + idea.interest;
+  
+  return (
+    <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 transition-all">
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="text-lg font-bold text-white flex-1">{idea.title}</h3>
+        <div className="flex space-x-2">
+          <button onClick={onEdit} className="text-blue-400 hover:text-blue-300 text-sm">✏️</button>
+          <button onClick={onDelete} className="text-red-400 hover:text-red-300 text-sm">🗑️</button>
+        </div>
+      </div>
+      <p className="text-gray-400 text-sm mb-3">{idea.description}</p>
+      
+      {idea.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {idea.tags.map(tag => (
+            <span key={tag} className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">{tag}</span>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <ScoreBar label="실현가능성" score={idea.feasibility} />
+        <ScoreBar label="수익성" score={idea.profitability} />
+        <ScoreBar label="흥미도" score={idea.interest} />
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-white/10 flex justify-between items-center">
+        <span className="text-sm text-gray-400">총점</span>
+        <span className="text-lg font-bold text-white">{totalScore}/15</span>
+      </div>
+    </div>
+  );
+}
+
+function ScoreBar({ label, score }: { label: string; score: number }) {
+  return (
+    <div className="flex items-center space-x-2 text-sm">
+      <span className="text-gray-400 w-24">{label}</span>
+      <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500" style={{ width: `${(score / 5) * 100}%` }}></div>
+      </div>
+      <span className="text-white w-8 text-right">{score}/5</span>
+    </div>
+  );
+}
+
+// 📊 프로젝트 트래커
+function ProjectTracker({ projects, setProjects }: {
+  projects: Project[];
+  setProjects: (value: Project[] | ((val: Project[]) => Project[])) => void;
+}) {
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    status: 'planned' as const,
+    progress: 0,
+    dueDate: '',
+    nextAction: '',
+    notes: '',
+  });
+
+  const handleSubmit = () => {
+    if (!formData.title) return;
+
+    if (editingId) {
+      setProjects(projects.map(proj => proj.id === editingId ? { ...proj, ...formData, updatedAt: new Date().toISOString() } : proj));
+      setEditingId(null);
+    } else {
+      const newProject: Project = {
+        id: Date.now().toString(),
+        ...formData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      setProjects([...projects, newProject]);
+    }
+    
+    setFormData({ title: '', status: 'planned', progress: 0, dueDate: '', nextAction: '', notes: '' });
+    setShowForm(false);
+  };
+
+  const handleEdit = (project: Project) => {
+    setFormData(project);
+    setEditingId(project.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm('정말 삭제하시겠어요?')) {
+      setProjects(projects.filter(proj => proj.id !== id));
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-white">📊 프로젝트</h2>
+          <button onClick={() => setShowForm(!showForm)} className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm">
+            {showForm ? '취소' : '➕ 추가'}
+          </button>
+        </div>
+
+        {showForm && (
+          <div className="mb-6 space-y-3 p-4 bg-white/5 rounded-xl">
+            <input type="text" placeholder="프로젝트 제목" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value as any })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white">
+              <option value="planned">예정</option>
+              <option value="in-progress">진행 중</option>
+              <option value="paused">일시정지</option>
+              <option value="completed">완료</option>
+            </select>
+            <input type="date" value={formData.dueDate} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            <input type="text" placeholder="다음 할 일" value={formData.nextAction} onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white" />
+            <div className="space-y-2">
+              <label className="text-sm text-gray-400">진행률: {formData.progress}%</label>
+              <input type="range" min="0" max="100" step="5" value={formData.progress} onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) })} className="w-full" />
+            </div>
+            <button onClick={handleSubmit} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-lg font-medium">
+              {editingId ? '수정' : '추가'}
+            </button>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          {projects.map(project => (
+            <ProjectCard key={project.id} project={project} onEdit={() => handleEdit(project)} onDelete={() => handleDelete(project.id)} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({ project, onEdit, onDelete }: { project: Project; onEdit: () => void; onDelete: () => void; }) {
+  const statusLabels = { planned: '예정', 'in-progress': '진행 중', paused: '일시정지', completed: '완료' };
+  const statusColors = { planned: 'text-gray-400', 'in-progress': 'text-green-400', paused: 'text-yellow-400', completed: 'text-blue-400' };
+
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="text-lg font-bold text-white flex-1">{project.title}</h3>
+        <div className="flex items-center space-x-2">
+          <span className={`text-sm ${statusColors[project.status]}`}>{statusLabels[project.status]}</span>
+          <button onClick={onEdit} className="text-blue-400 hover:text-blue-300 text-sm">✏️</button>
+          <button onClick={onDelete} className="text-red-400 hover:text-red-300 text-sm">🗑️</button>
+        </div>
+      </div>
+
+      <div className="mb-3">
+        <div className="flex justify-between text-sm text-gray-400 mb-1">
+          <span>진행률</span>
+          <span>{project.progress}%</span>
+        </div>
+        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all" style={{ width: `${project.progress}%` }}></div>
+        </div>
+      </div>
+
+      {project.nextAction && (
+        <div className="text-sm mb-2">
+          <span className="text-gray-400">다음: </span>
+          <span className="text-white">{project.nextAction}</span>
+        </div>
+      )}
+
+      {project.dueDate && (
+        <div className="text-sm text-gray-400" suppressHydrationWarning>
+          📅 {new Date(project.dueDate).toLocaleDateString('ko-KR')}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 📝 일일 체크인
+function DailyCheckin({ checkins, setCheckins }: {
+  checkins: DailyCheckin[];
+  setCheckins: (value: DailyCheckin[] | ((val: DailyCheckin[]) => DailyCheckin[])) => void;
+}) {
+  const today = new Date().toISOString().split('T')[0];
+  const todayCheckin = checkins.find(c => c.date === today);
+  
+  const [morningPlan, setMorningPlan] = useState(todayCheckin?.morning.plan || '');
+  const [mood, setMood] = useState<'happy' | 'neutral' | 'sad'>(todayCheckin?.morning.mood || 'neutral');
+  const [energy, setEnergy] = useState<1 | 2 | 3>(todayCheckin?.morning.energy || 2);
+
+  const handleSave = () => {
+    if (!morningPlan) return;
+
+    const newCheckin: DailyCheckin = {
+      id: todayCheckin?.id || Date.now().toString(),
+      date: today,
+      morning: { plan: morningPlan, mood, energy },
+      createdAt: todayCheckin?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (todayCheckin) {
+      setCheckins(checkins.map(c => c.id === todayCheckin.id ? newCheckin : c));
+    } else {
+      setCheckins([...checkins, newCheckin]);
+    }
+
+    alert('저장했어요! ✅');
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <h2 className="text-2xl font-bold text-white mb-4">📝 오늘의 체크인</h2>
+        <p className="text-gray-400 mb-6" suppressHydrationWarning>
+          {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+        </p>
+
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-white mb-3">🌅 아침 체크인</h3>
+          <textarea value={morningPlan} onChange={(e) => setMorningPlan(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500" rows={3} placeholder="오늘 뭐 할 건가요?"></textarea>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <h3 className="text-sm font-medium text-gray-400 mb-2">기분</h3>
+            <div className="flex space-x-2">
+              <button onClick={() => setMood('happy')} className={`text-3xl hover:scale-110 transition-transform ${mood === 'happy' ? 'scale-125' : 'opacity-50'}`}>😊</button>
+              <button onClick={() => setMood('neutral')} className={`text-3xl hover:scale-110 transition-transform ${mood === 'neutral' ? 'scale-125' : 'opacity-50'}`}>😐</button>
+              <button onClick={() => setMood('sad')} className={`text-3xl hover:scale-110 transition-transform ${mood === 'sad' ? 'scale-125' : 'opacity-50'}`}>😞</button>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-gray-400 mb-2">에너지</h3>
+            <div className="flex space-x-2">
+              <button onClick={() => setEnergy(1)} className={`text-2xl hover:scale-110 transition-transform ${energy === 1 ? 'scale-125' : 'opacity-50'}`}>⚡</button>
+              <button onClick={() => setEnergy(2)} className={`text-2xl hover:scale-110 transition-transform ${energy === 2 ? 'scale-125' : 'opacity-50'}`}>⚡⚡</button>
+              <button onClick={() => setEnergy(3)} className={`text-2xl hover:scale-110 transition-transform ${energy === 3 ? 'scale-125' : 'opacity-50'}`}>⚡⚡⚡</button>
+            </div>
+          </div>
+        </div>
+
+        <button onClick={handleSave} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-6 rounded-xl transition-all">
+          💾 저장하기
+        </button>
+      </div>
+
+      {/* 최근 체크인 */}
+      <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+        <h3 className="text-lg font-medium text-white mb-4">📜 최근 기록</h3>
+        <div className="space-y-3">
+          {checkins.slice(-7).reverse().map(checkin => (
+            <div key={checkin.id} className="bg-white/5 rounded-lg p-3">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white font-medium" suppressHydrationWarning>{new Date(checkin.date).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}</span>
+                <div className="flex space-x-2">
+                  <span>{checkin.morning.mood === 'happy' ? '😊' : checkin.morning.mood === 'neutral' ? '😐' : '😞'}</span>
+                  <span>{'⚡'.repeat(checkin.morning.energy)}</span>
+                </div>
+              </div>
+              <p className="text-gray-400 text-sm">{checkin.morning.plan}</p>
+            </div>
+          ))}
+          {checkins.length === 0 && (
+            <p className="text-gray-400 text-sm text-center py-4">아직 기록이 없어요</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ title, value, subtitle, emoji }: { title: string; value: string; subtitle: string; emoji: string; }) {
+  return (
+    <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-2xl">{emoji}</span>
+      </div>
+      <div className="text-sm text-gray-400 mb-1">{title}</div>
+      <div className="text-2xl font-bold text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500">{subtitle}</div>
+    </div>
+  );
+}
