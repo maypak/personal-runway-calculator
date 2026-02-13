@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <ClientOnly>
-      <div key={theme} className={`min-h-screen transition-colors duration-300 ${bgClasses[theme]}`}>
+      <div key={theme} className={`min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'theme-dark' : ''} ${bgClasses[theme]}`}>
         {/* Content Area */}
         <main className="max-w-4xl mx-auto px-4 py-8 pb-12">
           <FinanceDashboardSupabase />
