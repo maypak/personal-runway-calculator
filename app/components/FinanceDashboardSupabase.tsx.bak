@@ -1,0 +1,473 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
+
+export default function FinanceDashboardSupabase() {
+  const { user, signOut } = useAuth();
+  const {
+    settings,
+    expenses,
+    recurringExpenses,
+    loading,
+    updateSettings,
+    addExpense,
+    deleteExpense,
+    addRecurringExpense,
+    updateRecurringExpense,
+    deleteRecurringExpense,
+  } = useSupabaseFinance();
+
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showSimulator, setShowSimulator] = useState(false);
+  const [showRecurringForm, setShowRecurringForm] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  
+  const [newExpense, setNewExpense] = useState({ 
+    amount: '', 
+    category: 'Food', 
+    memo: '' 
+  });
+  
+  const [newRecurring, setNewRecurring] = useState({ 
+    name: '', 
+    amount: '', 
+    category: 'Fixed', 
+    dayOfMonth: 1 
+  });
+  
+  // Simulator state
+  const [simMonthlyExpense, setSimMonthlyExpense] = useState(4000);
+  const [simAdditionalIncome, setSimAdditionalIncome] = useState(0);
+  const [simOneTimeExpense, setSimOneTimeExpense] = useState(0);
+
+  // Initialize simulator with actual monthly expense
+  useEffect(() => {
+    if (settings) {
+      setSimMonthlyExpense(settings.monthlyFixed + settings.monthlyVariable);
+    }
+  }, [settings]);
+
+  if (loading || !settings) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">Loading your data...</div>
+      </div>
+    );
+  }
+
+  // Calculations
+  const today = new Date();
+  const startDate = new Date(settings.startDate);
+  const daysSince = Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  const totalIncome = settings.currentSavings + settings.lumpSum + (settings.monthlyIncome * settings.incomeMonths);
+  
+  const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  const remainingFunds = totalIncome - totalExpenses;
+  
+  const monthlyExpense = settings.monthlyFixed + settings.monthlyVariable;
+  const runway = monthlyExpense > 0 ? Math.floor(remainingFunds / monthlyExpense) : 999;
+  const runwayYears = Math.floor(runway / 12);
+  const runwayMonths = runway % 12;
+
+  // Simulator calculations
+  const simRemainingFunds = remainingFunds - simOneTimeExpense;
+  const simNetMonthlyExpense = simMonthlyExpense - simAdditionalIncome;
+  const simRunway = simNetMonthlyExpense > 0 ? Math.floor(simRemainingFunds / simNetMonthlyExpense) : 999;
+  const simRunwayYears = Math.floor(simRunway / 12);
+  const simRunwayMonths = simRunway % 12;
+  const runwayDiff = simRunway - runway;
+
+  const thisMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+  const thisMonthExpenses = expenses
+    .filter(exp => exp.date.startsWith(thisMonth))
+    .reduce((sum, exp) => sum + exp.amount, 0);
+  
+  const monthlyBudget = monthlyExpense;
+  const budgetUsagePercent = monthlyBudget > 0 ? (thisMonthExpenses / monthlyBudget) * 100 : 0;
+
+  // Total recurring expenses
+  const totalRecurring = recurringExpenses
+    .filter(r => r.enabled)
+    .reduce((sum, r) => sum + r.amount, 0);
+
+  const handleAddExpense = async () => {
+    if (!newExpense.amount || parseFloat(newExpense.amount) <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    await addExpense({
+      date: new Date().toISOString().split('T')[0],
+      category: newExpense.category,
+      amount: parseFloat(newExpense.amount),
+      memo: newExpense.memo || undefined,
+    });
+
+    setNewExpense({ amount: '', category: 'Food', memo: '' });
+    setShowExpenseForm(false);
+  };
+
+  const handleAddRecurring = async () => {
+    if (!newRecurring.name || !newRecurring.amount || parseFloat(newRecurring.amount) <= 0) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    await addRecurringExpense({
+      name: newRecurring.name,
+      amount: parseFloat(newRecurring.amount),
+      category: newRecurring.category,
+      dayOfMonth: newRecurring.dayOfMonth,
+      enabled: true,
+    });
+
+    setNewRecurring({ name: '', amount: '', category: 'Fixed', dayOfMonth: 1 });
+    setShowRecurringForm(false);
+  };
+
+  const categories = ['Food', 'Transport', 'Housing', 'Entertainment', 'Health', 'Shopping', 'Other'];
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-white">💰 Personal Runway</h1>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur text-white rounded-lg text-sm border border-white/20 transition"
+          >
+            ⚙️ Settings
+          </button>
+          <button
+            onClick={signOut}
+            className="px-4 py-2 bg-red-600/80 hover:bg-red-600 backdrop-blur text-white rounded-lg text-sm transition"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      {/* Settings Panel */}
+      {showSettings && (
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl p-6 space-y-4">
+          <h2 className="text-xl font-semibold mb-4 text-white">Financial Settings</h2>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                Current Savings ($)
+              </label>
+              <input
+                type="number"
+                value={settings.currentSavings}
+                onChange={(e) => updateSettings({ ...settings, currentSavings: parseFloat(e.target.value) || 0 })}
+                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lump Sum ($)
+              </label>
+              <input
+                type="number"
+                value={settings.lumpSum}
+                onChange={(e) => updateSettings({ ...settings, lumpSum: parseFloat(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Monthly Income ($)
+              </label>
+              <input
+                type="number"
+                value={settings.monthlyIncome}
+                onChange={(e) => updateSettings({ ...settings, monthlyIncome: parseFloat(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Income Months
+              </label>
+              <input
+                type="number"
+                value={settings.incomeMonths}
+                onChange={(e) => updateSettings({ ...settings, incomeMonths: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Monthly Fixed ($)
+              </label>
+              <input
+                type="number"
+                value={settings.monthlyFixed}
+                onChange={(e) => updateSettings({ ...settings, monthlyFixed: parseFloat(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Monthly Variable ($)
+              </label>
+              <input
+                type="number"
+                value={settings.monthlyVariable}
+                onChange={(e) => updateSettings({ ...settings, monthlyVariable: parseFloat(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={settings.startDate}
+                onChange={(e) => updateSettings({ ...settings, startDate: e.target.value })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowSettings(false)}
+            className="w-full py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+          >
+            Done
+          </button>
+        </div>
+      )}
+
+      {/* Runway Display */}
+      <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+        <div className="text-center">
+          <div className="text-sm font-medium opacity-90 mb-2">Your Runway</div>
+          <div className="text-5xl font-bold mb-2">
+            {runwayYears > 0 && `${runwayYears}y `}
+            {runwayMonths}m
+          </div>
+          <div className="text-sm opacity-75">
+            ({runway} months remaining)
+          </div>
+          <div className="mt-4 text-sm opacity-90">
+            ${remainingFunds.toLocaleString()} available • ${monthlyExpense.toLocaleString()}/month
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-sm text-gray-600">Total Income</div>
+          <div className="text-2xl font-bold text-green-600">
+            ${totalIncome.toLocaleString()}
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-sm text-gray-600">Total Spent</div>
+          <div className="text-2xl font-bold text-red-600">
+            ${totalExpenses.toLocaleString()}
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="text-sm text-gray-600">Days Since Start</div>
+          <div className="text-2xl font-bold text-blue-600">
+            {daysSince}
+          </div>
+        </div>
+      </div>
+
+      {/* Budget Progress */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-gray-700">
+            This Month's Budget
+          </span>
+          <span className="text-sm text-gray-600">
+            ${thisMonthExpenses.toLocaleString()} / ${monthlyBudget.toLocaleString()}
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-3">
+          <div
+            className={`h-3 rounded-full transition-all ${
+              budgetUsagePercent >= 100
+                ? 'bg-red-600'
+                : budgetUsagePercent >= 80
+                ? 'bg-yellow-500'
+                : 'bg-green-500'
+            }`}
+            style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
+          />
+        </div>
+        <div className="mt-1 text-xs text-gray-500">
+          {budgetUsagePercent.toFixed(0)}% used
+        </div>
+      </div>
+
+      {/* Expenses */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Recent Expenses</h3>
+          <button
+            onClick={() => setShowExpenseForm(!showExpenseForm)}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm"
+          >
+            + Add Expense
+          </button>
+        </div>
+
+        {showExpenseForm && (
+          <div className="mb-4 p-4 bg-gray-50 rounded space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="number"
+                placeholder="Amount"
+                value={newExpense.amount}
+                onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+                className="px-3 py-2 border rounded"
+              />
+              <select
+                value={newExpense.category}
+                onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
+                className="px-3 py-2 border rounded"
+              >
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <input
+              type="text"
+              placeholder="Memo (optional)"
+              value={newExpense.memo}
+              onChange={(e) => setNewExpense({ ...newExpense, memo: e.target.value })}
+              className="w-full px-3 py-2 border rounded"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={handleAddExpense}
+                className="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+              >
+                Add
+              </button>
+              <button
+                onClick={() => setShowExpenseForm(false)}
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          {expenses.slice(0, 10).map((exp) => (
+            <div key={exp.id} className="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <div>
+                <div className="font-medium">${exp.amount} - {exp.category}</div>
+                <div className="text-sm text-gray-600">
+                  {exp.date} {exp.memo && `• ${exp.memo}`}
+                </div>
+              </div>
+              <button
+                onClick={() => deleteExpense(exp.id)}
+                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+          {expenses.length === 0 && (
+            <div className="text-center text-gray-500 py-8">
+              No expenses yet. Add your first expense above!
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Runway Simulator */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <button
+          onClick={() => setShowSimulator(!showSimulator)}
+          className="w-full flex justify-between items-center text-lg font-semibold mb-4"
+        >
+          <span>🎲 Runway Simulator</span>
+          <span className="text-2xl">{showSimulator ? '▼' : '▶'}</span>
+        </button>
+
+        {showSimulator && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Monthly Expense: ${simMonthlyExpense}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max={monthlyExpense * 2}
+                step="100"
+                value={simMonthlyExpense}
+                onChange={(e) => setSimMonthlyExpense(parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Additional Monthly Income: ${simAdditionalIncome}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="5000"
+                step="100"
+                value={simAdditionalIncome}
+                onChange={(e) => setSimAdditionalIncome(parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                One-time Expense: ${simOneTimeExpense}
+              </label>
+              <input
+                type="range"
+                min="0"
+                max={remainingFunds}
+                step="1000"
+                value={simOneTimeExpense}
+                onChange={(e) => setSimOneTimeExpense(parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-4 text-center">
+              <div className="text-sm text-gray-600 mb-2">Simulated Runway</div>
+              <div className="text-4xl font-bold text-blue-600">
+                {simRunwayYears > 0 && `${simRunwayYears}y `}
+                {simRunwayMonths}m
+              </div>
+              <div className={`mt-2 text-sm font-medium ${runwayDiff >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {runwayDiff >= 0 ? '+' : ''}{runwayDiff} months vs current
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

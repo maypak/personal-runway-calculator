@@ -22,5 +22,56 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-feature-settings: 'tnum';
+}
+
+/* Typography Scale */
+.text-display {
+  font-size: 3.75rem;
+  line-height: 1.1;
+  font-weight: 700;
+  font-feature-settings: 'tnum';
+}
+
+.text-h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.text-h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-caption {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Tabular numbers for consistent number width */
+.tabular-nums {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
 }
