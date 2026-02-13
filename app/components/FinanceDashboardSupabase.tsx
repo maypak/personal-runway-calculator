@@ -138,11 +138,11 @@ export default function FinanceDashboardSupabase() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">💰 Personal Runway</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <div className="relative">
             <button
               onClick={() => setShowThemePicker(!showThemePicker)}
-              className={`px-4 py-2 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm transition`}
+              className={`px-3 py-2 md:px-4 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm transition`}
               title="Change theme"
             >
               🎨
@@ -175,7 +175,7 @@ export default function FinanceDashboardSupabase() {
           
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-gray-900 rounded-lg text-sm transition"
+            className="px-3 py-2 md:px-4 bg-gray-700 hover:bg-gray-800 text-gray-900 rounded-lg text-sm transition"
           >
             ⚙️
           </button>
@@ -192,7 +192,7 @@ export default function FinanceDashboardSupabase() {
       {/* Settings Panel */}
       {showSettings && (
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 space-y-4">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">Financial Settings</h2>
+          <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-900">Financial Settings</h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -290,10 +290,10 @@ export default function FinanceDashboardSupabase() {
       )}
 
       {/* Runway Display - Enhanced */}
-      <div className={`${classes.bgLight} rounded-2xl shadow-xl p-8 border-2 ${classes.border200}`}>
+      <div className={`${classes.bgLight} rounded-2xl shadow-xl p-6 md:p-8 border-2 ${classes.border200}`}>
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-700">Your Financial Runway</h2>
+          <h2 className="text-lg md:text-xl font-semibold text-gray-700">Your Financial Runway</h2>
           <span className="text-4xl">
             {runway > 24 ? '🛡️' : runway > 12 ? '⚠️' : '🚨'}
           </span>
@@ -314,7 +314,7 @@ export default function FinanceDashboardSupabase() {
           </div>
           
           {/* Emotional Message */}
-          <p className="text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
             {runway > 24 
               ? '💚 You\'re in great shape! Feel free to take new risks.' 
               : runway > 12 
@@ -344,24 +344,22 @@ export default function FinanceDashboardSupabase() {
         </div>
         
         {/* Details */}
-        <div className="flex justify-between items-center pt-4 border-t border-gray-200">
-          <div className="text-center flex-1">
-            <div className="text-sm text-gray-500">Available</div>
-            <div className="text-lg font-semibold text-green-600">
+        <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-200">
+          <div className="text-center">
+            <div className="text-xs md:text-sm text-gray-500">Available</div>
+            <div className="text-base md:text-lg font-semibold text-green-600">
               ${remainingFunds.toLocaleString()}
             </div>
           </div>
-          <div className="h-8 w-px bg-gray-300"></div>
-          <div className="text-center flex-1">
-            <div className="text-sm text-gray-500">Monthly</div>
-            <div className="text-lg font-semibold text-red-600">
+          <div className="text-center">
+            <div className="text-xs md:text-sm text-gray-500">Monthly</div>
+            <div className="text-base md:text-lg font-semibold text-red-600">
               ${monthlyExpense.toLocaleString()}
             </div>
           </div>
-          <div className="h-8 w-px bg-gray-300"></div>
-          <div className="text-center flex-1">
-            <div className="text-sm text-gray-500">Daily burn</div>
-            <div className="text-lg font-semibold text-gray-700">
+          <div className="text-center">
+            <div className="text-xs md:text-sm text-gray-500">Daily burn</div>
+            <div className="text-base md:text-lg font-semibold text-gray-700">
               ${Math.round(monthlyExpense / 30).toLocaleString()}
             </div>
           </div>
@@ -370,42 +368,42 @@ export default function FinanceDashboardSupabase() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-sm text-gray-600">Total Income</div>
-            <span className="text-2xl">💰</span>
+            <div className="text-xs md:text-sm text-gray-600">Total Income</div>
+            <span className="text-xl md:text-2xl">💰</span>
           </div>
-          <div className="text-2xl font-bold text-green-600">
+          <div className="text-xl md:text-2xl font-bold text-green-600">
             ${totalIncome.toLocaleString()}
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-sm text-gray-600">Total Spent</div>
-            <span className="text-2xl">💸</span>
+            <div className="text-xs md:text-sm text-gray-600">Total Spent</div>
+            <span className="text-xl md:text-2xl">💸</span>
           </div>
-          <div className="text-2xl font-bold text-red-600">
+          <div className="text-xl md:text-2xl font-bold text-red-600">
             ${totalExpenses.toLocaleString()}
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-sm text-gray-600">Days Since Start</div>
-            <span className="text-2xl">📅</span>
+            <div className="text-xs md:text-sm text-gray-600">Days Since Start</div>
+            <span className="text-xl md:text-2xl">📅</span>
           </div>
-          <div className="text-2xl font-bold text-blue-600">
+          <div className="text-xl md:text-2xl font-bold text-blue-600">
             {daysSince}
           </div>
         </div>
       </div>
 
       {/* Budget Progress */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-base font-semibold text-gray-700">
+          <span className="text-sm md:text-base font-semibold text-gray-700">
             This Month's Budget
           </span>
-          <span className="text-sm font-medium text-gray-600">
+          <span className="text-xs md:text-sm font-medium text-gray-600">
             ${thisMonthExpenses.toLocaleString()} / ${monthlyBudget.toLocaleString()}
           </span>
         </div>
@@ -438,12 +436,13 @@ export default function FinanceDashboardSupabase() {
       {/* Expenses */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-5">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Expenses</h3>
+          <h3 className="text-base md:text-lg font-semibold text-gray-900">Recent Expenses</h3>
           <button
             onClick={() => setShowExpenseForm(!showExpenseForm)}
-            className={`px-4 py-2 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm font-semibold transform active:scale-95 transition-all shadow-md hover:shadow-lg`}
+            className={`px-3 py-2 md:px-4 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm font-semibold transform active:scale-95 transition-all shadow-md hover:shadow-lg`}
           >
-            + Add Expense
+            <span className="hidden sm:inline">+ Add Expense</span>
+            <span className="sm:hidden">+ Add</span>
           </button>
         </div>
 
@@ -495,14 +494,14 @@ export default function FinanceDashboardSupabase() {
           {expenses.slice(0, 10).map((exp) => (
             <div key={exp.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div className="flex-1">
-                <div className="font-semibold text-gray-900">${exp.amount} - {exp.category}</div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm md:text-base font-semibold text-gray-900">${exp.amount} - {exp.category}</div>
+                <div className="text-xs md:text-sm text-gray-600">
                   {exp.date} {exp.memo && `• ${exp.memo}`}
                 </div>
               </div>
               <button
                 onClick={() => deleteExpense(exp.id)}
-                className="w-full sm:w-auto px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transform active:scale-95 transition-all"
+                className="w-full sm:w-auto px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs md:text-sm font-medium transform active:scale-95 transition-all"
               >
                 Delete
               </button>

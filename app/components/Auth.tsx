@@ -45,11 +45,11 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-6 md:p-4">
       <div className="w-full max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Hero Section */}
-          <div className="text-center md:text-left px-4 order-2 md:order-1">
+          <div className="text-center md:text-left px-6 md:px-4 order-2 md:order-1">
             {/* Logo */}
             <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg transform hover:scale-105 transition-transform">
@@ -62,33 +62,33 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             </div>
             
             {/* Hero Message */}
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
               Know exactly how long you can{' '}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 survive without a job
               </span>
             </h2>
             
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
               Built by an engineer who quit after 10 years. Track your savings, expenses, 
               and know exactly when you can make your move.
             </p>
             
             {/* Social Proof */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600 max-w-md mx-auto md:mx-0">
+              <div className="flex items-center justify-center md:justify-start gap-2">
                 <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                   <span className="text-lg">🔒</span>
                 </div>
                 <span className="font-medium">Secure & Private</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center md:justify-start gap-2">
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-lg">☁️</span>
                 </div>
                 <span className="font-medium">Cloud Sync</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center md:justify-start gap-2">
                 <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                   <span className="text-lg">🚀</span>
                 </div>
