@@ -1,12 +1,16 @@
-# Personal Runway Calculator 🚀
+# Personal Runway Calculator 💰
 
-**Financial Freedom Tracker for Freelancers, Digital Nomads & Indie Hackers**
+**How long can you survive without a job?**
+
+Calculate your personal runway in seconds. Track savings, expenses, and know exactly when you can make your move.
+
+🌐 **Live App:** [https://personal-runway-calculator.vercel.app](https://personal-runway-calculator.vercel.app)
 
 ---
 
 ## 🎯 What is this?
 
-A Notion template (and Next.js web app) that helps you calculate your **personal runway** — how long you can survive without a job.
+A free web app that helps you calculate your **personal runway** — how long your savings will last without a job.
 
 Built by a software engineer who quit after 10 years. I calculated my runway (31 months) and it gave me the confidence to take the leap.
 
@@ -17,58 +21,70 @@ Now I'm sharing this tool with you.
 ## ✨ Features
 
 ### 💰 Runway Calculator
-- Track your savings, severance, and income
-- See exactly how many months you can last
-- Real-time countdown to financial freedom
+- Track your savings, expenses, and income
+- See exactly how many months/years you can last
+- Real-time updates with every change
+- Color-coded status (green/yellow/red)
 
-### 🎲 "What If..." Simulator
-- "What if I cut expenses by 30%?"
-- "What if I earn $2K/month freelancing?"
-- "What if I take a 6-month trip?"
-→ See how each decision affects your runway
-
-### 📊 Budget Tracker
-- Monthly budget planning
-- Category-wise expense tracking
+### 📊 Expense Tracking
+- Add daily expenses with categories
+- Track recurring monthly bills
+- Monthly budget monitoring
 - Overspending alerts
 
-### 💼 Project Income Manager
-- Track freelance gigs
-- Monitor side project revenue
-- Visualize income vs. expenses
-
 ### 📈 Financial Dashboard
-- Net worth tracking
-- Income vs. expenses chart
-- Monthly trends
+- Current runway visualization
+- Spending breakdown
+- Monthly burn rate
+- Available funds tracker
+
+### ☁️ Cloud Sync
+- Your data syncs across devices
+- Secure authentication with Supabase
+- Never lose your data
+- Access anywhere, anytime
 
 ---
 
 ## 🚀 Quick Start
 
-### Web App (Development)
+### Use the App (Recommended)
+
+1. Visit [https://personal-runway-calculator.vercel.app](https://personal-runway-calculator.vercel.app)
+2. Create a free account
+3. Enter your financial settings
+4. See your runway instantly!
+
+### Run Locally
 
 ```bash
+# Clone the repo
+git clone https://github.com/maypak/personal-runway-calculator.git
+cd personal-runway-calculator
+
+# Install dependencies
 npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your Supabase credentials to .env.local
+
+# Run development server
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
 
-### Notion Template
-
-_(Coming soon to Gumroad!)_
-
 ---
 
 ## 🎯 Who is this for?
 
-- Planning to quit your 9-5
-- Recently went freelance
-- Building a side project while employed
-- Digital nomads tracking finances
-- Anyone pursuing financial independence (FIRE)
-- Indie hackers & solopreneurs
+- 🧑‍💼 Planning to quit your 9-5
+- 🎨 Freelancers tracking finances
+- 🚀 Building a side project while employed
+- 🌍 Digital nomads managing runway
+- 💸 Anyone pursuing financial independence (FIRE)
+- 🛠️ Indie hackers & solopreneurs
 
 ---
 
@@ -76,7 +92,7 @@ _(Coming soon to Gumroad!)_
 
 I worked as a software engineer for 10+ years. When I decided to quit, my biggest fear was:
 
-> "How long can I survive without income?"
+> **"How long can I survive without income?"**
 
 I built this calculator to answer that question. My result: **31 months**.
 
@@ -86,48 +102,93 @@ That number gave me confidence. Now it's your turn.
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Next.js 16 (React 19)
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **Storage:** LocalStorage (no backend needed)
-- **Deployment:** Vercel-ready
+- **Database:** Supabase (PostgreSQL)
+- **Auth:** Supabase Auth
+- **Deployment:** Vercel
+- **Icons:** Emoji + SVG
+
+---
+
+## 📸 Screenshots
+
+![Dashboard](./screenshots/dashboard.png)
+![Auth](./screenshots/auth.png)
+
+---
+
+## 🔐 Privacy & Security
+
+- ✅ Your data is encrypted and stored securely with Supabase
+- ✅ Only you can access your financial data
+- ✅ No ads, no tracking, no selling data
+- ✅ Open source — verify the code yourself
 
 ---
 
 ## 📝 Roadmap
 
-- [ ] Notion template version
-- [ ] Gumroad launch
+### Phase 1: MVP (✅ Done)
+- [x] Runway calculator
+- [x] Expense tracking
+- [x] Cloud sync with Supabase
+- [x] Responsive design
+- [x] Production deployment
+
+### Phase 2: Launch (Feb 2026)
 - [ ] Product Hunt launch
-- [ ] Recurring expenses tracking
+- [ ] Reddit community engagement
+- [ ] SEO optimization
+- [ ] User feedback collection
+
+### Phase 3: Features
 - [ ] Multi-currency support
-- [ ] Export to PDF
-- [ ] Mobile app
+- [ ] Export to PDF/CSV
+- [ ] Goal setting
+- [ ] Projections & trends
+- [ ] Mobile app (React Native)
 
 ---
 
 ## 🤝 Contributing
 
-This is an open-source project. PRs welcome!
+This is an open-source project. Contributions welcome!
+
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-MIT
+MIT License - feel free to use this for your own projects!
 
 ---
 
-## 🙏 Credits
+## 🙏 Support
 
-Built with ❤️ by someone who's been there.
+If this tool helped you:
+- ⭐ Star this repo
+- 🐦 Share on [Twitter](https://twitter.com/intent/tweet?text=Just%20calculated%20my%20personal%20runway!%20Check%20out%20this%20free%20tool%20→%20https://personal-runway-calculator.vercel.app)
+- 💬 Spread the word to friends planning financial freedom
 
-If this helped you, consider:
-- ⭐ Starring this repo
-- 🐦 Sharing on Twitter
-- 💰 Buying the Notion template (supports development!)
+---
+
+## 📧 Contact
+
+Built by [@maypak](https://github.com/maypak)
+
+Questions? Found a bug? Open an issue or reach out!
 
 ---
 
 **Stop guessing. Start planning.** 🚀
 
-Get your Personal Runway Calculator today and take control of your future.
+Calculate your runway and take control of your future.
+
+[Launch the Calculator →](https://personal-runway-calculator.vercel.app)

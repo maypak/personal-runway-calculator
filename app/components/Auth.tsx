@@ -116,7 +116,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full" style={{ width: '65%' }}></div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">💙 안정적이에요. 계획대로 가고 있습니다.</p>
+              <p className="text-xs text-gray-500 mt-2">💙 Looking good! You&apos;re on track.</p>
             </div>
           </div>
 
