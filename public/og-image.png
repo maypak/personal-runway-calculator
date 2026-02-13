@@ -1,0 +1,27 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#grad)"/>
+  
+  <!-- Glass card -->
+  <rect x="100" y="100" width="1000" height="430" rx="40" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  <!-- Icon -->
+  <text x="600" y="220" font-size="100" text-anchor="middle" fill="white">💰</text>
+  
+  <!-- Title -->
+  <text x="600" y="320" font-size="64" font-weight="800" text-anchor="middle" fill="white" font-family="Arial, sans-serif">Personal Runway Calculator</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="380" font-size="32" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="Arial, sans-serif">How long can you survive without a job?</text>
+  
+  <!-- CTA -->
+  <rect x="380" y="410" width="440" height="60" rx="16" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  <text x="600" y="450" font-size="28" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="Arial, sans-serif">Calculate Your Freedom → Free</text>
+</svg>
