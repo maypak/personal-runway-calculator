@@ -175,13 +175,13 @@ export default function FinanceDashboardSupabase() {
           
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="px-3 py-2 md:px-4 bg-gray-700 hover:bg-gray-800 text-gray-900 rounded-lg text-sm transition"
+            className="px-3 py-2 md:px-4 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm transition"
           >
             ⚙️
           </button>
           <button
             onClick={signOut}
-            className="px-3 py-2 bg-red-600 hover:bg-red-700 text-gray-900 rounded-lg text-sm transition"
+            className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm transition"
           >
             <span className="hidden sm:inline">Sign Out</span>
             <span className="sm:hidden">Exit</span>
@@ -573,7 +573,7 @@ export default function FinanceDashboardSupabase() {
             </div>
 
             <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-sm text-gray-900600 mb-2">Simulated Runway</div>
+              <div className="text-sm text-gray-600 mb-2">Simulated Runway</div>
               <div className="text-4xl font-bold text-blue-600">
                 {simRunwayYears > 0 && `${simRunwayYears}y `}
                 {simRunwayMonths}m
