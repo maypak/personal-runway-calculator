@@ -160,59 +160,81 @@ export default function FinanceDashboard() {
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="text-center py-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Personal Runway Calculator
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">Financial Freedom Tracker</p>
-      </div>
-
-      {/* Day Counter Card */}
-      <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl p-6 text-white shadow-lg">
-        <div className="text-center">
-          <div className="text-5xl font-bold mb-2">Day {daysSince}</div>
-          <div className="text-sm opacity-90">Since {data.startDate}</div>
+    <div className="space-y-4 pb-8">
+      {/* Header - Enhanced */}
+      <div className="text-center py-6 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 rounded-3xl blur-3xl"></div>
+        <div className="relative">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
+            Personal Runway Calculator
+          </h1>
+          <p className="text-sm text-gray-600">Financial Freedom Tracker ⏱️</p>
         </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Day Counter Card - Enhanced with Timer Animation */}
+      <div className="relative group">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+        <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-6 text-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-3xl animate-pulse">⏱️</span>
+              <div className="text-5xl md:text-6xl font-bold">Day {daysSince}</div>
+            </div>
+            <div className="text-sm opacity-90">Since {data.startDate}</div>
+            <div className="mt-4 text-xs opacity-75">Your journey to freedom</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats - Enhanced */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="text-gray-500 text-xs mb-1">Total Funds</div>
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-blue-100 hover:border-blue-300 transform hover:scale-105">
+          <div className="text-gray-500 text-xs mb-1 flex items-center gap-1">
+            <span>💰</span>
+            <span>Total Funds</span>
+          </div>
           <div className="text-2xl font-bold text-gray-900">${totalIncome.toLocaleString()}</div>
         </div>
         
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="text-gray-500 text-xs mb-1">Runway</div>
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-blue-100 hover:border-blue-300 transform hover:scale-105">
+          <div className="text-gray-500 text-xs mb-1 flex items-center gap-1">
+            <span>🎯</span>
+            <span>Runway</span>
+          </div>
           <div className="text-2xl font-bold text-blue-600">{runway}mo</div>
         </div>
         
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="text-gray-500 text-xs mb-1">This Month</div>
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-orange-100 hover:border-orange-300 transform hover:scale-105">
+          <div className="text-gray-500 text-xs mb-1 flex items-center gap-1">
+            <span>📊</span>
+            <span>This Month</span>
+          </div>
           <div className="text-2xl font-bold text-orange-600">${thisMonthExpenses.toLocaleString()}</div>
         </div>
         
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="text-gray-500 text-xs mb-1">Remaining</div>
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-green-100 hover:border-green-300 transform hover:scale-105">
+          <div className="text-gray-500 text-xs mb-1 flex items-center gap-1">
+            <span>✨</span>
+            <span>Remaining</span>
+          </div>
           <div className="text-2xl font-bold text-green-600">${remainingFunds.toLocaleString()}</div>
         </div>
       </div>
 
-      {/* Recurring Expenses */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 shadow-sm border-2 border-indigo-200">
+      {/* Recurring Expenses - Enhanced */}
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-5 shadow-sm border-2 border-blue-200 hover:shadow-md transition-all duration-300">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h3 className="font-bold text-gray-900 flex items-center">
-              <span className="text-2xl mr-2">📌</span>
-              Recurring Expenses
+            <h3 className="font-bold text-gray-900 flex items-center gap-2">
+              <span className="text-2xl">📌</span>
+              <span>Recurring Expenses</span>
             </h3>
             <p className="text-xs text-gray-600 mt-1">Auto-added monthly</p>
           </div>
           <div className="text-right">
             <div className="text-xs text-gray-500">Monthly Total</div>
-            <div className="text-lg font-bold text-indigo-600">${totalRecurring.toLocaleString()}</div>
+            <div className="text-lg font-bold text-blue-600">${totalRecurring.toLocaleString()}</div>
           </div>
         </div>
 
@@ -226,18 +248,18 @@ export default function FinanceDashboard() {
             data.recurringExpenses.map((recurring) => (
               <div
                 key={recurring.id}
-                className={`flex items-center justify-between p-3 rounded-xl transition-all ${
+                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 ${
                   recurring.enabled 
-                    ? 'bg-white border-2 border-indigo-200' 
+                    ? 'bg-white border-2 border-blue-200 hover:border-blue-400 hover:shadow-md' 
                     : 'bg-gray-100 opacity-60'
                 }`}
               >
                 <div className="flex items-center space-x-3 flex-1">
                   <button
                     onClick={() => toggleRecurring(recurring.id)}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
                       recurring.enabled 
-                        ? 'bg-indigo-500 text-white' 
+                        ? 'bg-blue-600 text-white scale-110' 
                         : 'bg-gray-300 text-gray-500'
                     }`}
                   >
@@ -254,7 +276,7 @@ export default function FinanceDashboard() {
                   <span className="font-bold text-gray-900">${recurring.amount.toLocaleString()}</span>
                   <button
                     onClick={() => deleteRecurring(recurring.id)}
-                    className="text-red-500 text-sm active:text-red-700"
+                    className="text-red-500 text-sm hover:text-red-700 transition-colors"
                   >
                     Delete
                   </button>
@@ -267,33 +289,33 @@ export default function FinanceDashboard() {
         {/* Add button */}
         <button
           onClick={() => setShowRecurringForm(!showRecurringForm)}
-          className="w-full bg-indigo-500 text-white py-3 rounded-xl font-medium active:bg-indigo-600 transition-colors"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 active:scale-95"
         >
           {showRecurringForm ? 'Cancel' : '+ Add Recurring Expense'}
         </button>
 
         {/* Add form */}
         {showRecurringForm && (
-          <div className="mt-4 p-4 bg-white rounded-xl space-y-3">
+          <div className="mt-4 p-4 bg-white rounded-xl space-y-3 border border-blue-200 animate-fadeIn">
             <input
               type="text"
               placeholder="Name (e.g. Rent, Phone bill)"
               value={newRecurring.name}
               onChange={(e) => setNewRecurring({ ...newRecurring, name: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
             />
             <input
               type="number"
               placeholder="Amount"
               value={newRecurring.amount}
               onChange={(e) => setNewRecurring({ ...newRecurring, amount: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
             />
             <div className="grid grid-cols-2 gap-3">
               <select
                 value={newRecurring.category}
                 onChange={(e) => setNewRecurring({ ...newRecurring, category: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
               >
                 <option>Fixed</option>
                 <option>Subscription</option>
@@ -308,12 +330,12 @@ export default function FinanceDashboard() {
                 placeholder="Day"
                 value={newRecurring.dayOfMonth}
                 onChange={(e) => setNewRecurring({ ...newRecurring, dayOfMonth: parseInt(e.target.value) })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
               />
             </div>
             <button
               onClick={addRecurring}
-              className="w-full bg-indigo-500 text-white py-3 rounded-xl font-medium active:bg-indigo-600 transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               Save
             </button>
@@ -321,18 +343,18 @@ export default function FinanceDashboard() {
         )}
       </div>
 
-      {/* Runway Simulator */}
-      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-5 shadow-sm border-2 border-purple-200">
+      {/* Runway Simulator - Enhanced */}
+      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-5 shadow-sm border-2 border-purple-200 hover:shadow-md transition-all duration-300">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-gray-900 flex items-center">
-            <span className="text-2xl mr-2">🎮</span>
-            Runway Simulator
+          <h3 className="font-bold text-gray-900 flex items-center gap-2">
+            <span className="text-2xl">🎮</span>
+            <span>Runway Simulator</span>
           </h3>
           <button
             onClick={() => setShowSimulator(!showSimulator)}
-            className="text-purple-600 text-sm font-medium"
+            className="text-purple-600 text-sm font-medium hover:text-purple-800 transition-colors"
           >
-            {showSimulator ? 'Collapse' : 'Expand'}
+            {showSimulator ? 'Collapse ▲' : 'Expand ▼'}
           </button>
         </div>
 
@@ -411,7 +433,7 @@ export default function FinanceDashboard() {
             </div>
 
             {/* Results */}
-            <div className="bg-white rounded-2xl p-4 mt-4">
+            <div className="bg-white rounded-2xl p-4 mt-4 border-2 border-purple-200">
               <div className="text-center mb-3">
                 <div className="text-sm text-gray-500 mb-1">Simulation Result</div>
                 <div className="text-4xl font-bold text-purple-600">
@@ -464,7 +486,7 @@ export default function FinanceDashboard() {
 
               <button
                 onClick={resetSimulator}
-                className="w-full mt-4 bg-gray-100 text-gray-700 py-2 rounded-xl text-sm font-medium active:bg-gray-200 transition-colors"
+                className="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 active:scale-95"
               >
                 Reset
               </button>
@@ -473,10 +495,13 @@ export default function FinanceDashboard() {
         )}
       </div>
 
-      {/* Budget Progress */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm">
+      {/* Budget Progress - Enhanced */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300">
         <div className="flex justify-between items-center mb-3">
-          <h3 className="font-bold text-gray-900">This Month Budget</h3>
+          <h3 className="font-bold text-gray-900 flex items-center gap-2">
+            <span>📈</span>
+            <span>This Month Budget</span>
+          </h3>
           <span className="text-sm font-medium text-gray-600">
             ${thisMonthExpenses.toLocaleString()} / ${data.monthlyBudget.toLocaleString()}
           </span>
@@ -484,9 +509,10 @@ export default function FinanceDashboard() {
         
         <div className="h-3 bg-gray-100 rounded-full overflow-hidden mb-2">
           <div
-            className={`h-full transition-all rounded-full ${
-              budgetUsagePercent > 100 ? 'bg-red-500' :
-              budgetUsagePercent > 80 ? 'bg-orange-500' : 'bg-blue-500'
+            className={`h-full transition-all duration-1000 ease-out rounded-full ${
+              budgetUsagePercent > 100 ? 'bg-gradient-to-r from-red-500 to-red-600' :
+              budgetUsagePercent > 80 ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 
+              'bg-gradient-to-r from-blue-600 to-blue-700'
             }`}
             style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
           />
@@ -502,31 +528,34 @@ export default function FinanceDashboard() {
         </div>
       </div>
 
-      {/* Expense List */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm">
+      {/* Expense List - Enhanced */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-gray-900">Recent Expenses</h3>
+          <h3 className="font-bold text-gray-900 flex items-center gap-2">
+            <span>🧾</span>
+            <span>Recent Expenses</span>
+          </h3>
           <button
             onClick={() => setShowExpenseForm(!showExpenseForm)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-xl text-sm font-medium active:bg-blue-600 transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
             {showExpenseForm ? 'Cancel' : '+ Add'}
           </button>
         </div>
 
         {showExpenseForm && (
-          <div className="mb-4 p-4 bg-gray-50 rounded-xl space-y-3">
+          <div className="mb-4 p-4 bg-blue-50 rounded-xl space-y-3 border border-blue-200 animate-fadeIn">
             <input
               type="number"
               placeholder="Amount"
               value={newExpense.amount}
               onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
             />
             <select
               value={newExpense.category}
               onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
             >
               <option>Food</option>
               <option>Transport</option>
@@ -539,11 +568,11 @@ export default function FinanceDashboard() {
               placeholder="Memo (optional)"
               value={newExpense.memo}
               onChange={(e) => setNewExpense({ ...newExpense, memo: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-base"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-base focus:border-blue-600 focus:outline-none transition-colors"
             />
             <button
               onClick={addExpense}
-              className="w-full bg-blue-500 text-white py-3 rounded-xl font-medium active:bg-blue-600 transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 active:scale-95"
             >
               Save
             </button>
@@ -557,14 +586,14 @@ export default function FinanceDashboard() {
             data.expenses.slice(0, 10).map((expense) => (
               <div
                 key={expense.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-300 hover:shadow-sm"
               >
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="font-medium text-gray-900">{expense.category}</span>
                     <span className="text-xs text-gray-400">{expense.date}</span>
                     {expense.memo?.includes('(auto)') && (
-                      <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded">auto</span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">auto</span>
                     )}
                   </div>
                   {expense.memo && (
@@ -575,7 +604,7 @@ export default function FinanceDashboard() {
                   <span className="font-bold text-gray-900">${expense.amount.toLocaleString()}</span>
                   <button
                     onClick={() => deleteExpense(expense.id)}
-                    className="text-red-500 text-sm active:text-red-700"
+                    className="text-red-500 text-sm hover:text-red-700 transition-colors"
                   >
                     Delete
                   </button>
@@ -586,9 +615,12 @@ export default function FinanceDashboard() {
         </div>
       </div>
 
-      {/* Runway Detail */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm">
-        <h3 className="font-bold text-gray-900 mb-4">Runway Breakdown</h3>
+      {/* Runway Detail - Enhanced */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300">
+        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <span>🔍</span>
+          <span>Runway Breakdown</span>
+        </h3>
         <div className="space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">💰 Current Savings</span>
@@ -602,7 +634,7 @@ export default function FinanceDashboard() {
             <span className="text-gray-600">💵 Income ({data.incomeMonths}mo)</span>
             <span className="font-bold text-gray-900">+${(data.monthlyIncome * data.incomeMonths).toLocaleString()}</span>
           </div>
-          <div className="h-px bg-gray-200 my-2" />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2" />
           <div className="flex justify-between text-base">
             <span className="font-bold text-gray-900">Total Available</span>
             <span className="font-bold text-blue-600">${totalIncome.toLocaleString()}</span>
@@ -611,12 +643,12 @@ export default function FinanceDashboard() {
             <span className="text-red-500">Total Spent</span>
             <span className="font-bold text-red-600">-${totalExpenses.toLocaleString()}</span>
           </div>
-          <div className="h-px bg-gray-200 my-2" />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2" />
           <div className="flex justify-between text-base">
             <span className="font-bold text-gray-900">Remaining</span>
             <span className="font-bold text-green-600">${remainingFunds.toLocaleString()}</span>
           </div>
-          <div className="h-px bg-gray-200 my-2" />
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2" />
           <div className="flex justify-between">
             <span className="text-gray-600">💳 Monthly Fixed</span>
             <span className="text-gray-900">${data.monthlyFixed.toLocaleString()}</span>
@@ -629,8 +661,8 @@ export default function FinanceDashboard() {
             <span className="font-bold text-gray-900">Monthly Expense</span>
             <span className="font-bold text-orange-600">${monthlyExpense.toLocaleString()}</span>
           </div>
-          <div className="h-px bg-gray-200 my-2" />
-          <div className="flex justify-between text-lg">
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2" />
+          <div className="flex justify-between text-lg bg-gradient-to-r from-purple-50 to-blue-50 p-3 rounded-lg">
             <span className="font-bold text-gray-900">Expected Runway</span>
             <span className="font-bold text-purple-600">
               {runway}mo (≈ {runwayYears}y {runwayMonths}mo)
@@ -642,6 +674,7 @@ export default function FinanceDashboard() {
       {/* Footer */}
       <div className="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
         <p>Built with ❤️ by someone who&apos;s been there.</p>
+        <p className="text-xs mt-2 text-gray-400">Your TIME is your most precious resource ⏱️</p>
       </div>
     </div>
   );
