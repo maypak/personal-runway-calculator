@@ -47,7 +47,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Hero Section */}
           <div className="text-center md:text-left px-4 order-2 md:order-1">
             {/* Logo */}
@@ -75,7 +75,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             </p>
             
             {/* Social Proof */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm text-gray-600">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                   <span className="text-lg">🔒</span>
@@ -116,7 +116,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
           {/* Auth Card */}
           <div className="order-1 md:order-2">
-            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-8 max-w-md mx-auto">
+            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 md:p-8 max-w-md mx-auto">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   {mode === 'signin' ? 'Welcome back' : 'Get started'}

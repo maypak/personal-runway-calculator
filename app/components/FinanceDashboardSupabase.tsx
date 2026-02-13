@@ -137,7 +137,7 @@ export default function FinanceDashboardSupabase() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">💰 Personal Runway</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">💰 Personal Runway</h1>
         <div className="flex gap-2">
           <div className="relative">
             <button
@@ -181,9 +181,10 @@ export default function FinanceDashboardSupabase() {
           </button>
           <button
             onClick={signOut}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-gray-900 rounded-lg text-sm transition"
+            className="px-3 py-2 bg-red-600 hover:bg-red-700 text-gray-900 rounded-lg text-sm transition"
           >
-            Sign Out
+            <span className="hidden sm:inline">Sign Out</span>
+            <span className="sm:hidden">Exit</span>
           </button>
         </div>
       </div>
@@ -193,7 +194,7 @@ export default function FinanceDashboardSupabase() {
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 space-y-4">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Financial Settings</h2>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Current Savings ($)
@@ -266,7 +267,7 @@ export default function FinanceDashboardSupabase() {
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Start Date
               </label>
@@ -300,7 +301,7 @@ export default function FinanceDashboardSupabase() {
         
         {/* Main Number */}
         <div className="text-center mb-6">
-          <div className="text-6xl font-bold text-gray-900 mb-3 tabular-nums">
+          <div className="text-4xl md:text-6xl font-bold text-gray-900 mb-3 tabular-nums">
             {runwayYears > 0 && (
               <span>
                 {runwayYears}
@@ -492,8 +493,8 @@ export default function FinanceDashboardSupabase() {
 
         <div className="space-y-2">
           {expenses.slice(0, 10).map((exp) => (
-            <div key={exp.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div>
+            <div key={exp.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div className="flex-1">
                 <div className="font-semibold text-gray-900">${exp.amount} - {exp.category}</div>
                 <div className="text-sm text-gray-600">
                   {exp.date} {exp.memo && `• ${exp.memo}`}
@@ -501,7 +502,7 @@ export default function FinanceDashboardSupabase() {
               </div>
               <button
                 onClick={() => deleteExpense(exp.id)}
-                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transform active:scale-95 transition-all"
+                className="w-full sm:w-auto px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transform active:scale-95 transition-all"
               >
                 Delete
               </button>
