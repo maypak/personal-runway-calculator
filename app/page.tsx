@@ -12,11 +12,11 @@ export default function Home() {
 
   // 테마별 배경색 명시적 매핑 (Tailwind 동적 클래스 문제 해결)
   const bgClasses = {
-    whiteBlue: 'bg-white',
-    whiteBlack: 'bg-gray-50',
-    skyGreen: 'bg-sky-50',
-    mint: 'bg-emerald-50',
-    purple: 'bg-purple-50',
+    classic: 'bg-white',
+    dark: 'bg-slate-900',
+    ocean: 'bg-gradient-to-br from-cyan-50 to-blue-100',
+    forest: 'bg-gradient-to-br from-emerald-50 to-green-100',
+    sunset: 'bg-gradient-to-br from-orange-50 to-pink-100',
   };
 
   if (loading) {

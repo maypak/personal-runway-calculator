@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 
-export type Theme = 'whiteBlue' | 'whiteBlack' | 'skyGreen' | 'mint' | 'purple';
+export type Theme = 'classic' | 'dark' | 'ocean' | 'forest' | 'sunset';
 
 const themes = {
-  whiteBlue: {
+  classic: {
     gradient: 'bg-white',
-    name: 'Clean Blue',
+    name: 'Classic Blue',
     accent: 'blue',
+    description: 'Clean & Professional',
     classes: {
       bg500: 'bg-blue-500',
       bg600: 'bg-blue-600',
@@ -23,82 +24,86 @@ const themes = {
       bgGradient: 'bg-gradient-to-br from-blue-600 to-blue-700',
     }
   },
-  whiteBlack: {
-    gradient: 'bg-gray-50',
-    name: 'Classic Gray',
-    accent: 'gray',
+  dark: {
+    gradient: 'bg-slate-900',
+    name: 'Dark Mode',
+    accent: 'slate',
+    description: 'Easy on Eyes',
     classes: {
-      bg500: 'bg-gray-700',
-      bg600: 'bg-gray-800',
-      bg700: 'bg-gray-900',
-      bgHover: 'hover:bg-gray-900',
-      text500: 'text-gray-700',
-      text600: 'text-gray-800',
-      text700: 'text-gray-900',
-      border200: 'border-gray-200',
-      border300: 'border-gray-300',
-      bgLight: 'bg-gray-100',
-      bgGradient: 'bg-gradient-to-br from-gray-800 to-gray-900',
+      bg500: 'bg-slate-600',
+      bg600: 'bg-slate-700',
+      bg700: 'bg-slate-800',
+      bgHover: 'hover:bg-slate-700',
+      text500: 'text-slate-400',
+      text600: 'text-slate-300',
+      text700: 'text-slate-200',
+      border200: 'border-slate-700',
+      border300: 'border-slate-600',
+      bgLight: 'bg-slate-800',
+      bgGradient: 'bg-gradient-to-br from-slate-700 to-slate-800',
     }
   },
-  skyGreen: {
-    gradient: 'bg-sky-50',
-    name: 'Fresh Lime',
-    accent: 'lime',
+  ocean: {
+    gradient: 'bg-gradient-to-br from-cyan-50 to-blue-100',
+    name: 'Ocean Breeze',
+    accent: 'cyan',
+    description: 'Fresh & Calm',
     classes: {
-      bg500: 'bg-lime-500',
-      bg600: 'bg-lime-600',
-      bg700: 'bg-lime-700',
-      bgHover: 'hover:bg-lime-700',
-      text500: 'text-lime-500',
-      text600: 'text-lime-600',
-      text700: 'text-lime-700',
-      border200: 'border-lime-200',
-      border300: 'border-lime-300',
-      bgLight: 'bg-lime-50',
-      bgGradient: 'bg-gradient-to-br from-sky-500 to-lime-600',
+      bg500: 'bg-cyan-500',
+      bg600: 'bg-cyan-600',
+      bg700: 'bg-cyan-700',
+      bgHover: 'hover:bg-cyan-700',
+      text500: 'text-cyan-600',
+      text600: 'text-cyan-700',
+      text700: 'text-cyan-800',
+      border200: 'border-cyan-200',
+      border300: 'border-cyan-300',
+      bgLight: 'bg-cyan-50',
+      bgGradient: 'bg-gradient-to-br from-cyan-600 to-blue-700',
     }
   },
-  mint: {
-    gradient: 'bg-emerald-50',
-    name: 'Mint Green',
+  forest: {
+    gradient: 'bg-gradient-to-br from-emerald-50 to-green-100',
+    name: 'Forest Green',
     accent: 'emerald',
+    description: 'Natural & Balanced',
     classes: {
       bg500: 'bg-emerald-500',
       bg600: 'bg-emerald-600',
       bg700: 'bg-emerald-700',
       bgHover: 'hover:bg-emerald-700',
-      text500: 'text-emerald-500',
-      text600: 'text-emerald-600',
-      text700: 'text-emerald-700',
+      text500: 'text-emerald-600',
+      text600: 'text-emerald-700',
+      text700: 'text-emerald-800',
       border200: 'border-emerald-200',
       border300: 'border-emerald-300',
       bgLight: 'bg-emerald-50',
-      bgGradient: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+      bgGradient: 'bg-gradient-to-br from-emerald-600 to-green-700',
     }
   },
-  purple: {
-    gradient: 'bg-purple-50',
-    name: 'Purple Dream',
-    accent: 'purple',
+  sunset: {
+    gradient: 'bg-gradient-to-br from-orange-50 to-pink-100',
+    name: 'Sunset Glow',
+    accent: 'orange',
+    description: 'Warm & Energetic',
     classes: {
-      bg500: 'bg-purple-500',
-      bg600: 'bg-purple-600',
-      bg700: 'bg-purple-700',
-      bgHover: 'hover:bg-purple-700',
-      text500: 'text-purple-500',
-      text600: 'text-purple-600',
-      text700: 'text-purple-700',
-      border200: 'border-purple-200',
-      border300: 'border-purple-300',
-      bgLight: 'bg-purple-50',
-      bgGradient: 'bg-gradient-to-br from-purple-600 to-pink-600',
+      bg500: 'bg-orange-500',
+      bg600: 'bg-orange-600',
+      bg700: 'bg-orange-700',
+      bgHover: 'hover:bg-orange-700',
+      text500: 'text-orange-600',
+      text600: 'text-orange-700',
+      text700: 'text-orange-800',
+      border200: 'border-orange-200',
+      border300: 'border-orange-300',
+      bgLight: 'bg-orange-50',
+      bgGradient: 'bg-gradient-to-br from-orange-600 to-pink-600',
     }
   },
 };
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>('whiteBlue');
+  const [theme, setThemeState] = useState<Theme>('classic');
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as Theme;
@@ -118,6 +123,7 @@ export function useTheme() {
     gradient: themes[theme].gradient,
     accent: themes[theme].accent,
     themeName: themes[theme].name,
+    description: themes[theme].description,
     classes: themes[theme].classes,
     allThemes: Object.entries(themes).map(([key, value]) => ({
       id: key as Theme,
