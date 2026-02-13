@@ -11,13 +11,16 @@
 
 ### Headline (Large, Bold)
 ```
-How long can you survive without a job?
+Your money isn't just money.
+It's TIME.
 ```
 
 ### Subheadline
 ```
-Calculate your personal runway in 30 seconds.
-Know exactly when you can quit, freelance, or take that sabbatical.
+How much time do you have to chase your dream?
+Build your startup? Find yourself?
+
+Calculate your TIME in 30 seconds.
 ```
 
 ### CTA Button (Primary)

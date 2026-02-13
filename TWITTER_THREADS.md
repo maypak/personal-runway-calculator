@@ -17,13 +17,14 @@
 
 **Hook tweet:**
 ```
-6 months ago I quit my engineering job after 10 years
+I bought myself 31 months.
 
-The scariest part wasn't leaving—it was not knowing:
+Not with a loan.
+Not with a windfall.
 
-"How long can I actually survive without income?"
+With savings I already had.
 
-So I built a calculator. Here's what happened 🧵
+Here's how I turned dollars into TIME 🧵
 ```
 
 ---

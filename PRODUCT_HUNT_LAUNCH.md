@@ -396,11 +396,13 @@ Hey Product Hunt! 👋
 
 I'm [Your Name], and I just quit my engineering job after 10 years.
 
-Before I quit, the scariest question was: **"How long can I survive without income?"**
+Before I quit, I calculated my runway: **31 months**.
 
-I had savings. But no idea if it was 6 months or 2 years worth.
+Not 31 months of money—31 months of TIME.
 
-So I built a calculator.
+Time to try 3 startup ideas. Time to learn. Time to find my path.
+
+That clarity changed everything. So I built a tool to help you find yours.
 
 ---
 

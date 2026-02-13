@@ -15,7 +15,7 @@
 
 ### Title (300 chars max)
 ```
-[Tool] Built a personal runway calculator after quitting my job - calculate exactly how long your savings will last
+[Tool] Your money isn't money—it's TIME. Built a free calculator to show you how much you have.
 ```
 
 ### Body
@@ -23,11 +23,13 @@
 ```
 Hey r/financialindependence 👋
 
-I quit my engineering job last year after 10 years. Before taking the leap, the #1 question was:
+I quit my engineering job last year after 10 years. Before taking the leap, I calculated my runway:
 
-**"How long can my savings actually last?"**
+**31 months.**
 
-I know the 4% rule, I know spreadsheets exist, but I wanted something dead simple that I could check every day without friction.
+Not 31 months of money—31 months of TIME. Time to build. Time to explore. Time to find my path.
+
+That shift in perspective changed everything.
 
 So I built it: [Personal Runway Calculator](https://personal-runway-calculator.vercel.app)
 

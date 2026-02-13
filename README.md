@@ -1,8 +1,10 @@
-# Personal Runway Calculator 💰
+# Personal Runway Calculator ⏱️
 
-**How long can you survive without a job?**
+**Your money isn't just money. It's TIME.**
 
-Calculate your personal runway in seconds. Track savings, expenses, and know exactly when you can make your move.
+Calculate how much time you have to chase your dream, build your startup, or find yourself.
+
+Track expenses. See your runway in real-time. Make confident decisions.
 
 🌐 **Live App:** [https://personal-runway-calculator.vercel.app](https://personal-runway-calculator.vercel.app)
 
