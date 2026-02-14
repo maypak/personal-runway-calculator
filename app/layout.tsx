@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://personal-runway-calculator.vercel.app'),
   title: "Personal Runway Calculator - Your Money is TIME",
   description: "How much TIME do you have? Calculate your financial runway in 30 seconds. Know exactly how long you can chase your dreams. Free tool built by an engineer who quit after 10 years.",
   keywords: ["runway calculator", "financial independence", "FIRE calculator", "burn rate", "time is money", "quit job", "financial freedom", "savings tracker", "personal finance", "how long can I survive", "money runway"],
@@ -53,13 +54,14 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
     creator: '@personalrunway',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
-  themeColor: '#8B5CF6',
   manifest: '/manifest.json',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: '#8B5CF6',
 };
 
 export default function RootLayout({
