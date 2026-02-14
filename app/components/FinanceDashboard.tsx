@@ -36,6 +36,8 @@ export default function FinanceDashboard() {
   const [simOneTimeExpense, setSimOneTimeExpense] = useState(0);
 
   // Auto-add recurring expenses monthly
+  // This effect should only run once on mount to check for new month
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const today = new Date();
     const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;

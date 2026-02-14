@@ -37,8 +37,9 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
         setMessage('✅ Signed in successfully!');
         onSuccess();
       }
-    } catch (error: any) {
-      setMessage(`❌ ${error.message}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An error occurred';
+      setMessage(`❌ ${message}`);
     } finally {
       setLoading(false);
     }
@@ -58,8 +59,9 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
       
       if (error) throw error;
       // Redirect happens automatically
-    } catch (error: any) {
-      setMessage(`❌ ${error.message}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An error occurred';
+      setMessage(`❌ ${message}`);
       setLoading(false);
     }
   };

@@ -6,8 +6,8 @@ import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
 
 export default function FinanceDashboardSupabase() {
-  const { user, signOut } = useAuth();
-  const { theme, setTheme, allThemes, accent, classes } = useTheme();
+  const { signOut } = useAuth();
+  const { theme, setTheme, allThemes, classes } = useTheme();
   const {
     settings,
     expenses,
@@ -17,13 +17,10 @@ export default function FinanceDashboardSupabase() {
     addExpense,
     deleteExpense,
     addRecurringExpense,
-    updateRecurringExpense,
-    deleteRecurringExpense,
   } = useSupabaseFinance();
 
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showSimulator, setShowSimulator] = useState(false);
-  const [showRecurringForm, setShowRecurringForm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showThemePicker, setShowThemePicker] = useState(false);
   
@@ -46,6 +43,8 @@ export default function FinanceDashboardSupabase() {
   const [simOneTimeExpense, setSimOneTimeExpense] = useState(0);
 
   // Initialize simulator with actual monthly expense
+  // This effect is intentional to sync simulator state with settings
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (settings) {
       setSimMonthlyExpense(settings.monthlyFixed + settings.monthlyVariable);
@@ -91,10 +90,10 @@ export default function FinanceDashboardSupabase() {
   const monthlyBudget = monthlyExpense;
   const budgetUsagePercent = monthlyBudget > 0 ? (thisMonthExpenses / monthlyBudget) * 100 : 0;
 
-  // Total recurring expenses
-  const totalRecurring = recurringExpenses
-    .filter(r => r.enabled)
-    .reduce((sum, r) => sum + r.amount, 0);
+  // Total recurring expenses (reserved for future use)
+  // const totalRecurring = recurringExpenses
+  //   .filter(r => r.enabled)
+  //   .reduce((sum, r) => sum + r.amount, 0);
 
   const handleAddExpense = async () => {
     if (!newExpense.amount || parseFloat(newExpense.amount) <= 0) {
@@ -113,23 +112,23 @@ export default function FinanceDashboardSupabase() {
     setShowExpenseForm(false);
   };
 
-  const handleAddRecurring = async () => {
-    if (!newRecurring.name || !newRecurring.amount || parseFloat(newRecurring.amount) <= 0) {
-      alert('Please fill in all fields');
-      return;
-    }
+  // Reserved for future recurring expense UI
+  // const handleAddRecurring = async () => {
+  //   if (!newRecurring.name || !newRecurring.amount || parseFloat(newRecurring.amount) <= 0) {
+  //     alert('Please fill in all fields');
+  //     return;
+  //   }
 
-    await addRecurringExpense({
-      name: newRecurring.name,
-      amount: parseFloat(newRecurring.amount),
-      category: newRecurring.category,
-      dayOfMonth: newRecurring.dayOfMonth,
-      enabled: true,
-    });
+  //   await addRecurringExpense({
+  //     name: newRecurring.name,
+  //     amount: parseFloat(newRecurring.amount),
+  //     category: newRecurring.category,
+  //     dayOfMonth: newRecurring.dayOfMonth,
+  //     enabled: true,
+  //   });
 
-    setNewRecurring({ name: '', amount: '', category: 'Fixed', dayOfMonth: 1 });
-    setShowRecurringForm(false);
-  };
+  //   setNewRecurring({ name: '', amount: '', category: 'Fixed', dayOfMonth: 1 });
+  // };
 
   const categories = ['Food', 'Transport', 'Housing', 'Entertainment', 'Health', 'Shopping', 'Other'];
 
@@ -401,7 +400,7 @@ export default function FinanceDashboardSupabase() {
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm md:text-base font-semibold text-gray-700">
-            This Month's Budget
+            This Month&apos;s Budget
           </span>
           <span className="text-xs md:text-sm font-medium text-gray-600">
             ${thisMonthExpenses.toLocaleString()} / ${monthlyBudget.toLocaleString()}
