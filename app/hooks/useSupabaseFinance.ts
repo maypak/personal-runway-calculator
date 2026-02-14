@@ -104,23 +104,36 @@ export function useSupabaseFinance() {
 
   // Update settings
   const updateSettings = async (newSettings: FinanceSettings) => {
-    if (!user) return;
+    if (!user) return { success: false, error: 'Not authenticated' };
 
+    // Optimistically update UI
     setSettings(newSettings);
 
-    await supabase
+    // Save to database with proper upsert
+    const { error } = await supabase
       .from('finance_settings')
-      .upsert({
-        user_id: user.id,
-        monthly_fixed: newSettings.monthlyFixed,
-        monthly_variable: newSettings.monthlyVariable,
-        current_savings: newSettings.currentSavings,
-        lump_sum: newSettings.lumpSum,
-        start_date: newSettings.startDate,
-        monthly_income: newSettings.monthlyIncome,
-        income_months: newSettings.incomeMonths,
-      })
-      .eq('user_id', user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          monthly_fixed: newSettings.monthlyFixed,
+          monthly_variable: newSettings.monthlyVariable,
+          current_savings: newSettings.currentSavings,
+          lump_sum: newSettings.lumpSum,
+          start_date: newSettings.startDate,
+          monthly_income: newSettings.monthlyIncome,
+          income_months: newSettings.incomeMonths,
+        },
+        {
+          onConflict: 'user_id',
+        }
+      );
+
+    if (error) {
+      console.error('Failed to save settings:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
   };
 
   // Add expense
