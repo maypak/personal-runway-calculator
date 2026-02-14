@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Image Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        #preview {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            backdrop-filter: blur(10px);
+        }
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .main-message {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .main-title {
+            font-size: 80px;
+            font-weight: 900;
+            margin: 0 0 20px 0;
+            line-height: 1.1;
+        }
+        .highlight {
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            font-size: 36px;
+            font-weight: 400;
+            margin: 0;
+            opacity: 0.95;
+        }
+        .features {
+            display: flex;
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+        .feature-icon {
+            font-size: 28px;
+        }
+        .feature-text {
+            color: white;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .circle1 {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -100px;
+        }
+        .circle2 {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            left: -100px;
+        }
+        button {
+            margin: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div id="preview">
+        <div class="decorative-circle circle1"></div>
+        <div class="decorative-circle circle2"></div>
+        
+        <div class="logo">
+            <div class="logo-icon">⏱️</div>
+            <div class="logo-text">Personal Runway</div>
+        </div>
+        
+        <div class="main-message">
+            <h1 class="main-title">
+                Your money isn't just money.<br>
+                It's <span class="highlight">TIME</span>.
+            </h1>
+            <p class="subtitle">Calculate your runway in 30 seconds</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">🔒</span>
+                <span class="feature-text">Secure & Private</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">☁️</span>
+                <span class="feature-text">Cloud Sync</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🚀</span>
+                <span class="feature-text">100% Free</span>
+            </div>
+        </div>
+    </div>
+    
+    <button onclick="downloadImage()">Download OG Image (1200x630)</button>
+    
+    <script>
+        async function downloadImage() {
+            const preview = document.getElementById('preview');
+            
+            // Use html2canvas if available, otherwise provide instructions
+            if (typeof html2canvas === 'undefined') {
+                alert('Please run this command in terminal:\n\ncd personal-runway-calculator\nnpx html2canvas-cli og-image-generator.html public/og-image.png --width 1200 --height 630\n\nOr open this file in browser and use browser screenshot tools.');
+                return;
+            }
+            
+            const canvas = await html2canvas(preview, {
+                width: 1200,
+                height: 630,
+                scale: 2
+            });
+            
+            const link = document.createElement('a');
+            link.download = 'og-image.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

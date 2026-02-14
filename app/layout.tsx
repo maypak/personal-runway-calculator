@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Personal Runway Calculator - How Long Can You Survive Without a Job?",
-  description: "Calculate your personal runway in seconds. Track savings, expenses, and know exactly how long you can survive without a job. Free financial independence calculator built by a 10-year engineer who quit.",
-  keywords: ["runway calculator", "financial independence", "FIRE calculator", "burn rate", "savings calculator", "quit job", "financial freedom", "personal finance"],
+  title: "Personal Runway Calculator - Your Money is TIME",
+  description: "How much TIME do you have? Calculate your financial runway in 30 seconds. Know exactly how long you can chase your dreams. Free tool built by an engineer who quit after 10 years.",
+  keywords: ["runway calculator", "financial independence", "FIRE calculator", "burn rate", "time is money", "quit job", "financial freedom", "savings tracker", "personal finance", "how long can I survive", "money runway"],
   authors: [{ name: "Personal Runway Calculator" }],
   creator: "Personal Runway Calculator",
   publisher: "Personal Runway Calculator",
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://personal-runway-calculator.vercel.app',
-    title: "Personal Runway Calculator - How Long Can You Survive Without a Job?",
-    description: "Calculate your personal runway in seconds. Track savings, expenses, and know exactly how long you can survive without a job.",
+    title: "Personal Runway Calculator - Your Money is TIME",
+    description: "How much TIME do you have to chase your dream? Calculate your financial runway in 30 seconds. Built by an engineer who quit after 10 years.",
     siteName: 'Personal Runway Calculator',
     images: [
       {
@@ -48,8 +48,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Personal Runway Calculator - How Long Can You Survive Without a Job?",
-    description: "Calculate your personal runway in seconds. Track savings, expenses, and know exactly how long you can survive without a job.",
+    title: "Personal Runway Calculator - Your Money is TIME",
+    description: "How much TIME do you have to chase your dream? Calculate your runway in 30 seconds. Free tool for dreamers, builders, and future quitters.",
     images: ['/og-image.png'],
     creator: '@personalrunway',
   },
