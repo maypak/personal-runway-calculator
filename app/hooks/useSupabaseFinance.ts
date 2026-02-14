@@ -104,35 +104,47 @@ export function useSupabaseFinance() {
 
   // Update settings
   const updateSettings = async (newSettings: FinanceSettings) => {
-    if (!user) return { success: false, error: 'Not authenticated' };
+    console.log('🔍 [updateSettings] Called with:', newSettings);
+    console.log('🔍 [updateSettings] Current user:', user?.id);
+
+    if (!user) {
+      console.error('❌ [updateSettings] No user authenticated');
+      return { success: false, error: 'Not authenticated' };
+    }
 
     // Optimistically update UI
     setSettings(newSettings);
+    console.log('✅ [updateSettings] Optimistic UI update complete');
+
+    // Prepare data for database
+    const dbData = {
+      user_id: user.id,
+      monthly_fixed: newSettings.monthlyFixed,
+      monthly_variable: newSettings.monthlyVariable,
+      current_savings: newSettings.currentSavings,
+      lump_sum: newSettings.lumpSum,
+      start_date: newSettings.startDate,
+      monthly_income: newSettings.monthlyIncome,
+      income_months: newSettings.incomeMonths,
+    };
+    console.log('🔍 [updateSettings] DB payload:', dbData);
 
     // Save to database with proper upsert
-    const { error } = await supabase
+    console.log('⏳ [updateSettings] Starting upsert...');
+    const { data, error } = await supabase
       .from('finance_settings')
-      .upsert(
-        {
-          user_id: user.id,
-          monthly_fixed: newSettings.monthlyFixed,
-          monthly_variable: newSettings.monthlyVariable,
-          current_savings: newSettings.currentSavings,
-          lump_sum: newSettings.lumpSum,
-          start_date: newSettings.startDate,
-          monthly_income: newSettings.monthlyIncome,
-          income_months: newSettings.incomeMonths,
-        },
-        {
-          onConflict: 'user_id',
-        }
-      );
+      .upsert(dbData, { onConflict: 'user_id' })
+      .select();
+
+    console.log('🔍 [updateSettings] Upsert result - data:', data);
+    console.log('🔍 [updateSettings] Upsert result - error:', error);
 
     if (error) {
-      console.error('Failed to save settings:', error);
+      console.error('❌ [updateSettings] Failed to save settings:', error);
       return { success: false, error: error.message };
     }
 
+    console.log('✅ [updateSettings] Successfully saved to database');
     return { success: true };
   };
 
