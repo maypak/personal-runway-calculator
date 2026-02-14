@@ -150,22 +150,34 @@ export function useSupabaseFinance() {
 
   // Add expense
   const addExpense = async (expense: Omit<Expense, 'id' | 'createdAt'>) => {
-    if (!user) return;
+    console.log('🔍 [addExpense] Called with:', expense);
+    
+    if (!user) {
+      console.error('❌ [addExpense] No user authenticated');
+      return;
+    }
+
+    const dbPayload = {
+      user_id: user.id,
+      date: expense.date,
+      category: expense.category,
+      amount: expense.amount,
+      memo: expense.memo,
+      description: expense.description,
+    };
+    console.log('🔍 [addExpense] DB payload:', dbPayload);
 
     const { data, error } = await supabase
       .from('expenses')
-      .insert({
-        user_id: user.id,
-        date: expense.date,
-        category: expense.category,
-        amount: expense.amount,
-        memo: expense.memo,
-        description: expense.description,
-      })
+      .insert(dbPayload)
       .select()
       .single();
 
+    console.log('🔍 [addExpense] Result - data:', data);
+    console.log('🔍 [addExpense] Result - error:', error);
+
     if (data && !error) {
+      console.log('✅ [addExpense] Successfully added expense');
       setExpenses((prev) => [
         {
           id: data.id,
@@ -178,35 +190,64 @@ export function useSupabaseFinance() {
         },
         ...prev,
       ]);
+    } else if (error) {
+      console.error('❌ [addExpense] Failed:', error.message);
     }
   };
 
   // Delete expense
   const deleteExpense = async (id: string) => {
-    if (!user) return;
+    console.log('🔍 [deleteExpense] Called with id:', id);
+    
+    if (!user) {
+      console.error('❌ [deleteExpense] No user authenticated');
+      return;
+    }
 
-    await supabase.from('expenses').delete().eq('id', id);
+    console.log('⏳ [deleteExpense] Deleting from database...');
+    const { error } = await supabase.from('expenses').delete().eq('id', id);
+    
+    console.log('🔍 [deleteExpense] Result - error:', error);
+
+    if (error) {
+      console.error('❌ [deleteExpense] Failed:', error.message);
+      return;
+    }
+
+    console.log('✅ [deleteExpense] Successfully deleted expense');
     setExpenses((prev) => prev.filter((e) => e.id !== id));
   };
 
   // Add recurring expense
   const addRecurringExpense = async (expense: Omit<RecurringExpense, 'id'>) => {
-    if (!user) return;
+    console.log('🔍 [addRecurringExpense] Called with:', expense);
+    
+    if (!user) {
+      console.error('❌ [addRecurringExpense] No user authenticated');
+      return;
+    }
+
+    const dbPayload = {
+      user_id: user.id,
+      name: expense.name,
+      amount: expense.amount,
+      category: expense.category,
+      day_of_month: expense.dayOfMonth,
+      enabled: expense.enabled,
+    };
+    console.log('🔍 [addRecurringExpense] DB payload:', dbPayload);
 
     const { data, error } = await supabase
       .from('recurring_expenses')
-      .insert({
-        user_id: user.id,
-        name: expense.name,
-        amount: expense.amount,
-        category: expense.category,
-        day_of_month: expense.dayOfMonth,
-        enabled: expense.enabled,
-      })
+      .insert(dbPayload)
       .select()
       .single();
 
+    console.log('🔍 [addRecurringExpense] Result - data:', data);
+    console.log('🔍 [addRecurringExpense] Result - error:', error);
+
     if (data && !error) {
+      console.log('✅ [addRecurringExpense] Successfully added recurring expense');
       setRecurringExpenses((prev) => [
         ...prev,
         {
@@ -218,24 +259,42 @@ export function useSupabaseFinance() {
           enabled: data.enabled,
         },
       ]);
+    } else if (error) {
+      console.error('❌ [addRecurringExpense] Failed:', error.message);
     }
   };
 
   // Update recurring expense
   const updateRecurringExpense = async (id: string, updates: Partial<RecurringExpense>) => {
-    if (!user) return;
+    console.log('🔍 [updateRecurringExpense] Called with id:', id, 'updates:', updates);
+    
+    if (!user) {
+      console.error('❌ [updateRecurringExpense] No user authenticated');
+      return;
+    }
 
-    await supabase
+    const dbPayload = {
+      name: updates.name,
+      amount: updates.amount,
+      category: updates.category,
+      day_of_month: updates.dayOfMonth,
+      enabled: updates.enabled,
+    };
+    console.log('🔍 [updateRecurringExpense] DB payload:', dbPayload);
+
+    const { error } = await supabase
       .from('recurring_expenses')
-      .update({
-        name: updates.name,
-        amount: updates.amount,
-        category: updates.category,
-        day_of_month: updates.dayOfMonth,
-        enabled: updates.enabled,
-      })
+      .update(dbPayload)
       .eq('id', id);
 
+    console.log('🔍 [updateRecurringExpense] Result - error:', error);
+
+    if (error) {
+      console.error('❌ [updateRecurringExpense] Failed:', error.message);
+      return;
+    }
+
+    console.log('✅ [updateRecurringExpense] Successfully updated');
     setRecurringExpenses((prev) =>
       prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
     );
@@ -243,9 +302,24 @@ export function useSupabaseFinance() {
 
   // Delete recurring expense
   const deleteRecurringExpense = async (id: string) => {
-    if (!user) return;
+    console.log('🔍 [deleteRecurringExpense] Called with id:', id);
+    
+    if (!user) {
+      console.error('❌ [deleteRecurringExpense] No user authenticated');
+      return;
+    }
 
-    await supabase.from('recurring_expenses').delete().eq('id', id);
+    console.log('⏳ [deleteRecurringExpense] Deleting from database...');
+    const { error } = await supabase.from('recurring_expenses').delete().eq('id', id);
+    
+    console.log('🔍 [deleteRecurringExpense] Result - error:', error);
+
+    if (error) {
+      console.error('❌ [deleteRecurringExpense] Failed:', error.message);
+      return;
+    }
+
+    console.log('✅ [deleteRecurringExpense] Successfully deleted');
     setRecurringExpenses((prev) => prev.filter((r) => r.id !== id));
   };
 

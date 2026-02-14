@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PWA Icon Generator</title>
+</head>
+<body>
+  <h1>PWA Icon Generator</h1>
+  <p>Icons will be auto-generated and downloaded...</p>
+  <canvas id="canvas192" width="192" height="192" style="border:1px solid #ccc; margin: 10px;"></canvas>
+  <canvas id="canvas512" width="512" height="512" style="border:1px solid #ccc; margin: 10px;"></canvas>
+
+  <script>
+    function generateIcon(canvasId, size, filename) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      
+      // Purple gradient background
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#8B5CF6'); // violet-500
+      gradient.addColorStop(1, '#6D28D9'); // violet-700
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // White text: $
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${size * 0.55}px system-ui`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('$', size / 2, size / 2);
+      
+      // Small "time" text
+      ctx.font = `${size * 0.12}px system-ui`;
+      ctx.fillText('TIME', size / 2, size * 0.8);
+      
+      // Download
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // Auto-generate on load
+    window.onload = function() {
+      setTimeout(() => generateIcon('canvas192', 192, 'icon-192.png'), 100);
+      setTimeout(() => generateIcon('canvas512', 512, 'icon-512.png'), 500);
+    };
+  </script>
+</body>
+</html>
