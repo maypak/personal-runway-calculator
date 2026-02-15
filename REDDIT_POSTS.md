@@ -62,21 +62,28 @@ The calculator isn't revolutionary - it's just **friction-free**. No spreadsheet
 
 ## It's free and open source:
 
-- Free tier: Basic runway calculator + 50 expenses/month
+- **100% free** - No tiers, no paywalls (for now)
 - No ads, no tracking, no selling data
-- Source code: [GitHub link]
+- Open source: github.com/maypak/personal-runway-calculator
 
 ---
 
-## Early access (50 spots):
+## Beta testers wanted (10-15 spots):
 
-I'm looking for 50 beta users to test and give feedback before the public launch. If you're interested:
+I'm looking for 10-15 quality beta testers before the public launch.
 
-- Lifetime Pro features (unlimited tracking, exports)
-- Vote on next features
-- Priority support
+**What you get:**
+- Early access (test first!)
+- Direct line to me (the founder)
+- Your feedback shapes the product
+- Listed as "Beta Contributor" (optional)
 
-Apply here: [Beta form link] (2 min)
+**What I need:**
+- Use it for 2-3 days
+- Give honest feedback
+- Report bugs
+
+**Apply:** [Beta form link] (2 min)
 
 ---
 
