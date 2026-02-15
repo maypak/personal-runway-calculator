@@ -32,6 +32,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleanup notes for future improvements
 
 ### Changed
+- **UX Improvement: Optional fields** (2026-02-15)
+  - Lump Sum, Monthly Income, Income Months, Monthly Variable now allow empty values
+  - Added placeholder "0" instead of forcing 0 value
+  - Added "(optional)" labels for clarity
+  - Better user experience - cleaner initial state
+- **Code Quality** (2026-02-15)
+  - ESLint warnings reduced from 11 to 4 (63% improvement)
+  - Removed unused variables (recurringExpenses, newRecurring - future features)
+  - Documented intentional patterns with comments
+  - Created .eslintignore for build scripts
 - Updated SEO metadata to emphasize time-over-money metaphor
 - Improved error handling (removed `any` types)
 - Enhanced metadata keywords for better discoverability
@@ -58,12 +68,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Replaced `any` types with proper Error type guards
 
 ### Documentation
+- **README.md overhaul** (2026-02-15)
+  - Updated to reflect 93% launch readiness
+  - Added PWA features section
+  - Updated tech stack (Next.js 16, Turbopack, RLS)
+  - Strengthened "Your Money is TIME" messaging
+  - Documented Phase 1 completion (P0 fix, PWA, QA)
+- **CLAUDE.md: Supabase guidelines** (2026-02-15)
+  - Section 5: Database & RLS best practices
+  - Critical: UPSERT + RLS pitfalls documented
+  - Correct pattern (conditional INSERT/UPDATE)
+  - Emergency debugging checklist
+  - Prevent future regressions
+- **QA Regression Tests** (2026-02-15)
+  - Added P0 bug history to test scenarios
+  - Document critical test points
+  - Reference QA fix report for full analysis
+- **Code Comments** (2026-02-15)
+  - Explained why UPSERT is avoided
+  - Referenced QA reports for context
+  - Help future developers avoid same mistakes
 - Added QA Automation Plan (A+B hybrid approach)
-- Added QA test scenarios document
+- Added QA test scenarios document (40 scenarios)
 - Added Supabase OAuth setup guide
 - Created research insights summary (target audience, monetization, launch strategy)
 - Updated coding guidelines based on industry best practices (Karpathy principles)
 - Added cleanup notes documenting unused files and types
+- **P0 Fix Report** (qa-reports/2026-02-15-10-30-P0-FIX.md, 8.5KB)
 
 ## [0.1.0] - 2026-02-13
 
