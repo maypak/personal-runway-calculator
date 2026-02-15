@@ -1,8 +1,8 @@
 # Contributing to Personal Runway Calculator
 
-Thank you for your interest in contributing! 🙏
+First off, thanks for taking the time to contribute! 🎉
 
-This project aims to help people calculate their financial runway and make confident decisions about quitting their jobs, freelancing, or taking career breaks.
+This document provides guidelines for contributing to the Personal Runway Calculator project.
 
 ---
 
@@ -11,121 +11,53 @@ This project aims to help people calculate their financial runway and make confi
 1. [Code of Conduct](#code-of-conduct)
 2. [How Can I Contribute?](#how-can-i-contribute)
 3. [Development Setup](#development-setup)
-4. [Pull Request Process](#pull-request-process)
-5. [Coding Standards](#coding-standards)
-6. [Commit Guidelines](#commit-guidelines)
-7. [Testing](#testing)
-8. [Documentation](#documentation)
+4. [Coding Guidelines](#coding-guidelines)
+5. [Commit Message Convention](#commit-message-convention)
+6. [Pull Request Process](#pull-request-process)
+7. [Issue Reporting](#issue-reporting)
 
 ---
 
 ## Code of Conduct
 
-Be kind, be respectful, be helpful.
+**Be respectful, be kind, be helpful.**
 
-This is a safe space for people learning, growing, and building together.
+This is a tool built to help people, by people. We're all learning, all growing.
 
-**We don't tolerate:**
-- Harassment, discrimination, or hate speech
-- Trolling or deliberate disruption
-- Spam or self-promotion
-- Sharing private information without consent
-
-**If you see a violation:** Report it to [your-email@example.com]
+If you see something that could be better, suggest it constructively. If someone makes a mistake, help them learn.
 
 ---
 
 ## How Can I Contribute?
 
-### 🐛 Reporting Bugs
+### 🐛 Report Bugs
 
-**Before submitting:**
-1. Check if the bug is already reported (search [Issues](issues-link))
-2. Try the latest version (bug might be fixed)
-3. Reproduce the bug (consistent steps)
+Found a bug? [Open an issue](https://github.com/maypak/personal-runway-calculator/issues/new) with:
 
-**When reporting:**
-- Use a clear title: "Bug: [feature] doesn't work when [condition]"
-- Describe steps to reproduce
-- Include expected vs actual behavior
-- Add screenshots if UI-related
-- Share your environment (browser, OS, device)
+- **Clear title**: "Bug: Runway calculation incorrect when..."
+- **Steps to reproduce**: What you did
+- **Expected behavior**: What should happen
+- **Actual behavior**: What actually happened
+- **Screenshots**: If applicable
+- **Environment**: Browser, OS, device
 
-**Template:**
-```markdown
-## Bug Description
-[Clear description]
+### 💡 Suggest Features
 
-## Steps to Reproduce
-1. Go to...
-2. Click on...
-3. See error
+Have an idea? [Open an issue](https://github.com/maypak/personal-runway-calculator/issues/new) with:
 
-## Expected Behavior
-[What should happen]
+- **Clear title**: "Feature: Add multi-currency support"
+- **Problem**: What pain point does this solve?
+- **Solution**: How would this feature work?
+- **Alternatives**: Other ways to solve this?
+- **Mockups/sketches**: Visual helps!
 
-## Actual Behavior
-[What actually happens]
+### 🔧 Submit Code
 
-## Environment
-- Browser: Chrome 120
-- OS: macOS 14.0
-- Device: Desktop
+Want to contribute code? Awesome! Follow the [Pull Request Process](#pull-request-process) below.
 
-## Screenshots
-[If applicable]
-```
+### 📝 Improve Documentation
 
----
-
-### 💡 Suggesting Features
-
-**Before suggesting:**
-1. Check if it's already requested (search [Issues](issues-link))
-2. Think about the use case (who needs this?)
-3. Consider if it fits the project scope (runway calculator, not general budgeting app)
-
-**When suggesting:**
-- Use a clear title: "Feature: Add [specific feature]"
-- Explain the problem it solves
-- Describe your proposed solution
-- Mention alternatives you've considered
-- Explain why this matters
-
-**Template:**
-```markdown
-## Problem
-[What problem does this solve?]
-
-## Proposed Solution
-[How would this feature work?]
-
-## Alternatives Considered
-[Other ways to solve this]
-
-## Why This Matters
-[Use case, user benefit]
-
-## Additional Context
-[Screenshots, mockups, examples]
-```
-
----
-
-### 🔧 Code Contributions
-
-**Good first issues:**
-- Look for `good-first-issue` label
-- Usually small, well-defined tasks
-- Great for getting familiar with the codebase
-
-**Areas we need help:**
-- [ ] Writing tests (we have none!)
-- [ ] Accessibility improvements
-- [ ] Performance optimizations
-- [ ] Mobile UX polish
-- [ ] Documentation
-- [ ] Translations (future)
+Typos, unclear instructions, missing examples? PRs welcome!
 
 ---
 
@@ -133,314 +65,180 @@ This is a safe space for people learning, growing, and building together.
 
 ### Prerequisites
 
-```bash
-- Node.js 18+ (check: node --version)
-- npm 9+ (check: npm --version)
-- Git (check: git --version)
-- Supabase account (free tier)
-```
+- **Node.js**: 20+ (recommended: 20.x LTS)
+- **npm**: 10+
+- **Git**: Latest version
+- **Supabase account**: For auth + database (free tier OK)
+
+### Local Setup
+
+1. **Fork the repository**
+
+   Click "Fork" on GitHub to create your own copy.
+
+2. **Clone your fork**
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/personal-runway-calculator.git
+   cd personal-runway-calculator
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+4. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Edit `.env.local` and add your Supabase credentials:
+
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+   [Get your Supabase credentials](https://supabase.com/dashboard)
+
+5. **Run development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+6. **Make your changes**
+
+   - Create a new branch: `git checkout -b feature/your-feature-name`
+   - Make changes
+   - Test locally
+   - Commit with [conventional commit messages](#commit-message-convention)
+
+7. **Run checks before committing**
+
+   ```bash
+   npm run lint      # Check for linting errors
+   npm run build     # Ensure build succeeds
+   npm run type-check # TypeScript type checking
+   ```
 
 ---
 
-### 1. Fork & Clone
+## Coding Guidelines
 
-```bash
-# Fork the repo on GitHub, then:
-git clone https://github.com/YOUR-USERNAME/personal-runway-calculator.git
-cd personal-runway-calculator
-```
+We follow **Karpathy principles** (see [CLAUDE.md](./CLAUDE.md) for full guidelines).
 
----
+### Core Principles
 
-### 2. Install Dependencies
+1. **Think Before Coding**
+   - Understand the problem deeply
+   - Consider edge cases
+   - Plan the solution
 
-```bash
-npm install
-```
+2. **Simplicity First**
+   - Simple > clever
+   - Fewer lines > more features
+   - Maintainability > performance (until proven otherwise)
 
----
+3. **Surgical Changes**
+   - One thing at a time
+   - No drive-by refactoring
+   - If you touch it, test it
 
-### 3. Environment Setup
-
-```bash
-# Copy example env file
-cp .env.example .env.local
-
-# Add your Supabase credentials
-# Get these from: https://app.supabase.com/project/YOUR-PROJECT/settings/api
-```
-
-`.env.local`:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
-```
-
----
-
-### 4. Database Setup
-
-```bash
-# Option A: Use existing Supabase project
-# 1. Create new project on supabase.com
-# 2. Run migrations from /supabase/schema.sql
-
-# Option B: Local Supabase (advanced)
-npx supabase init
-npx supabase start
-npx supabase db reset
-```
-
----
-
-### 5. Run Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
----
-
-### 6. Create a Branch
-
-```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/bug-description
-```
-
-**Branch naming:**
-- `feature/` for new features
-- `fix/` for bug fixes
-- `docs/` for documentation
-- `refactor/` for code refactoring
-- `test/` for adding tests
-
----
-
-## Pull Request Process
-
-### 1. Make Your Changes
-
-- Write clean, readable code
-- Follow our coding standards (see below)
-- Add comments for complex logic
-- Update documentation if needed
-
----
-
-### 2. Test Locally
-
-```bash
-# Run the app
-npm run dev
-
-# Build for production (check for errors)
-npm run build
-
-# Run the production build
-npm start
-```
-
-**Manual testing checklist:**
-- [ ] Feature works on desktop
-- [ ] Feature works on mobile (iPhone, Android)
-- [ ] No console errors
-- [ ] UI is responsive
-- [ ] Accessibility: keyboard navigation works
-- [ ] Works in Chrome, Firefox, Safari
-
----
-
-### 3. Commit Your Changes
-
-```bash
-git add .
-git commit -m "feat: add expense categories"
-```
-
-**See Commit Guidelines below for format.**
-
----
-
-### 4. Push to Your Fork
-
-```bash
-git push origin feature/your-feature-name
-```
-
----
-
-### 5. Open a Pull Request
-
-1. Go to your fork on GitHub
-2. Click "Compare & pull request"
-3. Fill out the PR template:
-
-```markdown
-## Description
-[What does this PR do?]
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Breaking change
-- [ ] Documentation update
-
-## How to Test
-1. Go to...
-2. Click on...
-3. Verify that...
-
-## Screenshots
-[If UI changes]
-
-## Checklist
-- [ ] Code follows style guidelines
-- [ ] I've tested this locally
-- [ ] I've updated documentation
-- [ ] No new warnings or errors
-```
-
----
-
-### 6. Code Review
-
-- We'll review your PR within 2-3 days
-- Be ready to make changes if requested
-- Once approved, we'll merge!
-
----
-
-## Coding Standards
+4. **Goal-Driven**
+   - Every PR solves a real problem
+   - No "might need this later" code
+   - Delete > comment out
 
 ### TypeScript
 
-✅ **Do:**
+- **Use strict mode**: Enabled by default
+- **Avoid `any`**: Use proper types
+- **Prefer interfaces**: Over types (for objects)
+- **Document complex types**: Add comments
+
 ```typescript
-// Use explicit types
-interface ExpenseData {
-  amount: number;
-  category: string;
-  date: string;
+// ✅ Good
+interface FinancialSettings {
+  currentSavings: number;
+  monthlyFixed: number;
+  monthlyVariable: number;
+  lumpSum?: number; // Optional
 }
 
-// Prefer named exports
-export function calculateRunway(savings: number, expenses: number): number {
-  return Math.floor(savings / expenses);
-}
-
-// Use async/await
-async function fetchExpenses(): Promise<ExpenseData[]> {
-  const { data } = await supabase.from('expenses').select('*');
-  return data || [];
-}
+// ❌ Bad
+const settings: any = { ... };
 ```
 
-❌ **Don't:**
+### React
+
+- **Functional components**: No class components
+- **Hooks**: Use built-in hooks (useState, useEffect, etc.)
+- **Custom hooks**: Prefix with `use` (e.g., `useSupabaseFinance`)
+- **Props**: Destructure in function signature
+
 ```typescript
-// Avoid `any`
-function doSomething(data: any) { ... }
-
-// Avoid default exports (use named exports)
-export default function MyComponent() { ... }
-
-// Avoid `.then()` chains (use async/await)
-supabase.from('expenses').select('*').then(data => { ... });
-```
-
----
-
-### React Components
-
-✅ **Do:**
-```tsx
-// Functional components with TypeScript
-interface ButtonProps {
-  onClick: () => void;
-  label: string;
-  disabled?: boolean;
+// ✅ Good
+export default function Dashboard({ user }: { user: User }) {
+  const [settings, setSettings] = useState<FinancialSettings>(defaultSettings);
+  ...
 }
 
-export function Button({ onClick, label, disabled = false }: ButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="px-4 py-2 bg-blue-500 text-white rounded"
-    >
-      {label}
-    </button>
-  );
+// ❌ Bad
+export default function Dashboard(props: any) {
+  ...
 }
 ```
 
-❌ **Don't:**
+### CSS (Tailwind)
+
+- **Use Tailwind utilities**: Avoid custom CSS unless necessary
+- **Responsive design**: Mobile-first (`sm:`, `md:`, `lg:`)
+- **Dark mode**: Not yet implemented, but planned
+- **Consistent spacing**: Use Tailwind's spacing scale (p-4, m-2, etc.)
+
 ```tsx
-// Avoid class components
-class Button extends React.Component { ... }
-
-// Avoid inline styles (use Tailwind)
-<button style={{ padding: '10px' }}>Click</button>
-```
-
----
-
-### Tailwind CSS
-
-✅ **Do:**
-```tsx
-// Use Tailwind utilities
-<div className="flex items-center gap-4 p-6 bg-white rounded-lg shadow">
-  <h1 className="text-2xl font-bold text-gray-900">Title</h1>
+// ✅ Good
+<div className="px-4 py-2 bg-white rounded-lg shadow-md hover:shadow-lg transition">
+  ...
 </div>
 
-// Use responsive classes
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+// ❌ Bad
+<div style={{ padding: '8px 16px', backgroundColor: 'white' }}>
+  ...
+</div>
 ```
-
-❌ **Don't:**
-```tsx
-// Avoid custom CSS files
-<div className="my-custom-class">
-
-// Avoid inline styles
-<div style={{ display: 'flex' }}>
-```
-
----
 
 ### File Structure
 
 ```
-/app
-  /components      # Reusable UI components
-    Auth.tsx
-    Dashboard.tsx
-  /hooks           # Custom React hooks
-    useAuth.ts
-    useRunway.ts
-  /lib             # Utilities, helpers
-    supabase.ts
-    utils.ts
-  /types           # TypeScript types
-    index.ts
-  page.tsx         # Route pages
-  layout.tsx
-/supabase
-  schema.sql       # Database schema
-/public
-  manifest.json    # PWA manifest
-  og-image.png
+app/
+├── components/       # React components
+│   ├── Auth.tsx
+│   ├── FinanceDashboard.tsx
+│   └── ...
+├── hooks/            # Custom hooks
+│   ├── useSupabaseFinance.ts
+│   └── useLocalStorage.ts
+├── types/            # TypeScript types/interfaces
+│   └── index.ts
+├── layout.tsx        # Root layout
+└── page.tsx          # Home page
+
+public/               # Static assets
+supabase/             # Supabase schema & migrations
 ```
 
 ---
 
-## Commit Guidelines
+## Commit Message Convention
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/).
+We follow **Conventional Commits** for clear, structured commit history.
 
 ### Format
 
@@ -454,190 +252,235 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/).
 
 ### Types
 
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style (formatting, no logic change)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Adding tests
-- `chore`: Build, dependencies, etc.
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation only
+- **style**: Code style (formatting, no logic change)
+- **refactor**: Code restructuring (no behavior change)
+- **perf**: Performance improvement
+- **test**: Add or update tests
+- **chore**: Build process, dependencies, etc.
 
 ### Examples
 
 ```bash
-feat(dashboard): add expense categories
+# Feature
+git commit -m "feat(dashboard): Add multi-currency support"
 
-Added dropdown for expense categories (Food, Transport, Entertainment).
-Users can now organize expenses better.
+# Bug fix
+git commit -m "fix(auth): Resolve OAuth login redirect issue"
 
-Closes #42
+# Documentation
+git commit -m "docs(readme): Update installation instructions"
+
+# Refactor
+git commit -m "refactor(hooks): Extract Supabase logic to custom hook"
+
+# Breaking change
+git commit -m "feat(api)!: Change expense data structure
+
+BREAKING CHANGE: Expense schema now uses `amount` instead of `value`"
+```
+
+### Scope (Optional)
+
+- `dashboard`: Financial dashboard
+- `auth`: Authentication
+- `expenses`: Expense tracking
+- `settings`: Settings panel
+- `hooks`: Custom hooks
+- `types`: TypeScript types
+- `db`: Database/Supabase
+- `ui`: UI components
+- `docs`: Documentation
 
 ---
 
-fix(auth): resolve email verification bug
+## Pull Request Process
 
-Email verification link was broken on mobile Safari.
-Fixed by adjusting redirect URL format.
+### 1. Create a Branch
 
-Fixes #56
+```bash
+git checkout -b feature/multi-currency-support
+```
+
+Branch naming:
+- `feature/feature-name` (new features)
+- `fix/bug-description` (bug fixes)
+- `docs/what-youre-updating` (docs)
+- `refactor/what-youre-refactoring` (refactors)
+
+### 2. Make Your Changes
+
+- Follow [coding guidelines](#coding-guidelines)
+- Write clear commit messages
+- Test your changes locally
+- Update documentation if needed
+
+### 3. Run Checks
+
+```bash
+npm run lint
+npm run build
+npm run type-check
+```
+
+**All must pass** before submitting PR.
+
+### 4. Push to Your Fork
+
+```bash
+git push origin feature/multi-currency-support
+```
+
+### 5. Open a Pull Request
+
+Go to [GitHub](https://github.com/maypak/personal-runway-calculator) and click "New Pull Request"
+
+**PR Template:**
+
+```markdown
+## Description
+
+[What does this PR do?]
+
+## Motivation
+
+[Why is this change needed? What problem does it solve?]
+
+## Changes
+
+- Added multi-currency selector to settings
+- Updated runway calculation to handle currency conversion
+- Added currency conversion API integration
+
+## Screenshots (if applicable)
+
+[Before/after screenshots]
+
+## Checklist
+
+- [ ] Code follows project coding guidelines
+- [ ] Commit messages follow conventional commit format
+- [ ] All checks pass (lint, build, type-check)
+- [ ] Documentation updated (if needed)
+- [ ] Tested locally
+- [ ] No breaking changes (or documented if unavoidable)
+
+## Related Issues
+
+Fixes #123
+```
+
+### 6. Code Review
+
+- Maintainer will review within 1-3 days
+- Address feedback
+- Iterate until approved
+- PR will be merged or closed with explanation
 
 ---
 
-docs(readme): update installation instructions
+## Issue Reporting
 
-Added troubleshooting section for Supabase setup.
+### Bug Report Template
 
----
+```markdown
+**Describe the bug**
+A clear description of what the bug is.
 
-refactor(hooks): simplify useRunway hook
+**To Reproduce**
+Steps to reproduce:
+1. Go to '...'
+2. Click on '...'
+3. See error
 
-Removed unnecessary state, improved performance by 20%.
+**Expected behavior**
+What you expected to happen.
 
----
+**Screenshots**
+If applicable, add screenshots.
 
-test(utils): add tests for runway calculation
+**Environment**
+- Browser: [e.g., Chrome 120]
+- OS: [e.g., macOS 14]
+- Device: [e.g., iPhone 15]
 
-Added unit tests for edge cases (zero expenses, negative savings).
+**Additional context**
+Any other context about the problem.
+```
+
+### Feature Request Template
+
+```markdown
+**Is your feature request related to a problem?**
+A clear description of the problem. Ex. I'm always frustrated when [...]
+
+**Describe the solution you'd like**
+A clear description of what you want to happen.
+
+**Describe alternatives you've considered**
+Other solutions or features you've considered.
+
+**Additional context**
+Any other context, screenshots, or mockups.
 ```
 
 ---
 
-## Testing
+## Development Tips
 
-**We currently don't have tests (yet!)**
+### Debugging
 
-If you'd like to help set up testing:
-1. Choose a framework (Jest + React Testing Library?)
-2. Write tests for core functions:
-   - Runway calculation
-   - Expense tracking
-   - Auth flows
-3. Open a PR with testing setup
-
-**Priority:**
-- Unit tests for calculations
-- Integration tests for Supabase
-- E2E tests for critical flows (signup, expense tracking)
-
----
-
-## Documentation
-
-### Code Comments
-
-✅ **Do comment:**
-- Complex logic or algorithms
-- Non-obvious decisions
-- Edge cases or gotchas
-- Public API functions
-
+**Supabase Logs:**
 ```typescript
-/**
- * Calculate financial runway based on savings and monthly expenses.
- * Returns number of months until funds run out.
- * 
- * @param savings - Total available savings (USD)
- * @param monthlyExpenses - Average monthly burn rate (USD)
- * @returns Number of months (rounded down)
- * 
- * @example
- * calculateRunway(60000, 3000) // Returns: 20
- */
-export function calculateRunway(savings: number, monthlyExpenses: number): number {
-  if (monthlyExpenses <= 0) return 999; // Infinite runway
-  return Math.floor(savings / monthlyExpenses);
-}
+// useSupabaseFinance.ts has comprehensive logging
+console.log('🔍 [functionName] Context:', data);
 ```
 
-❌ **Don't comment:**
-- Obvious code
-- What the code does (code should be self-explanatory)
+**Browser DevTools:**
+- Network tab: Check Supabase API calls
+- Console: Look for errors
+- React DevTools: Inspect component state
 
-```typescript
-// Bad: Obvious comment
-const total = a + b; // Add a and b
-```
+### Testing Locally
 
----
+**Test scenarios:**
+1. Fresh user (no data)
+2. Existing user (with data)
+3. Edge cases (zero savings, negative expenses, etc.)
+4. Mobile viewport (Chrome DevTools responsive mode)
+5. Offline mode (PWA, future feature)
 
-### README Updates
+### Common Issues
 
-If your PR changes user-facing features:
-- Update README.md
-- Add screenshots if UI changed
-- Update feature list
-- Add to "What's New" section
+**Build fails:**
+- Check TypeScript errors: `npm run type-check`
+- Check ESLint: `npm run lint`
+- Clear cache: `rm -rf .next && npm run dev`
 
----
+**Supabase connection fails:**
+- Verify `.env.local` credentials
+- Check Supabase dashboard (project status)
+- Review RLS policies (ensure enabled)
 
-## Project-Specific Notes
-
-### Supabase RLS Policies
-
-**When adding new tables:**
-1. Add RLS policies (users can only see their own data)
-2. Test with `set role authenticated` in SQL
-
-```sql
--- Enable RLS
-ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can only see own data
-CREATE POLICY "Users can view own expenses"
-  ON expenses
-  FOR SELECT
-  TO authenticated
-  USING (auth.uid() = user_id);
-
--- Test the policy
-SET role authenticated;
-SET request.jwt.claims.sub = '<test-user-uuid>';
-SELECT * FROM expenses; -- Should only show test user's data
-```
-
----
-
-### Mobile-First Design
-
-**Always test on mobile:**
-- Use Chrome DevTools device emulation
-- Test on real iPhone if possible
-- Check touch targets (min 44px)
-- Verify text is readable (min 16px)
-
----
-
-### Performance
-
-**Lighthouse score targets:**
-- Performance: 90+
-- Accessibility: 100
-- Best Practices: 100
-- SEO: 100
-
-**Keep bundle size small:**
-- Current: 87 kB
-- Target: <100 kB
+**Deployment issues:**
+- Check Vercel logs
+- Ensure environment variables set in Vercel dashboard
+- Verify build succeeds locally first
 
 ---
 
 ## Questions?
 
-- **General questions:** Open a [Discussion](discussions-link)
-- **Bug reports:** Open an [Issue](issues-link)
-- **Feature requests:** Open an [Issue](issues-link)
-- **Security issues:** Email [security@example.com]
-- **DM me:** Twitter [@personalrunway]
+**Before asking:**
+1. Check [README.md](./README.md)
+2. Search [existing issues](https://github.com/maypak/personal-runway-calculator/issues)
+3. Read [CLAUDE.md](./CLAUDE.md) for coding philosophy
 
----
-
-## Recognition
-
-Contributors are recognized in:
-- README.md (Contributors section)
-- Release notes (for significant contributions)
-- Shout-outs on Twitter
+**Still stuck?**
+- Open an issue with `question` label
+- Or DM on Twitter [@PersonalRunway](https://twitter.com/personalrunway)
 
 ---
 
@@ -645,14 +488,13 @@ Contributors are recognized in:
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
 
----
-
-## Thank You! 🙏
-
-Every contribution, big or small, makes this project better.
-
-Thank you for being part of the journey!
+See [LICENSE](./LICENSE) for details.
 
 ---
 
-**Happy coding!** 🚀
+**Thank you for contributing!** 🙏
+
+Every PR, issue, and suggestion helps make this tool better for everyone.
+
+— May  
+Founder, Personal Runway Calculator
