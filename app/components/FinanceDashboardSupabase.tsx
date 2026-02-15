@@ -52,6 +52,20 @@ export default function FinanceDashboardSupabase() {
     }
   }, [settings]);
 
+  // Keyboard accessibility: Close modals with Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowSettings(false);
+        setShowExpenseForm(false);
+        setShowSimulator(false);
+        setShowThemePicker(false);
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, []);
+
   if (loading || !settings) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -143,7 +157,7 @@ export default function FinanceDashboardSupabase() {
             <button
               onClick={() => setShowThemePicker(!showThemePicker)}
               className={`px-3 py-2 md:px-4 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm transition`}
-              title="Change theme"
+              aria-label="Change color theme"
             >
               🎨
             </button>
@@ -176,6 +190,7 @@ export default function FinanceDashboardSupabase() {
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="px-3 py-2 md:px-4 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm transition"
+            aria-label="Open financial settings"
           >
             ⚙️
           </button>
@@ -448,6 +463,7 @@ export default function FinanceDashboardSupabase() {
           <button
             onClick={() => setShowExpenseForm(!showExpenseForm)}
             className={`px-3 py-2 md:px-4 ${classes.bg600} ${classes.bgHover} text-white rounded-lg text-sm font-semibold transform active:scale-95 transition-all shadow-md hover:shadow-lg`}
+            aria-label="Add new expense"
           >
             <span className="hidden sm:inline">+ Add Expense</span>
             <span className="sm:hidden">+ Add</span>
@@ -510,6 +526,7 @@ export default function FinanceDashboardSupabase() {
               <button
                 onClick={() => deleteExpense(exp.id)}
                 className="w-full sm:w-auto px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs md:text-sm font-medium transform active:scale-95 transition-all"
+                aria-label={`Delete ${exp.category} expense of $${exp.amount}`}
               >
                 Delete
               </button>
@@ -528,6 +545,8 @@ export default function FinanceDashboardSupabase() {
         <button
           onClick={() => setShowSimulator(!showSimulator)}
           className="w-full flex justify-between items-center text-lg font-semibold mb-4"
+          aria-expanded={showSimulator}
+          aria-label="Toggle runway simulator"
         >
           <span>🎲 Runway Simulator</span>
           <span className="text-2xl">{showSimulator ? '▼' : '▶'}</span>
