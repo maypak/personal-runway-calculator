@@ -11,12 +11,12 @@ export default function FinanceDashboardSupabase() {
   const {
     settings,
     expenses,
-    recurringExpenses,
+    // recurringExpenses, // Future feature - expense templates
     loading,
     updateSettings,
     addExpense,
     deleteExpense,
-    addRecurringExpense,
+    // addRecurringExpense, // Future feature - expense templates
   } = useSupabaseFinance();
 
   const [showExpenseForm, setShowExpenseForm] = useState(false);
@@ -30,12 +30,13 @@ export default function FinanceDashboardSupabase() {
     memo: '' 
   });
   
-  const [newRecurring, setNewRecurring] = useState({ 
-    name: '', 
-    amount: '', 
-    category: 'Fixed', 
-    dayOfMonth: 1 
-  });
+  // Recurring expenses - future feature
+  // const [newRecurring, setNewRecurring] = useState({ 
+  //   name: '', 
+  //   amount: '', 
+  //   category: 'Fixed', 
+  //   dayOfMonth: 1 
+  // });
   
   // Simulator state
   const [simMonthlyExpense, setSimMonthlyExpense] = useState(4000);
@@ -43,10 +44,10 @@ export default function FinanceDashboardSupabase() {
   const [simOneTimeExpense, setSimOneTimeExpense] = useState(0);
 
   // Initialize simulator with actual monthly expense
-  // This effect is intentional to sync simulator state with settings
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+  // Intentional: Sync simulator state with settings on mount/update
   useEffect(() => {
     if (settings) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSimMonthlyExpense(settings.monthlyFixed + settings.monthlyVariable);
     }
   }, [settings]);

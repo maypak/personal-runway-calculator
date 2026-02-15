@@ -105,9 +105,11 @@ const themes = {
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>('classic');
 
+  // Load saved theme from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('theme') as Theme;
     if (saved && themes[saved]) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setThemeState(saved);
     }
   }, []);

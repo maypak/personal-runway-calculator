@@ -1,0 +1,23 @@
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Scripts (Node.js, not TypeScript)
+generate-icons.js
+icon-generator.html
+og-image-generator.html
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Config files
+*.config.js
+*.config.ts

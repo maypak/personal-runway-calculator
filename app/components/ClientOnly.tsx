@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 export default function ClientOnly({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
-  // This effect is intentional to prevent hydration mismatch
-  // between server and client rendering
-  // eslint-disable-next-line react-hooks/set-state-in-effect
+  // Intentional: Prevent hydration mismatch between SSR and client
+  // This is a standard Next.js pattern for client-only components
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
