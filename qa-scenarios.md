@@ -313,23 +313,78 @@
 
 ## Scenario 3: Financial Settings - Data Persistence
 
+### 🔴 REGRESSION TEST: P0 Bug Fixed (2026-02-15)
+
+**Bug History:** This scenario previously failed due to UPSERT + RLS policy conflict.
+
+**Original Issue:**
+- Settings saved successfully (optimistic UI update)
+- Page refresh → Data loss (only current savings persisted)
+- Supabase 409 Conflict errors in console
+
+**Root Cause:** Supabase UPSERT conflicting with separate INSERT/UPDATE RLS policies
+
+**Fix:** Replace UPSERT with conditional INSERT/UPDATE (check existing record first)
+
+**Critical Test Points:**
+1. ✅ Save settings → **No 409/406/400 errors in console**
+2. ✅ Refresh page → **All values persist** (not just current savings)
+3. ✅ Verify Supabase finance_settings table → **Record exists with all fields**
+
+**Regression Prevention:**
+- This test must PASS on every deployment
+- If 409 errors appear again → Escalate as P0 immediately
+- See: `qa-reports/2026-02-15-10-30-P0-FIX.md` for full analysis
+
+---
+
 ### 3.1 Reload Page - Data Integrity
 
-**Priority:** P0 (Critical)
+**Priority:** P0 (Critical - REGRESSION TEST INCLUDED)
 
 **Steps:**
 1. Login and enter financial settings
-2. Save settings
-3. Hard refresh page (Ctrl+Shift+R / Cmd+Shift+R)
-4. Verify all fields show saved values
-5. Close browser completely
-6. Re-open and login
-7. Verify data still persists
+2. Enter test values:
+   - Current Savings: `50000`
+   - Lump Sum: `10000`
+   - Monthly Income: `3000`
+   - Income Months: `6`
+   - Monthly Fixed: `2000`
+   - Monthly Variable: `1500`
+3. Click "Save" or "Done"
+4. Verify dashboard shows:
+   - Available: `$78,000` (50k + 10k + 3k×6)
+   - Monthly: `$3,500` (2k + 1.5k)
+   - Runway: `~1yr 10mo`
+5. **Hard refresh page** (Ctrl+Shift+R / Cmd+Shift+R)
+6. **CRITICAL: Verify ALL values persist:**
+   - Current Savings: `50000` ✅
+   - Lump Sum: `10000` ✅
+   - Monthly Income: `3000` ✅
+   - Income Months: `6` ✅
+   - Monthly Fixed: `2000` ✅
+   - Monthly Variable: `1500` ✅
+7. Close browser completely
+8. Re-open and login
+9. Verify data still persists
 
 **Expected Results:**
-- ✅ All fields populated with saved values
+- ✅ All fields populated with saved values (not just savings!)
 - ✅ No data loss
 - ✅ Dashboard calculations match saved data
+- ✅ **Console has ZERO errors** (no 409/406/400)
+
+**Regression Check (If this fails, P0 bug has returned):**
+- ❌ If only "Current Savings" persists → P0 regression
+- ❌ If 409 Conflict errors in console → P0 regression
+- ❌ If dashboard shows wrong values → P0 regression
+
+**Debug Steps (If failure):**
+1. Open browser DevTools → Console tab
+2. Look for Supabase API errors (409, 406, 400)
+3. Check Network tab → filter "finance_settings"
+4. Screenshot errors and escalate immediately
+5. Reference: `qa-reports/2026-02-15-10-30-P0-FIX.md`
 
 ---
 
