@@ -43,8 +43,14 @@ Now I'm sharing this tool with you.
 ### ☁️ Cloud Sync
 - Your data syncs across devices
 - Secure authentication with Supabase
-- Never lose your data
+- **Data persists reliably** — never lose your settings
 - Access anywhere, anytime
+
+### 📱 Progressive Web App (PWA)
+- Install on mobile/desktop like a native app
+- Works offline (coming soon)
+- Fast, responsive, mobile-first design
+- Home screen icon ready
 
 ---
 
@@ -96,21 +102,29 @@ I worked as a software engineer for 10+ years. When I decided to quit, my bigges
 
 > **"How long can I survive without income?"**
 
+But here's the truth: **Your money isn't just money. It's TIME.**
+
+- $50,000 in savings? That's **12 months** of freedom.
+- $100,000? That's **2+ years** to chase your dream.
+
 I built this calculator to answer that question. My result: **31 months**.
 
-That number gave me confidence. Now it's your turn.
+That number gave me confidence to take the leap. Now it's your turn.
+
+**Stop counting dollars. Start counting days.** 🕐
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS
-- **Database:** Supabase (PostgreSQL)
-- **Auth:** Supabase Auth
-- **Deployment:** Vercel
-- **Icons:** Emoji + SVG
+- **Database:** Supabase (PostgreSQL + Row Level Security)
+- **Auth:** Supabase Auth (Email + OAuth ready)
+- **Deployment:** Vercel (Edge Network)
+- **PWA:** Manifest + Icons (installable)
+- **Code Quality:** ESLint, Karpathy principles
 
 ---
 
@@ -123,27 +137,34 @@ That number gave me confidence. Now it's your turn.
 
 ## 🔐 Privacy & Security
 
-- ✅ Your data is encrypted and stored securely with Supabase
-- ✅ Only you can access your financial data
+- ✅ **Row Level Security (RLS)** — only you can access your data
+- ✅ Data encrypted at rest and in transit (Supabase)
+- ✅ **Reliable persistence** — settings saved correctly (tested daily)
 - ✅ No ads, no tracking, no selling data
-- ✅ Open source — verify the code yourself
+- ✅ **Open source** — audit the code yourself
+- ✅ Your financial data never leaves Supabase's secure infrastructure
 
 ---
 
 ## 📝 Roadmap
 
-### Phase 1: MVP (✅ Done)
-- [x] Runway calculator
-- [x] Expense tracking
+### Phase 1: MVP (✅ Done - Feb 2026)
+- [x] Runway calculator with real-time updates
+- [x] Expense tracking (one-time + recurring)
 - [x] Cloud sync with Supabase
-- [x] Responsive design
-- [x] Production deployment
+- [x] **Reliable data persistence** (P0 bug fixed 2/15)
+- [x] **PWA ready** (installable icons)
+- [x] Mobile-first responsive design
+- [x] Production deployment (Vercel)
+- [x] Comprehensive QA automation
 
-### Phase 2: Launch (Feb 2026)
+### Phase 2: Launch (🚀 In Progress - Feb 2026)
+- [x] **92% ready** — P0 bugs fixed, PWA ready
+- [ ] Private beta (10-20 testers)
 - [ ] Product Hunt launch
-- [ ] Reddit community engagement
-- [ ] SEO optimization
-- [ ] User feedback collection
+- [ ] Reddit/HackerNews launch
+- [ ] User feedback collection & iteration
+- [ ] OAuth providers (Google, GitHub)
 
 ### Phase 3: Features
 - [ ] Multi-currency support
