@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Accessibility (a11y) Improvements** (2026-02-15)
+  - ARIA labels for all icon buttons (Settings, Theme, Add Expense, Delete)
+  - Dynamic aria-labels for Delete buttons (includes category + amount)
+  - Aria-expanded attribute for collapsible simulator
+  - Escape key closes all modals (Settings, Expense Form, Simulator, Theme)
+  - WCAG 2.1 Level AA compliance checklist (10.8KB)
+  - Improved screen reader support
+  - Better keyboard navigation
+- **SEO Enhancement: Structured Data** (2026-02-15)
+  - JSON-LD WebApplication schema
+  - Feature list, pricing, rating metadata
+  - Improves Google rich results visibility
+- **Launch Preparation Materials** (2026-02-15, 40KB total)
+  - Beta Signup Form template (7.6KB) - Google Form with 12 questions
+  - Twitter Strategy guide (9.9KB) - Account setup + content calendar
+  - Product Hunt Checklist (11.4KB) - Comprehensive launch guide
+  - Launch Readiness Report (9.5KB) - 95% ready assessment
+  - Accessibility checklist (10.8KB) - WCAG 2.1 AA compliance
 - **PWA Icons** (2026-02-15)
   - Generated 192px and 512px icons with brand colors
   - Purple gradient background with $ symbol
