@@ -8,11 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PWA Icons** (2026-02-15)
+  - Generated 192px and 512px icons with brand colors
+  - Purple gradient background with $ symbol
+  - Updated manifest.json with icon definitions
+  - Fixes 404 errors for missing PWA assets
 - **QA Automation System** (2026-02-14)
   - Daily automated QA at 3:00 AM KST
   - 17 comprehensive test scenarios
   - QA Tester subagent role definition
   - Automated reporting to `/qa-reports/`
+- **Debug Logging System** (2026-02-14)
+  - Comprehensive logging in all useSupabaseFinance functions
+  - Request/response tracking for all database operations
+  - Error context and stack traces
+  - Helps diagnose production issues without browser access
 - Google OAuth social login UI
 - GitHub OAuth social login UI
 - Karpathy-inspired coding guidelines (CLAUDE.md)
@@ -28,10 +38,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Separated viewport and themeColor to viewport export (Next.js 16 best practice)
 
 ### Fixed
-- **Financial settings not persisting** (2026-02-14)
+- **🔴 P0: Financial settings data loss on refresh** (2026-02-15)
+  - **Issue**: Settings not persisting after page reload (regression from 2/14)
+  - **Root cause**: Supabase UPSERT operation conflicting with RLS policies (409 Conflict)
+  - **Solution**: Replace upsert with conditional INSERT/UPDATE (check existing record first)
+  - **Impact**: Users' financial data now persists correctly across sessions
+  - **Status**: ✅ Fixed, deployed to production
+- **Financial settings not persisting** (2026-02-14, initial attempt)
   - Root cause: Incorrect upsert usage with .eq() after upsert
   - Fix: Use onConflict: 'user_id' for proper upsert
-  - Added error handling and return values
+  - Note: This fix didn't fully resolve the issue (see 2/15 P0 fix above)
 - **Next.js 16 build warnings** (2026-02-14)
   - Added metadataBase for absolute OG image URLs
   - Moved viewport/themeColor to separate export
