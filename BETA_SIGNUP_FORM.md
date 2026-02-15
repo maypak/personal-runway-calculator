@@ -1,394 +1,338 @@
-# Personal Runway Calculator - Beta Signup Form
+# Beta Signup Form - Google Form Template
 
-**Google Forms Template**  
-Create at: [https://forms.google.com](https://forms.google.com)
-
----
-
-## Form Title
-**Personal Runway Calculator - Early Access**
-
-## Description
-```
-Calculate your personal runway in seconds. Track savings, expenses, and know exactly how long you can survive without a job.
-
-We're looking for 50 beta users to help test and improve the app before public launch.
-
-🎁 Early Access Perks:
-• Lifetime Pro features (normally $20/month)
-• Priority support
-• Vote on new features
-• Early adopter badge
-
-Time to complete: 2 minutes
-```
+**Purpose:** Collect beta testers for Personal Runway Calculator  
+**Target:** 10-20 quality testers  
+**Timeline:** Feb 15-17, 2026
 
 ---
 
-## Questions
+## Form Settings
 
-### Q1: Basic Info
-**Email Address** *  
-Type: Short answer  
-Required: Yes  
-Validation: Email format
+**Title:** Personal Runway Calculator - Beta Access  
+**Description:**
 
-**Name**  
-Type: Short answer  
-Required: Yes
+> **Your money isn't just money. It's TIME.**
+>
+> We're launching a free tool to help you calculate your personal runway — how long your savings will last without a job.
+>
+> **Beta testers get:**
+> - Early access (before public launch)
+> - Direct line to the founder (me!)
+> - Your feedback shapes the product
+> - Listed as "Beta Contributor" (optional)
+>
+> **What we need from you:**
+> - Use the app for 2-3 days
+> - Give honest feedback (good or bad)
+> - Report any bugs you find
+>
+> **Time commitment:** 30-60 minutes over 3 days  
+> **Reward:** Shape a tool that helps thousands
 
 ---
 
-### Q2: Current Situation
-**Are you currently planning to quit your job or go freelance?** *  
-Type: Multiple choice  
-Required: Yes
+## Questions (Google Form)
+
+### 1. Email Address *
+**Type:** Short answer (Email validation)  
+**Required:** Yes  
+**Help text:** We'll send you the beta link here
+
+---
+
+### 2. What's your name? *
+**Type:** Short answer  
+**Required:** Yes  
+**Help text:** First name is fine!
+
+---
+
+### 3. Why are you interested in this tool? *
+**Type:** Paragraph  
+**Required:** Yes  
+**Help text:** Tell us your situation (e.g., planning to quit, freelancer, side project)
+
+**Example responses:**
+- "Planning to quit my job in 6 months"
+- "Freelancer, want to track runway better"
+- "Building a side project, need financial clarity"
+
+---
+
+### 4. Have you ever calculated your "runway" before?
+**Type:** Multiple choice  
+**Required:** Yes
 
 Options:
-- ○ Yes, planning to quit within 6 months
-- ○ Yes, planning to quit within 1 year
-- ○ Already quit / freelancing
-- ○ Considering it, no timeline yet
-- ○ Not planning, but interested in financial tracking
-- ○ Other: ___
+- Yes, in a spreadsheet
+- Yes, with an app (YNAB, Mint, etc.)
+- No, but I've thought about it
+- No, this is new to me
 
 ---
 
-### Q3: Current Runway Awareness
-**Do you know your current financial runway (how long you can survive without income)?** *  
-Type: Multiple choice  
-Required: Yes
+### 5. What's your biggest financial fear right now?
+**Type:** Multiple choice  
+**Required:** No
 
 Options:
-- ○ Yes, I've calculated it precisely
-- ○ Yes, rough estimate only
-- ○ No, but I want to know
-- ○ No, never thought about it
-
-**If yes, how many months?**  
-Type: Short answer  
-Required: No
+- Running out of money too soon
+- Not knowing when to quit my job
+- Overspending without realizing it
+- Not having a financial plan
+- Other: __________
 
 ---
 
-### Q4: Pain Points
-**What's your biggest challenge with managing personal finances?** *  
-Type: Checkboxes (select all that apply)  
-Required: Yes
+### 6. How tech-savvy are you?
+**Type:** Multiple choice  
+**Required:** Yes  
+**Help text:** Helps us understand who's testing
 
 Options:
-- ☐ Don't know how long my savings will last
-- ☐ Can't track daily expenses consistently
-- ☐ Don't have a clear monthly budget
-- ☐ Afraid to take the leap (quit job) due to financial uncertainty
-- ☐ Losing track of multiple income sources
-- ☐ No good tools for runway calculation
-- ☐ Other: ___
+- Very (I'm a developer/designer)
+- Moderately (I use apps daily)
+- Not very (I prefer simple tools)
 
 ---
 
-### Q5: Features Interest
-**Which features interest you most?** *  
-Type: Checkboxes (select all that apply)  
-Required: Yes
+### 7. What device will you primarily use?
+**Type:** Multiple choice  
+**Required:** Yes
 
 Options:
-- ☐ Runway calculator (months/years left)
-- ☐ Daily expense tracking
-- ☐ Monthly budget monitoring
-- ☐ Income tracking (freelance gigs)
-- ☐ "What-if" scenarios (cut expenses, add income)
-- ☐ Cloud sync across devices
-- ☐ Export reports (PDF/CSV)
-- ☐ Other: ___
+- Desktop/Laptop
+- Mobile (iPhone)
+- Mobile (Android)
+- Tablet
+- Mix of desktop + mobile
 
 ---
 
-### Q6: Usage Commitment
-**If selected for early access, can you commit to:**  
-Type: Checkboxes (select all that apply)  
-Required: Yes
+### 8. Can you commit to 2-3 days of testing?
+**Type:** Multiple choice  
+**Required:** Yes
 
 Options:
-- ☐ Use the app at least 3x per week for 2 weeks
-- ☐ Report bugs or issues you find
-- ☐ Fill out a quick feedback survey (5 min)
-- ☐ Optional: 15-min interview for deeper feedback
+- Yes, I can start today
+- Yes, but I need a few days
+- Maybe, depends on time
+- No, just curious
+
+**Logic:** If "No" → Show message: "Thanks for your interest! We'll notify you when we launch publicly."
 
 ---
 
-### Q7: Referral Source
-**How did you hear about Personal Runway Calculator?**  
-Type: Multiple choice  
-Required: No
+### 9. How did you hear about this? (Optional)
+**Type:** Multiple choice  
+**Required:** No
 
 Options:
-- ○ Product Hunt
-- ○ Reddit
-- ○ Twitter/X
-- ○ Friend referral
-- ○ Google search
-- ○ Dev.to
-- ○ Hacker News
-- ○ Other: ___
+- Friend/colleague
+- Reddit
+- Twitter
+- HackerNews
+- Other: __________
 
 ---
 
-### Q8: Additional Comments
-**Anything else you'd like to share? (optional)**  
-Type: Paragraph  
-Required: No
+### 10. Want to be listed as a Beta Contributor?
+**Type:** Multiple choice  
+**Required:** No
 
-Placeholder text:
+Options:
+- Yes! (Provide Twitter/LinkedIn handle below)
+- No thanks, I prefer to stay anonymous
+
+---
+
+### 11. Twitter/LinkedIn (Optional)
+**Type:** Short answer  
+**Required:** No  
+**Help text:** Only if you want credit as a Beta Contributor
+
+---
+
+### 12. Any questions or concerns?
+**Type:** Paragraph  
+**Required:** No  
+**Help text:** Ask us anything!
+
+---
+
+## Confirmation Message
+
+> **You're in! 🎉**
+>
+> Thanks for signing up for beta access.
+>
+> **What happens next:**
+> 1. We'll review applications today (first-come, first-served)
+> 2. You'll receive a beta invite within 24 hours
+> 3. Once you get access, use the app for 2-3 days
+> 4. We'll send a quick feedback survey
+>
+> **Beta link arriving soon:**  
+> Check your email (we'll send from [메이님 email])
+>
+> **Questions?**  
+> Reply to the beta invite email or DM us on Twitter [@PersonalRunway]
+>
+> **— May**  
+> Founder, Personal Runway Calculator
+
+---
+
+## Auto-Response Email Template
+
+**Subject:** Beta Access - Personal Runway Calculator
+
+**Body:**
+
 ```
-Example:
-- Specific use case you have in mind
-- Features you wish existed
-- Questions about the app
-```
+Hi [Name]!
 
----
+Thanks for signing up to beta test Personal Runway Calculator! 🎉
 
-## Confirmation Message (After Submit)
+🔗 **Your beta access link:**
+https://personal-runway-calculator.vercel.app
 
-```
-🎉 Thank you for signing up!
+📝 **How to test:**
+1. Sign up with your email (or use Google/GitHub)
+2. Enter your financial settings (savings, expenses, income)
+3. Add a few expenses to test tracking
+4. Refresh the page to verify data persists
+5. Try it on mobile if possible
 
-Your application has been received.
+⏰ **Timeline:**
+Please use the app over the next 2-3 days. We'll send a feedback survey on [Date].
 
-What happens next?
-1. We'll review applications within 3-5 days
-2. Selected users will receive an email with access instructions
-3. You'll get early access + lifetime Pro features!
+💬 **Report bugs:**
+Reply to this email or use the in-app feedback button (coming soon)
 
-Selection criteria:
-• Diversity of use cases
-• Active commitment to testing
-• Clear interest in personal finance
+🐛 **Known issues:**
+- OAuth (Google/GitHub login) not yet enabled (coming this week)
+- Some features still in development
 
-Questions? Email: [your-email@example.com]
+🙏 **Your feedback matters:**
+You're one of the first 20 people testing this. Your input will shape the product for thousands of users.
 
-Follow us:
-🐦 Twitter: [@personalrunway]
-🌐 Website: [https://personal-runway-calculator.vercel.app]
+**Questions? Just reply to this email.**
 
-Thank you! 🚀
-```
+Thanks for helping us build something useful!
 
----
-
-## Google Sheets Auto-Response Setup
-
-### Auto-Email (using Google Apps Script)
-
-```javascript
-function onFormSubmit(e) {
-  var email = e.values[1]; // Email address column
-  var name = e.values[2]; // Name column
-  
-  var subject = "✅ Early Access Application Received - Personal Runway Calculator";
-  
-  var body = `
-Hi ${name},
-
-Thank you for applying for early access to Personal Runway Calculator!
-
-Your application has been received and is under review.
-
-🎁 What you'll get if selected:
-• Lifetime Pro features (worth $20/month)
-• Priority support from the founder
-• Vote on new features
-• Early adopter badge
-
-📅 Timeline:
-• Review: 3-5 days
-• Access: Immediate upon selection
-• Beta period: 2 weeks
-
-We're selecting 50 users who represent diverse use cases and can provide valuable feedback.
-
-Questions? Just reply to this email!
-
-Best,
-[Your Name]
+— May
 Founder, Personal Runway Calculator
-
-🌐 https://personal-runway-calculator.vercel.app
-🐦 @personalrunway
-  `;
-  
-  MailApp.sendEmail(email, subject, body);
-}
+https://personal-runway-calculator.vercel.app
 ```
 
 ---
 
-## Selection Criteria (Internal)
+## Google Form Settings
 
-### Scoring System (Total: 100 points)
+**Response Settings:**
+- ✅ Collect email addresses
+- ✅ Limit to 1 response per person
+- ✅ Allow response editing
+- ❌ Show link to submit another response
 
-**Use Case Clarity (30 points)**
-- Planning to quit within 6 months: 30
-- Planning to quit within 1 year: 25
-- Already quit/freelancing: 20
-- Considering: 15
-- Just interested: 10
+**Presentation Settings:**
+- ✅ Show progress bar
+- ✅ Shuffle question order: NO
+- ✅ Show link to submit another response: NO
+- Confirmation message: (See above)
 
-**Pain Point Relevance (25 points)**
-- 4+ pain points selected: 25
-- 3 pain points: 20
-- 2 pain points: 15
-- 1 pain point: 10
-
-**Feature Interest (20 points)**
-- 5+ features: 20
-- 3-4 features: 15
-- 1-2 features: 10
-
-**Commitment Level (25 points)**
-- All 4 commitments: 25
-- 3 commitments: 20
-- 2 commitments: 15
-- 1 commitment: 10
+**Quiz Settings:**
+- Not a quiz
 
 ---
 
-### Selection Process
+## Distribution Plan
 
-1. **Auto-filter**: Remove duplicates, spam, invalid emails
-2. **Scoring**: Calculate total score for each applicant
-3. **Manual review**: Read top 100 applications
-4. **Diversity check**: Ensure mix of use cases (quit planning, freelancers, FI seekers)
-5. **Final selection**: 50 users
-6. **Waitlist**: Next 50 for future beta rounds
+**Where to share:**
+1. **Direct outreach** (10-15 friends/colleagues)
+   - Personal DM with context
+   - "Hey, I built this tool. Would you test it?"
+   
+2. **Reddit** (5-10 responses expected)
+   - r/SideProject (soft launch)
+   - Include Google Form link in post
+   
+3. **Twitter** (if account exists)
+   - Thread about building in public
+   - "Looking for 10 beta testers"
+   
+4. **HackerNews** (maybe)
+   - Show HN with beta signup
+   - Only if ready for traffic
 
----
-
-### Diversity Targets (50 users)
-
-- Planning to quit (6 months): 15 users (30%)
-- Planning to quit (1 year): 10 users (20%)
-- Already freelancing: 10 users (20%)
-- FIRE enthusiasts: 10 users (20%)
-- Other: 5 users (10%)
-
----
-
-## Follow-Up Email (Selected Users)
-
-```
-Subject: 🎉 You're in! Early Access to Personal Runway Calculator
-
-Hi [Name],
-
-Congratulations! You've been selected for early access to Personal Runway Calculator.
-
-Out of [X] applications, you're one of 50 users we chose based on your clear use case and commitment to testing.
-
-🚀 Get Started (5 minutes):
-
-1. Visit: https://personal-runway-calculator.vercel.app
-2. Sign up with this email: [their-email]
-3. Your Pro features are already unlocked!
-
-📋 Beta Tester Checklist:
-
-Week 1:
-- [ ] Complete initial setup (savings, expenses)
-- [ ] Track expenses for 3-5 days
-- [ ] Try "What-if" scenarios
-
-Week 2:
-- [ ] Fill out feedback survey (we'll send link)
-- [ ] Optional: 15-min interview
-
-🎁 Your Lifetime Pro Benefits:
-
-✓ Unlimited expense tracking
-✓ Advanced analytics
-✓ Export reports
-✓ Priority support
-✓ Early access to new features
-
-💬 Questions or bugs?
-
-Join our beta testers Discord: [invite-link]
-Or email me directly: [your-email]
-
-Thank you for being an early believer!
-
-Best,
-[Your Name]
-Founder, Personal Runway Calculator
-
-P.S. Know someone else who'd love this? Share the beta signup: [form-link]
-```
+**Target:** 20 signups → Pick 10-15 best fits
 
 ---
 
-## Rejection Email (Not Selected This Round)
+## Selection Criteria
 
-```
-Subject: Personal Runway Calculator Early Access Update
+**Auto-accept:**
+- Friends/colleagues (personal referral)
+- Developers/designers (good at giving feedback)
+- People planning to quit jobs (target audience)
 
-Hi [Name],
+**Review needed:**
+- "Just curious" (may not engage)
+- Very non-tech-savvy (may struggle with beta bugs)
+- No clear use case (may not provide useful feedback)
 
-Thank you for applying for early access to Personal Runway Calculator.
-
-We received an overwhelming response ([X] applications!) and unfortunately couldn't accept everyone in this round.
-
-✨ Good news:
-
-You're on our waitlist and will get priority access when we:
-• Open the second beta round (2-3 weeks)
-• Launch publicly with a special early supporter discount
-
-Want to try it anyway?
-
-The app is live at https://personal-runway-calculator.vercel.app
-
-Free tier includes:
-• Basic runway calculation
-• 50 expenses per month
-• Cloud sync
-
-We'd still love your feedback even if you're not in the official beta group!
-
-Thank you for your interest 🙏
-
-Best,
-[Your Name]
-Founder, Personal Runway Calculator
-
-P.S. Follow @personalrunway on Twitter for launch updates!
-```
+**Prioritize:**
+- Mix of tech/non-tech users
+- Mix of desktop/mobile users
+- People who can start TODAY
 
 ---
 
-## Analytics to Track
+## Success Metrics
 
-- Total applications
-- Conversion rate (form visits → submissions)
-- Score distribution
-- Most common pain points
-- Most desired features
-- Referral source breakdown
-- Geographic distribution (if collected)
+**Good beta:**
+- 10-15 active testers
+- 5+ detailed feedback responses
+- 2-3 bug reports (shows thorough testing)
+- 1-2 feature requests (shows engagement)
+
+**Great beta:**
+- 15-20 active testers
+- 10+ feedback responses
+- 5+ bugs found & fixed
+- Early evangelists (share on social)
 
 ---
 
-**Form Creation Time: ~20 minutes**  
-**Setup Auto-Responses: ~10 minutes**  
-**Total: ~30 minutes** ✅
+## Timeline
+
+**Day 0 (Feb 15):** Launch form, send to 10 friends  
+**Day 1 (Feb 16):** Reddit post, review signups, send invites  
+**Day 2-4 (Feb 17-19):** Testers use app, collect feedback  
+**Day 5 (Feb 20):** Synthesize feedback, prioritize fixes  
+**Day 6-7 (Feb 21-22):** Fix P1 bugs, polish  
+**Day 8 (Feb 23):** Public launch prep
+
+---
+
+## Notes
+
+- Keep form SHORT (12 questions max)
+- Ask for commitment upfront (filter tire-kickers)
+- Offer credit as incentive (Beta Contributor badge)
+- Be transparent about bugs (beta = expect issues)
+- Make it easy to give feedback (reply to email)
 
 ---
 
 **Next Steps:**
-1. Create Google Form with these questions
+1. Create Google Form with above questions
 2. Set up auto-response email
-3. Share form link via:
-   - Reddit posts
-   - Product Hunt coming soon page
-   - Twitter/X
-   - Personal network
+3. Draft outreach messages
+4. Identify 10-15 people to DM directly
+5. Prepare Reddit post (r/SideProject)
+
+---
+
+_Created: 2026-02-15 by 어메이징메이_
