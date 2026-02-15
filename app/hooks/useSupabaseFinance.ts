@@ -128,6 +128,20 @@ export function useSupabaseFinance() {
     };
     console.log('🔍 [updateSettings] DB payload:', dbData);
 
+    // IMPORTANT: We use conditional INSERT/UPDATE instead of UPSERT
+    // because Supabase RLS policies conflict with UPSERT operations.
+    //
+    // Issue: UPSERT tries INSERT first, then UPDATE on conflict.
+    // Supabase RLS requires both INSERT and UPDATE policies to pass,
+    // which causes 409 Conflict errors.
+    //
+    // Solution: Check for existing record first, then explicitly
+    // INSERT (if new) or UPDATE (if exists). This satisfies only
+    // the relevant RLS policy and avoids the conflict.
+    //
+    // See: qa-reports/2026-02-15-10-30-P0-FIX.md for full analysis
+    // Date fixed: 2026-02-15
+
     // Check if settings already exist
     console.log('⏳ [updateSettings] Checking existing settings...');
     const { data: existing } = await supabase
