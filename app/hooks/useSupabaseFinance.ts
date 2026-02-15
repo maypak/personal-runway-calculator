@@ -118,7 +118,6 @@ export function useSupabaseFinance() {
 
     // Prepare data for database
     const dbData = {
-      user_id: user.id,
       monthly_fixed: newSettings.monthlyFixed,
       monthly_variable: newSettings.monthlyVariable,
       current_savings: newSettings.currentSavings,
@@ -129,15 +128,35 @@ export function useSupabaseFinance() {
     };
     console.log('🔍 [updateSettings] DB payload:', dbData);
 
-    // Save to database with proper upsert
-    console.log('⏳ [updateSettings] Starting upsert...');
-    const { data, error } = await supabase
+    // Check if settings already exist
+    console.log('⏳ [updateSettings] Checking existing settings...');
+    const { data: existing } = await supabase
       .from('finance_settings')
-      .upsert(dbData, { onConflict: 'user_id' })
-      .select();
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    console.log('🔍 [updateSettings] Upsert result - data:', data);
-    console.log('🔍 [updateSettings] Upsert result - error:', error);
+    console.log('🔍 [updateSettings] Existing record:', existing);
+
+    let error;
+    if (existing) {
+      // Update existing record
+      console.log('⏳ [updateSettings] Updating existing record...');
+      const result = await supabase
+        .from('finance_settings')
+        .update(dbData)
+        .eq('user_id', user.id);
+      error = result.error;
+      console.log('🔍 [updateSettings] Update result - error:', error);
+    } else {
+      // Insert new record
+      console.log('⏳ [updateSettings] Inserting new record...');
+      const result = await supabase
+        .from('finance_settings')
+        .insert({ ...dbData, user_id: user.id });
+      error = result.error;
+      console.log('🔍 [updateSettings] Insert result - error:', error);
+    }
 
     if (error) {
       console.error('❌ [updateSettings] Failed to save settings:', error);
