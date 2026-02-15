@@ -11,7 +11,10 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "screenshots": "node scripts/capture-screenshots.js",
-    "lighthouse": "bash scripts/lighthouse-audit.sh"
+    "lighthouse": "bash scripts/lighthouse-audit.sh",
+    "security": "npm run security:secrets && npm run security:deps && npm run lint",
+    "security:secrets": "gitleaks detect --verbose",
+    "security:deps": "snyk test"
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
@@ -30,7 +33,10 @@
     "canvas": "^3.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "eslint-plugin-security": "^3.0.1",
+    "gitleaks": "^1.0.0",
     "puppeteer": "^24.37.3",
+    "snyk": "^1.1302.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

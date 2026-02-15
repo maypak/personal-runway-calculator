@@ -1,0 +1,15 @@
+
+Running 10 tests using 5 workers
+
+  ✓   5 [chromium] › tests/auth.spec.ts:5:7 › Authentication Flow › should load auth page successfully (446ms)
+  ✓   3 [chromium] › tests/auth.spec.ts:61:7 › Authentication Flow › should show OAuth buttons (445ms)
+  ✓   1 [chromium] › tests/auth.spec.ts:17:7 › Authentication Flow › should show sign up form (508ms)
+  ✓   2 [chromium] › tests/auth.spec.ts:69:7 › Authentication Flow › should validate email format (542ms)
+  ✓   9 [chromium] › tests/auth.spec.ts:142:7 › Authentication Flow › should be mobile responsive (277ms)
+  ✓   6 [chromium] › tests/auth.spec.ts:86:7 › Authentication Flow › should validate password length (475ms)
+  ✓   7 [chromium] › tests/auth.spec.ts:106:7 › Authentication Flow › should toggle between sign in and sign up (778ms)
+  ✓  10 [chromium] › tests/auth.spec.ts:157:7 › Authentication Flow › should load within 3 seconds (812ms)
+  ✓   8 [chromium] › tests/auth.spec.ts:121:7 › Authentication Flow › should have no console errors on page load (2.3s)
+  ✓   4 [chromium] › tests/auth.spec.ts:28:7 › Authentication Flow › should attempt email signup (3.4s)
+
+  10 passed (4.6s)
