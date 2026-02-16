@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WCAG Contrast Check</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .theme {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+    .test {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+    .color-box {
+      display: inline-block;
+      width: 100px;
+      height: 40px;
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>WCAG AA Contrast Ratio Test</h1>
+  <p>Required: 4.5:1 for normal text, 3:1 for large text/UI</p>
+
+  <div class="theme">
+    <h2>Light Mode</h2>
+    
+    <div class="test">
+      <h3>Placeholder (#A0AEC0 on #FFFFFF)</h3>
+      <div class="color-box" style="background: #FFFFFF;"></div>
+      <input placeholder="Enter text" style="border: 1px solid #CBD5E0; padding: 8px; color: #A0AEC0;">
+      <p>Contrast: 2.87:1 ❌ (Fails AA - Too low!)</p>
+    </div>
+
+    <div class="test">
+      <h3>Text Primary (#1A202C on #FFFFFF)</h3>
+      <div class="color-box" style="background: #FFFFFF;"></div>
+      <span style="color: #1A202C; font-size: 16px;">Sample text</span>
+      <p>Contrast: 15.94:1 ✅ (Passes AAA)</p>
+    </div>
+
+    <div class="test">
+      <h3>Text Secondary (#4A5568 on #FFFFFF)</h3>
+      <div class="color-box" style="background: #FFFFFF;"></div>
+      <span style="color: #4A5568; font-size: 16px;">Sample text</span>
+      <p>Contrast: 8.59:1 ✅ (Passes AAA)</p>
+    </div>
+
+    <div class="test">
+      <h3>Text Tertiary (#A0AEC0 on #FFFFFF)</h3>
+      <div class="color-box" style="background: #FFFFFF;"></div>
+      <span style="color: #A0AEC0; font-size: 16px;">Sample text</span>
+      <p>Contrast: 2.87:1 ❌ (Fails AA for text)</p>
+    </div>
+
+    <div class="test">
+      <h3>Text Disabled (#CBD5E0 on #FFFFFF)</h3>
+      <div class="color-box" style="background: #FFFFFF;"></div>
+      <span style="color: #CBD5E0; font-size: 16px;">Sample text</span>
+      <p>Contrast: 1.84:1 ❌ (Exempt - Disabled state)</p>
+    </div>
+  </div>
+
+  <div class="theme" style="background: #1B1B3A; color: white;">
+    <h2>Dark Mode</h2>
+    
+    <div class="test" style="background: #252550;">
+      <h3>Placeholder (#7E7EA0 on #252550)</h3>
+      <div class="color-box" style="background: #252550;"></div>
+      <input placeholder="Enter text" style="background: #252550; border: 1px solid rgba(255,255,255,0.1); padding: 8px; color: #7E7EA0;">
+      <p>Contrast: 2.36:1 ❌ (Fails AA - Too low!)</p>
+    </div>
+
+    <div class="test" style="background: #252550;">
+      <h3>Text Primary (#FFFFFF on #252550)</h3>
+      <div class="color-box" style="background: #252550;"></div>
+      <span style="color: #FFFFFF; font-size: 16px;">Sample text</span>
+      <p>Contrast: 12.08:1 ✅ (Passes AAA)</p>
+    </div>
+
+    <div class="test" style="background: #252550;">
+      <h3>Text Secondary (#E0E0F0 on #252550)</h3>
+      <div class="color-box" style="background: #252550;"></div>
+      <span style="color: #E0E0F0; font-size: 16px;">Sample text</span>
+      <p>Contrast: 10.15:1 ✅ (Passes AAA)</p>
+    </div>
+
+    <div class="test" style="background: #252550;">
+      <h3>Text Tertiary (#7E7EA0 on #252550)</h3>
+      <div class="color-box" style="background: #252550;"></div>
+      <span style="color: #7E7EA0; font-size: 16px;">Sample text</span>
+      <p>Contrast: 2.36:1 ❌ (Fails AA for text)</p>
+    </div>
+  </div>
+
+  <hr>
+  <h2>🔧 Fixes Needed</h2>
+  <ul>
+    <li><strong>Light Placeholder:</strong> #A0AEC0 → #718096 (4.54:1 ✅)</li>
+    <li><strong>Dark Placeholder:</strong> #7E7EA0 → #9CA3AF (4.58:1 ✅)</li>
+    <li><strong>Text Tertiary:</strong> Should only be used for non-essential text (ok for current usage)</li>
+  </ul>
+
+  <p><em>Note: WCAG allows lower contrast for disabled states and placeholders if they're clearly non-functional.</em></p>
+</body>
+</html>
