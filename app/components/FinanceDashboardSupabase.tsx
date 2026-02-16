@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
+import GoalSetting from './GoalSetting';
+import GoalProgress from './GoalProgress';
 
 export default function FinanceDashboardSupabase() {
   const { signOut } = useAuth();
@@ -11,11 +13,15 @@ export default function FinanceDashboardSupabase() {
   const {
     settings,
     expenses,
+    goals,
     // recurringExpenses, // Future feature - expense templates
     loading,
     updateSettings,
     addExpense,
     deleteExpense,
+    addGoal,
+    updateGoal,
+    deleteGoal,
     // addRecurringExpense, // Future feature - expense templates
   } = useSupabaseFinance();
 
@@ -23,6 +29,8 @@ export default function FinanceDashboardSupabase() {
   const [showSimulator, setShowSimulator] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showThemePicker, setShowThemePicker] = useState(false);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [editingGoal, setEditingGoal] = useState<typeof goals[0] | null>(null);
   
   const [newExpense, setNewExpense] = useState({ 
     amount: '', 
@@ -60,6 +68,8 @@ export default function FinanceDashboardSupabase() {
         setShowExpenseForm(false);
         setShowSimulator(false);
         setShowThemePicker(false);
+        setShowGoalModal(false);
+        setEditingGoal(null);
       }
     };
     window.addEventListener('keydown', handleEscape);
@@ -126,6 +136,31 @@ export default function FinanceDashboardSupabase() {
     setNewExpense({ amount: '', category: 'Food', memo: '' });
     setShowExpenseForm(false);
   };
+
+  // Goal handlers
+  const handleSaveGoal = async (goal: Parameters<typeof addGoal>[0]) => {
+    if (editingGoal) {
+      // Update existing goal
+      await updateGoal(editingGoal.id, goal);
+      setEditingGoal(null);
+    } else {
+      // Add new goal
+      await addGoal(goal);
+    }
+    setShowGoalModal(false);
+  };
+
+  const handleEditGoal = (goal: typeof goals[0]) => {
+    setEditingGoal(goal);
+    setShowGoalModal(true);
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    await deleteGoal(goalId);
+  };
+
+  // Get active goal (Free tier: only 1 active)
+  const activeGoal = goals.find(g => g.isActive);
 
   // Reserved for future recurring expense UI
   // const handleAddRecurring = async () => {
@@ -389,6 +424,37 @@ export default function FinanceDashboardSupabase() {
         </div>
       </div>
 
+      {/* Goal Progress Section */}
+      {activeGoal ? (
+        <GoalProgress
+          goal={activeGoal}
+          currentRunway={runway}
+          remainingFunds={remainingFunds}
+          onEdit={() => handleEditGoal(activeGoal)}
+          onDelete={() => handleDeleteGoal(activeGoal.id)}
+        />
+      ) : (
+        <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-2xl shadow-lg p-6 border-2 border-dashed border-violet-300 dark:border-violet-700 text-center">
+          <div className="text-4xl mb-3">🎯</div>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            Set Your First Goal
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-md mx-auto">
+            Track your progress toward a specific runway target or savings amount. 
+            Setting goals makes you <strong>40% more likely</strong> to achieve them!
+          </p>
+          <button
+            onClick={() => {
+              setEditingGoal(null);
+              setShowGoalModal(true);
+            }}
+            className="px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+          >
+            Set Goal
+          </button>
+        </div>
+      )}
+
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 md:p-5 hover:shadow-xl transition-shadow">
@@ -612,6 +678,17 @@ export default function FinanceDashboardSupabase() {
           </div>
         )}
       </div>
+
+      {/* Goal Setting Modal */}
+      <GoalSetting
+        isOpen={showGoalModal}
+        onClose={() => {
+          setShowGoalModal(false);
+          setEditingGoal(null);
+        }}
+        onSave={handleSaveGoal}
+        existingGoal={editingGoal}
+      />
     </div>
   );
 }

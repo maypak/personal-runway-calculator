@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './useAuth';
-import type { FinanceSettings, Expense, RecurringExpense } from '../types';
+import type { FinanceSettings, Expense, RecurringExpense, UserGoal } from '../types';
 
 export function useSupabaseFinance() {
   const { user, loading: authLoading } = useAuth();
   const [settings, setSettings] = useState<FinanceSettings | null>(null);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [recurringExpenses, setRecurringExpenses] = useState<RecurringExpense[]>([]);
+  const [goals, setGoals] = useState<UserGoal[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Load data when user is authenticated
@@ -92,6 +93,28 @@ export function useSupabaseFinance() {
             category: r.category,
             dayOfMonth: r.day_of_month,
             enabled: r.enabled,
+          }))
+        );
+      }
+
+      // Load user goals
+      const { data: goalsData } = await supabase
+        .from('user_goals')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (goalsData) {
+        setGoals(
+          goalsData.map((g) => ({
+            id: g.id,
+            goalType: g.goal_type as 'runway' | 'savings',
+            targetValue: Number(g.target_value),
+            description: g.description || undefined,
+            isActive: g.is_active,
+            achievedAt: g.achieved_at || undefined,
+            createdAt: g.created_at,
+            updatedAt: g.updated_at,
           }))
         );
       }
@@ -356,10 +379,132 @@ export function useSupabaseFinance() {
     setRecurringExpenses((prev) => prev.filter((r) => r.id !== id));
   };
 
+  // Add goal
+  const addGoal = async (goal: Omit<UserGoal, 'id' | 'createdAt' | 'updatedAt'>) => {
+    console.log('🔍 [addGoal] Called with:', goal);
+    
+    if (!user) {
+      console.error('❌ [addGoal] No user authenticated');
+      return;
+    }
+
+    // Free tier: Only 1 active goal allowed
+    const activeGoals = goals.filter(g => g.isActive);
+    if (goal.isActive && activeGoals.length >= 1) {
+      console.warn('⚠️ [addGoal] Free tier limit: Only 1 active goal allowed');
+      // Deactivate other goals first
+      for (const g of activeGoals) {
+        await supabase
+          .from('user_goals')
+          .update({ is_active: false })
+          .eq('id', g.id);
+      }
+    }
+
+    const dbPayload = {
+      user_id: user.id,
+      goal_type: goal.goalType,
+      target_value: goal.targetValue,
+      description: goal.description,
+      is_active: goal.isActive,
+      achieved_at: goal.achievedAt,
+    };
+    console.log('🔍 [addGoal] DB payload:', dbPayload);
+
+    const { data, error } = await supabase
+      .from('user_goals')
+      .insert(dbPayload)
+      .select()
+      .single();
+
+    console.log('🔍 [addGoal] Result - data:', data);
+    console.log('🔍 [addGoal] Result - error:', error);
+
+    if (data && !error) {
+      console.log('✅ [addGoal] Successfully added goal');
+      const newGoal: UserGoal = {
+        id: data.id,
+        goalType: data.goal_type as 'runway' | 'savings',
+        targetValue: Number(data.target_value),
+        description: data.description || undefined,
+        isActive: data.is_active,
+        achievedAt: data.achieved_at || undefined,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
+      setGoals((prev) => [newGoal, ...prev]);
+      return { success: true, data: newGoal };
+    } else if (error) {
+      console.error('❌ [addGoal] Failed:', error.message);
+      return { success: false, error: error.message };
+    }
+  };
+
+  // Update goal
+  const updateGoal = async (id: string, updates: Partial<Omit<UserGoal, 'id' | 'createdAt' | 'updatedAt'>>) => {
+    console.log('🔍 [updateGoal] Called with id:', id, 'updates:', updates);
+    
+    if (!user) {
+      console.error('❌ [updateGoal] No user authenticated');
+      return { success: false, error: 'Not authenticated' };
+    }
+
+    const dbPayload: Record<string, unknown> = {};
+    if (updates.goalType !== undefined) dbPayload.goal_type = updates.goalType;
+    if (updates.targetValue !== undefined) dbPayload.target_value = updates.targetValue;
+    if (updates.description !== undefined) dbPayload.description = updates.description;
+    if (updates.isActive !== undefined) dbPayload.is_active = updates.isActive;
+    if (updates.achievedAt !== undefined) dbPayload.achieved_at = updates.achievedAt;
+
+    console.log('🔍 [updateGoal] DB payload:', dbPayload);
+
+    const { error } = await supabase
+      .from('user_goals')
+      .update(dbPayload)
+      .eq('id', id);
+
+    console.log('🔍 [updateGoal] Result - error:', error);
+
+    if (error) {
+      console.error('❌ [updateGoal] Failed:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    console.log('✅ [updateGoal] Successfully updated');
+    setGoals((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, ...updates } : g))
+    );
+    return { success: true };
+  };
+
+  // Delete goal
+  const deleteGoal = async (id: string) => {
+    console.log('🔍 [deleteGoal] Called with id:', id);
+    
+    if (!user) {
+      console.error('❌ [deleteGoal] No user authenticated');
+      return;
+    }
+
+    console.log('⏳ [deleteGoal] Deleting from database...');
+    const { error } = await supabase.from('user_goals').delete().eq('id', id);
+    
+    console.log('🔍 [deleteGoal] Result - error:', error);
+
+    if (error) {
+      console.error('❌ [deleteGoal] Failed:', error.message);
+      return;
+    }
+
+    console.log('✅ [deleteGoal] Successfully deleted goal');
+    setGoals((prev) => prev.filter((g) => g.id !== id));
+  };
+
   return {
     settings,
     expenses,
     recurringExpenses,
+    goals,
     loading: authLoading || loading,
     updateSettings,
     addExpense,
@@ -367,5 +512,8 @@ export function useSupabaseFinance() {
     addRecurringExpense,
     updateRecurringExpense,
     deleteRecurringExpense,
+    addGoal,
+    updateGoal,
+    deleteGoal,
   };
 }

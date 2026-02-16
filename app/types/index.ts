@@ -110,3 +110,15 @@ export interface FinancialData {
   expenses: Expense[];
   recurringExpenses: RecurringExpense[];
 }
+
+// User Goal (Goal Setting Feature - Priority 1)
+export interface UserGoal {
+  id: string;
+  goalType: 'runway' | 'savings'; // Runway (months) or Savings ($)
+  targetValue: number; // 6 (months) or 30000 ($)
+  description?: string; // Optional: "Safe quit my job"
+  isActive: boolean; // Only 1 active per user (Free tier)
+  achievedAt?: string; // ISO timestamp, null until achieved
+  createdAt: string;
+  updatedAt: string;
+}
