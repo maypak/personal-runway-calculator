@@ -2,18 +2,19 @@
 
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { Clock, CheckCircle, XCircle, Shield, Cloud, Sparkles, Wallet } from 'lucide-react';
 
 export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
+    setMessage(null);
 
     try {
       if (mode === 'signup') {
@@ -26,7 +27,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
         });
 
         if (error) throw error;
-        setMessage('✅ Check your email for confirmation link!');
+        setMessage({ type: 'success', text: 'Check your email for confirmation link!' });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -34,12 +35,12 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
         });
 
         if (error) throw error;
-        setMessage('✅ Signed in successfully!');
+        setMessage({ type: 'success', text: 'Signed in successfully!' });
         onSuccess();
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'An error occurred';
-      setMessage(`❌ ${message}`);
+      const text = error instanceof Error ? error.message : 'An error occurred';
+      setMessage({ type: 'error', text });
     } finally {
       setLoading(false);
     }
@@ -47,7 +48,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
   const handleSocialAuth = async (provider: 'google' | 'github') => {
     setLoading(true);
-    setMessage('');
+    setMessage(null);
     
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -58,129 +59,125 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
       });
       
       if (error) throw error;
-      // Redirect happens automatically
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'An error occurred';
-      setMessage(`❌ ${message}`);
+      const text = error instanceof Error ? error.message : 'An error occurred';
+      setMessage({ type: 'error', text });
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-6 md:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4">
       <div className="w-full max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Hero Section */}
           <div className="text-center md:text-left px-6 md:px-4 order-2 md:order-1">
-            {/* Logo with Clock Animation */}
+            {/* Logo */}
             <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
-              <div className="relative w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-3xl shadow-lg transform hover:scale-110 transition-all duration-300 hover:rotate-6">
-                <span className="relative z-10">⏱️</span>
+              <div className="relative w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all duration-300 hover:rotate-6">
+                <Clock className="w-8 h-8 text-white relative z-10" />
                 {/* Pulse animation */}
-                <div className="absolute inset-0 bg-blue-400 rounded-2xl animate-ping opacity-20"></div>
+                <div className="absolute inset-0 bg-primary-light rounded-2xl animate-ping opacity-20"></div>
               </div>
               <div className="text-left">
-                <h1 className="text-2xl font-bold text-gray-900">Personal Runway</h1>
-                <p className="text-sm text-gray-600">Financial Freedom Tracker</p>
+                <h1 className="text-2xl font-bold text-text-primary">Personal Runway</h1>
+                <p className="text-sm text-text-tertiary">Financial Freedom Tracker</p>
               </div>
             </div>
             
             {/* Hero Message */}
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
               Your money isn&apos;t just money.{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent animate-pulse">
+              <span className="bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent">
                 It&apos;s TIME.
               </span>
             </h2>
             
-            <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
-              How much <strong className="text-blue-600">time</strong> do you have to chase your dream? Build your startup? Find yourself?
+            <p className="text-base md:text-lg text-text-secondary mb-8 leading-relaxed">
+              How much <strong className="text-primary">time</strong> do you have to chase your dream? Build your startup? Find yourself?
             </p>
             
-            <p className="text-base text-gray-700 mb-8 font-medium">
-              Calculate your <span className="text-blue-600 font-bold">TIME</span> in 30 seconds. ⏰
+            <p className="text-base text-text-primary mb-8 font-medium flex items-center justify-center md:justify-start gap-2">
+              <Clock className="w-5 h-5 text-primary" />
+              Calculate your <span className="text-primary font-bold">TIME</span> in 30 seconds.
             </p>
             
-            {/* Social Proof - Enhanced */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-600 max-w-md mx-auto md:mx-0">
+            {/* Social Proof */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-text-secondary max-w-md mx-auto md:mx-0">
               <div className="flex items-center justify-center md:justify-start gap-2 group">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
+                <div className="w-8 h-8 bg-success/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Shield className="w-5 h-5 text-success" />
                 </div>
                 <span className="font-medium">Secure & Private</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2 group">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
-                  </svg>
+                <div className="w-8 h-8 bg-info/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Cloud className="w-5 h-5 text-info" />
                 </div>
                 <span className="font-medium">Cloud Sync</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2 group">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
-                  </svg>
+                <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-5 h-5 text-primary" />
                 </div>
                 <span className="font-medium">100% Free</span>
               </div>
             </div>
 
-            {/* Feature Preview with Timer Animation */}
-            <div className="hidden md:block mt-12 p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-300 hover:scale-105">
+            {/* Feature Preview */}
+            <div className="hidden md:block mt-12 p-6 bg-surface-card rounded-2xl shadow-lg border border-border-subtle hover:shadow-xl transition-all duration-300 hover:scale-105">
               <div className="flex items-center gap-3 mb-4">
-                <div className="relative w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md">
+                <div className="relative w-10 h-10 bg-gradient-to-br from-primary to-primary-hover rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md">
                   2yr
-                  {/* Tick mark animation */}
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-white animate-pulse"></div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-600">Your TIME</div>
-                  <div className="text-lg font-bold text-gray-900">24 months</div>
+                  <div className="text-sm text-text-tertiary">Your TIME</div>
+                  <div className="text-lg font-bold text-text-primary">24 months</div>
                 </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 h-2 rounded-full transition-all duration-1000 ease-out" style={{ width: '67%' }}></div>
+              <div className="w-full bg-bg-tertiary rounded-full h-2 overflow-hidden">
+                <div className="bg-gradient-to-r from-primary to-primary-hover h-2 rounded-full transition-all duration-1000 ease-out" style={{ width: '67%' }}></div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">💙 Looking good! You&apos;re on track.</p>
+              <p className="text-xs text-text-tertiary mt-2 flex items-center gap-1">
+                <Wallet className="w-3 h-3 text-info" />
+                Looking good! You&apos;re on track.
+              </p>
             </div>
           </div>
 
-          {/* Auth Card - Enhanced */}
+          {/* Auth Card */}
           <div className="order-1 md:order-2">
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-blue-100 p-6 md:p-8 max-w-md mx-auto hover:shadow-3xl transition-all duration-300">
+            <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300">
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold text-text-primary mb-2">
                   {mode === 'signin' ? 'Welcome back' : 'Get started'}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-text-tertiary">
                   {mode === 'signin' 
-                    ? 'Sign in to check your TIME ⏱️' 
+                    ? 'Sign in to check your TIME' 
                     : 'Create your free account 🚀'}
                 </p>
               </div>
 
-              {/* Mode Toggle - Enhanced */}
+              {/* Mode Toggle */}
               <div className="flex gap-2 mb-6">
                 <button
                   onClick={() => setMode('signin')}
-                  className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform ${
+                  className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
                     mode === 'signin'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-102'
+                      ? 'bg-gradient-to-r from-primary to-primary-hover text-white shadow-md scale-105'
+                      : 'bg-surface-hover text-text-secondary hover:bg-surface-active'
                   }`}
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => setMode('signup')}
-                  className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform ${
+                  className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
                     mode === 'signup'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-102'
+                      ? 'bg-gradient-to-r from-primary to-primary-hover text-white shadow-md scale-105'
+                      : 'bg-surface-hover text-text-secondary hover:bg-surface-active'
                   }`}
                 >
                   Sign Up
@@ -193,7 +190,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   type="button"
                   onClick={() => handleSocialAuth('google')}
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-white border-2 border-gray-300 hover:border-gray-400 rounded-lg font-semibold text-gray-700 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
+                  className="w-full py-3 px-4 bg-surface-card border-2 border-border-default hover:border-border-strong rounded-lg font-semibold text-text-primary transition-all duration-200 active:scale-98 disabled:opacity-50 flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -208,7 +205,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   type="button"
                   onClick={() => handleSocialAuth('github')}
                   disabled={loading}
-                  className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
+                  className="w-full py-3 px-4 bg-text-primary hover:bg-text-secondary text-white rounded-lg font-semibold transition-all duration-200 active:scale-98 disabled:opacity-50 flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd"/>
@@ -220,16 +217,16 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
               {/* Divider */}
               <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
+                  <div className="w-full border-t border-border-subtle"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500 font-medium">Or continue with email</span>
+                  <span className="px-4 bg-surface-card text-text-tertiary font-medium">Or continue with email</span>
                 </div>
               </div>
 
               <form onSubmit={handleAuth} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-text-secondary mb-2">
                     Email
                   </label>
                   <input
@@ -237,13 +234,16 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-blue-400"
+                    className="w-full px-4 py-3 border-2 border-border-default rounded-lg
+                      bg-surface-card text-text-primary placeholder:text-text-tertiary
+                      focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                      transition-all duration-200 hover:border-border-strong"
                     placeholder="your@email.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-text-secondary mb-2">
                     Password
                   </label>
                   <input
@@ -252,18 +252,27 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-blue-400"
+                    className="w-full px-4 py-3 border-2 border-border-default rounded-lg
+                      bg-surface-card text-text-primary placeholder:text-text-tertiary
+                      focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                      transition-all duration-200 hover:border-border-strong"
                     placeholder="••••••••"
                   />
                   {mode === 'signup' && (
-                    <p className="text-xs text-gray-500 mt-2">At least 6 characters</p>
+                    <p className="text-xs text-text-tertiary mt-2">At least 6 characters</p>
                   )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl disabled:scale-100"
+                  className="w-full py-3
+                    bg-gradient-to-r from-primary to-primary-hover
+                    hover:from-primary-hover hover:to-primary-active
+                    disabled:from-text-disabled disabled:to-text-disabled
+                    text-white font-semibold rounded-lg
+                    transition-all duration-200 active:scale-98
+                    shadow-md hover:shadow-lg"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
@@ -280,20 +289,28 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
               </form>
 
               {message && (
-                <div className={`mt-4 p-3 rounded-lg text-sm text-center transition-all duration-300 ${
-                  message.startsWith('✅') 
-                    ? 'bg-green-50 text-green-700 border-2 border-green-200 animate-pulse' 
-                    : 'bg-red-50 text-red-700 border-2 border-red-200'
+                <div className={`mt-4 p-3 rounded-lg text-sm flex items-center gap-2 transition-all duration-300 ${
+                  message.type === 'success'
+                    ? 'bg-success/10 text-success border-2 border-success/20' 
+                    : 'bg-error/10 text-error border-2 border-error/20'
                 }`}>
-                  {message}
+                  {message.type === 'success' ? (
+                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  ) : (
+                    <XCircle className="w-5 h-5 flex-shrink-0" />
+                  )}
+                  <span>{message.text}</span>
                 </div>
               )}
 
-              <div className="mt-6 text-center text-sm text-gray-500">
+              <div className="mt-6 text-center text-sm text-text-tertiary">
                 {mode === 'signup' ? (
-                  <p>By signing up, your data is stored securely with Supabase 🔒</p>
+                  <p className="flex items-center justify-center gap-1">
+                    <Shield className="w-4 h-4" />
+                    By signing up, your data is stored securely with Supabase
+                  </p>
                 ) : (
-                  <p>Don&apos;t have an account? Click <strong className="text-blue-600">Sign Up</strong> above</p>
+                  <p>Don&apos;t have an account? Click <strong className="text-primary">Sign Up</strong> above</p>
                 )}
               </div>
             </div>

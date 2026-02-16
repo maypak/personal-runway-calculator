@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Target, PartyPopper, BarChart3, DollarSign, Sparkles, Edit2, Trash2, X } from 'lucide-react';
 import type { UserGoal } from '../types';
 
 interface GoalProgressProps {
@@ -25,21 +26,18 @@ export default function GoalProgress({
   let currentValue = 0;
   let targetValue = goal.targetValue;
   let deficit = 0;
-  let unit = '';
 
   if (goal.goalType === 'runway') {
     currentValue = currentRunway;
     targetValue = goal.targetValue;
     progress = currentRunway > 0 ? Math.min((currentRunway / targetValue) * 100, 100) : 0;
     deficit = Math.max(targetValue - currentRunway, 0);
-    unit = 'months';
   } else {
     // savings
     currentValue = remainingFunds;
     targetValue = goal.targetValue;
     progress = remainingFunds > 0 ? Math.min((remainingFunds / targetValue) * 100, 100) : 0;
     deficit = Math.max(targetValue - remainingFunds, 0);
-    unit = '$';
   }
 
   const isAchieved = progress >= 100;
@@ -54,18 +52,20 @@ export default function GoalProgress({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border-2 border-violet-200 dark:border-violet-800">
+    <div className="bg-surface-card rounded-xl shadow-md p-4 sm:p-6 border-2 border-primary/30">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xl sm:text-2xl">
-            {isAchieved ? '🎉' : '🎯'}
-          </span>
+        <div className="flex items-center gap-3">
+          {isAchieved ? (
+            <PartyPopper className="w-6 h-6 sm:w-7 sm:h-7 text-success" />
+          ) : (
+            <Target className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+          )}
           <div>
-            <h3 className="text-base sm:text-xl font-bold text-gray-900 dark:text-white">
+            <h3 className="text-base sm:text-xl font-bold text-text-primary">
               {isAchieved ? 'Goal Achieved!' : 'Your Goal'}
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-text-tertiary">
               {goal.goalType === 'runway' 
                 ? `${goal.targetValue}-Month Runway` 
                 : `$${goal.targetValue.toLocaleString()} Savings`}
@@ -75,33 +75,37 @@ export default function GoalProgress({
         <div className="flex gap-2">
           <button
             onClick={onEdit}
-            className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
+            className="p-2 text-primary hover:bg-surface-hover rounded-lg
+              transition-all duration-200 active:scale-95"
             aria-label="Edit goal"
+            title="Edit goal"
           >
-            Edit
+            <Edit2 className="w-4 h-4" />
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="text-sm text-red-600 dark:text-red-400 hover:underline"
+            className="p-2 text-error hover:bg-surface-hover rounded-lg
+              transition-all duration-200 active:scale-95"
             aria-label="Delete goal"
+            title="Delete goal"
           >
-            Delete
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Description */}
       {goal.description && (
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 italic">
+        <p className="text-sm text-text-secondary mb-3 italic">
           "{goal.description}"
         </p>
       )}
 
       {/* Progress Bar */}
       <div className="mb-2">
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
+        <div className="w-full bg-bg-tertiary rounded-full h-3 sm:h-4 overflow-hidden">
           <div
-            className="bg-gradient-to-r from-violet-500 to-violet-600 h-3 sm:h-4 transition-all duration-500 ease-out rounded-full"
+            className="bg-gradient-to-r from-primary to-primary-hover h-3 sm:h-4 transition-all duration-500 ease-out rounded-full"
             style={{ width: `${Math.min(progress, 100)}%` }}
             role="progressbar"
             aria-valuenow={Math.round(progress)}
@@ -109,40 +113,40 @@ export default function GoalProgress({
             aria-valuemax={100}
           />
         </div>
-        <div className="text-right text-xs sm:text-sm font-semibold text-violet-700 dark:text-violet-400 mt-1">
+        <div className="text-right text-xs sm:text-sm font-semibold text-primary mt-1">
           {Math.round(progress)}%
         </div>
       </div>
 
       {/* Values */}
-      <div className="text-base sm:text-lg font-mono text-gray-700 dark:text-gray-300 mb-3">
+      <div className="text-base sm:text-lg font-mono text-text-primary mb-3">
         {formatValue(currentValue)} / {formatValue(targetValue)}
       </div>
 
       {/* Status Info */}
       {!isAchieved ? (
-        <div className="space-y-2 p-3 sm:p-4 bg-violet-50 dark:bg-violet-900/20 rounded-xl">
-          <div className="flex items-start gap-2 text-xs sm:text-sm">
-            <span className="text-base sm:text-lg flex-shrink-0">📊</span>
-            <span className="text-gray-700 dark:text-gray-300">
-              Current: <span className="font-semibold text-violet-700 dark:text-violet-400">
+        <div className="space-y-2 p-3 sm:p-4 bg-primary-light rounded-xl border border-primary/20">
+          <div className="flex items-start gap-3 text-xs sm:text-sm">
+            <BarChart3 className="w-5 h-5 text-primary flex-shrink-0" />
+            <span className="text-text-secondary">
+              Current: <span className="font-semibold text-primary">
                 {formatValue(currentValue)}
               </span>
             </span>
           </div>
-          <div className="flex items-start gap-2 text-xs sm:text-sm">
-            <span className="text-base sm:text-lg flex-shrink-0">💰</span>
-            <span className="text-gray-700 dark:text-gray-300">
-              Need: <span className="font-semibold text-violet-700 dark:text-violet-400">
+          <div className="flex items-start gap-3 text-xs sm:text-sm">
+            <DollarSign className="w-5 h-5 text-primary flex-shrink-0" />
+            <span className="text-text-secondary">
+              Need: <span className="font-semibold text-primary">
                 {formatValue(deficit)} more
               </span>
             </span>
           </div>
         </div>
       ) : (
-        <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-          <div className="flex items-center gap-2 text-xs sm:text-sm text-green-700 dark:text-green-400">
-            <span className="text-base sm:text-lg">✨</span>
+        <div className="p-3 sm:p-4 bg-success/10 rounded-xl border border-success/20">
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-success">
+            <Sparkles className="w-5 h-5 flex-shrink-0" />
             <span className="font-semibold">
               Congratulations! You've reached your goal.
             </span>
@@ -157,19 +161,31 @@ export default function GoalProgress({
           onClick={() => setShowDeleteConfirm(false)}
         >
           <div 
-            className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full"
+            className="bg-surface-card rounded-xl p-6 max-w-sm w-full shadow-xl border border-border-subtle"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Delete Goal?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-text-primary">
+                Delete Goal?
+              </h3>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="text-text-tertiary hover:text-text-secondary p-1 rounded-lg
+                  hover:bg-surface-hover transition-all duration-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-text-secondary mb-6">
               Are you sure you want to delete this goal? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2
+                  bg-surface-hover hover:bg-surface-active
+                  text-text-primary rounded-lg font-medium
+                  transition-all duration-200 active:scale-98"
               >
                 Cancel
               </button>
@@ -178,7 +194,10 @@ export default function GoalProgress({
                   onDelete();
                   setShowDeleteConfirm(false);
                 }}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                className="flex-1 px-4 py-2
+                  bg-error hover:bg-error/90
+                  text-white rounded-lg font-medium
+                  transition-all duration-200 active:scale-98"
               >
                 Delete
               </button>
