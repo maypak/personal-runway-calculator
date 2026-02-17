@@ -238,3 +238,59 @@ export interface FIMilestone {
   achievedDate?: string; // ISO date
   estimatedDate?: string; // ISO date (if not achieved yet)
 }
+
+// Phase-based Planning Types - Week 4
+export interface PhaseOneTimeExpense {
+  name: string;
+  amount: number;
+  month: number; // Relative to phase start (0 = first month of phase)
+}
+
+export interface Phase {
+  id: string;
+  userId: string;
+  scenarioId?: string | null;
+  
+  // Phase metadata
+  name: string;
+  description?: string;
+  phaseOrder: number;
+  
+  // Time range (0-indexed months)
+  startMonth: number;
+  endMonth: number;
+  
+  // Financial data
+  monthlyExpenses: number;
+  monthlyIncome: number;
+  oneTimeExpenses: PhaseOneTimeExpense[];
+  
+  // Calculated (cached)
+  totalBurn?: number;
+  
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PhaseBreakdown {
+  phaseName: string;
+  duration: number; // months
+  totalBurn: number;
+  avgMonthlyBurn: number;
+  startMonth: number;
+  endMonth: number;
+}
+
+export interface PhaseRunwayResult {
+  runway: number; // Total months until savings depleted
+  monthlyData: MonthData[];
+  phaseBreakdown: PhaseBreakdown[];
+  totalBurn: number;
+  breakevenMonth: number | null;
+}
+
+export interface PhaseTemplate {
+  name: string;
+  description: string;
+  phases: Omit<Phase, 'id' | 'userId' | 'scenarioId' | 'createdAt' | 'updatedAt'>[];
+}
