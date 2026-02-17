@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Target, X } from 'lucide-react';
 import type { UserGoal } from '../types';
+import { useI18n } from '../contexts/I18nContext';
 
 interface GoalSettingProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export default function GoalSetting({
   onSave,
   existingGoal,
 }: GoalSettingProps) {
+  const { t } = useI18n();
   const [goalType, setGoalType] = useState<'runway' | 'savings'>('runway');
   const [targetValue, setTargetValue] = useState('');
   const [description, setDescription] = useState('');
@@ -41,7 +43,7 @@ export default function GoalSetting({
     
     const value = parseFloat(targetValue);
     if (isNaN(value) || value <= 0) {
-      alert('Please enter a valid positive number');
+      alert(t('errors.invalidNumber'));
       return;
     }
 
@@ -72,7 +74,7 @@ export default function GoalSetting({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-text-primary flex items-center gap-2">
             <Target className="w-6 h-6 text-primary" />
-            {existingGoal ? 'Edit Goal' : 'Set Your Goal'}
+            {existingGoal ? t('goals:setting.editTitle') : t('goals:setting.title')}
           </h2>
           <button
             onClick={onClose}
@@ -89,7 +91,7 @@ export default function GoalSetting({
           {/* Goal Type */}
           <div>
             <label className="block text-sm font-semibold text-text-secondary mb-3">
-              Goal Type
+              {t('goals:setting.goalType')}
             </label>
             <div className="space-y-2">
               <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer
@@ -105,10 +107,10 @@ export default function GoalSetting({
                 />
                 <div className="flex-1">
                   <div className="font-medium text-text-primary">
-                    Runway (months)
+                    {t('goals:setting.runway.title')}
                   </div>
                   <div className="text-xs text-text-tertiary">
-                    How many months you want to survive
+                    {t('goals:setting.runway.description')}
                   </div>
                 </div>
               </label>
@@ -125,10 +127,10 @@ export default function GoalSetting({
                 />
                 <div className="flex-1">
                   <div className="font-medium text-text-primary">
-                    Savings Amount ($)
+                    {t('goals:setting.savings.title')}
                   </div>
                   <div className="text-xs text-text-tertiary">
-                    Target amount of money to save
+                    {t('goals:setting.savings.description')}
                   </div>
                 </div>
               </label>
@@ -138,7 +140,7 @@ export default function GoalSetting({
           {/* Target Value */}
           <div>
             <label htmlFor="targetValue" className="block text-sm font-semibold text-text-secondary mb-2">
-              Target {goalType === 'runway' ? 'Months' : 'Amount ($)'}
+              {goalType === 'runway' ? t('goals:setting.targetMonths') : t('goals:setting.targetAmount')}
             </label>
             <input
               id="targetValue"
@@ -147,7 +149,7 @@ export default function GoalSetting({
               min="0"
               value={targetValue}
               onChange={(e) => setTargetValue(e.target.value)}
-              placeholder={goalType === 'runway' ? 'e.g., 6' : 'e.g., 30000'}
+              placeholder={goalType === 'runway' ? t('goals:setting.placeholderMonths') : t('goals:setting.placeholderAmount')}
               className="w-full px-4 py-3 text-lg font-mono
                 bg-surface-card border-2 border-border-default rounded-lg
                 text-text-primary placeholder:text-text-tertiary
@@ -156,16 +158,14 @@ export default function GoalSetting({
               required
             />
             <p className="text-xs text-text-tertiary mt-1">
-              {goalType === 'runway' 
-                ? 'Recommended: 3-12 months' 
-                : 'Enter your target savings amount'}
+              {goalType === 'runway' ? t('goals:setting.hintMonths') : t('goals:setting.hintAmount')}
             </p>
           </div>
 
           {/* Description (Optional) */}
           <div>
             <label htmlFor="description" className="block text-sm font-semibold text-text-secondary mb-2">
-              Why this goal? <span className="text-text-tertiary font-normal">(optional)</span>
+              {t('goals:setting.descriptionLabel')} <span className="text-text-tertiary font-normal">{t('goals:setting.descriptionOptional')}</span>
             </label>
             <input
               id="description"
@@ -173,7 +173,7 @@ export default function GoalSetting({
               maxLength={50}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g., Safe quit my job"
+              placeholder={t('goals:setting.descriptionPlaceholder')}
               className="w-full px-4 py-2
                 bg-surface-card border-2 border-border-default rounded-lg
                 text-text-primary placeholder:text-text-tertiary
@@ -181,7 +181,7 @@ export default function GoalSetting({
                 transition-all duration-200"
             />
             <p className="text-xs text-text-tertiary mt-1">
-              {description.length}/50 characters
+              {description.length}/50 {t('goals:setting.charactersCount')}
             </p>
           </div>
 
@@ -189,8 +189,7 @@ export default function GoalSetting({
           {!existingGoal && (
             <div className="p-3 bg-info/10 rounded-lg border border-info/20">
               <p className="text-xs text-info">
-                <strong>Free tier:</strong> You can set 1 active goal. 
-                Setting a new goal will replace your current one.
+                {t('goals:setting.freeTierNotice')}
               </p>
             </div>
           )}
@@ -205,7 +204,7 @@ export default function GoalSetting({
                 text-text-primary rounded-lg font-semibold
                 transition-all duration-200 active:scale-98"
             >
-              Cancel
+              {t('goals:setting.cancel')}
             </button>
             <button
               type="submit"
@@ -215,7 +214,7 @@ export default function GoalSetting({
                 shadow-md hover:shadow-lg
                 transition-all duration-200 active:scale-98"
             >
-              {existingGoal ? 'Update Goal' : 'Save Goal'}
+              {existingGoal ? t('goals:setting.update') : t('goals:setting.save')}
             </button>
           </div>
         </form>

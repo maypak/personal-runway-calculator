@@ -21,13 +21,16 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
+import { useI18n } from '../contexts/I18nContext';
 import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function FinanceDashboardSupabase() {
   const { signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useI18n();
   const {
     settings,
     expenses,
@@ -168,18 +171,23 @@ export default function FinanceDashboardSupabase() {
         <div className="flex items-center gap-3">
           <Wallet className="w-7 h-7 md:w-8 md:h-8 text-primary" />
           <h1 className="text-2xl md:text-3xl font-bold text-text-primary">
-            Personal Runway
+            {t('auth:hero.logo')}
           </h1>
         </div>
         
         <div className="flex flex-wrap gap-2">
+          {/* Language Switcher */}
+          <div className="hidden sm:block">
+            <LanguageSwitcher />
+          </div>
+          
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             className="p-2 md:p-3 bg-surface-card hover:bg-surface-hover active:bg-surface-active
               border border-border-subtle rounded-lg
               transition-all duration-200 active:scale-98"
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            aria-label={t('theme.toggle')}
           >
             {theme === 'light' ? (
               <Moon className="w-5 h-5 text-text-secondary" />
@@ -194,7 +202,7 @@ export default function FinanceDashboardSupabase() {
             className="p-2 md:p-3 bg-surface-card hover:bg-surface-hover active:bg-surface-active
               border border-border-subtle rounded-lg
               transition-all duration-200 active:scale-98"
-            aria-label="Open financial settings"
+            aria-label={t('nav.settings')}
           >
             <Settings className="w-5 h-5 text-text-secondary" />
           </button>
@@ -208,7 +216,7 @@ export default function FinanceDashboardSupabase() {
               transition-all duration-200 active:scale-98"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
+            <span>{t('dashboard:header.signOut')}</span>
           </button>
         </div>
       </div>
@@ -217,7 +225,7 @@ export default function FinanceDashboardSupabase() {
       {showSettings && (
         <div className="bg-surface-card rounded-xl shadow-lg border border-border-subtle p-6 space-y-4">
           <h2 className="text-lg md:text-xl font-semibold mb-4 text-text-primary">
-            Financial Settings
+            {t('dashboard:settings.title')}
           </h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -352,8 +360,13 @@ export default function FinanceDashboardSupabase() {
                 transition-all duration-200 active:scale-98"
             >
               <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+              <span>{t('dashboard:header.signOut')}</span>
             </button>
+          </div>
+
+          {/* Language Switcher (Mobile) */}
+          <div className="sm:hidden pt-2">
+            <LanguageSwitcher />
           </div>
 
           <button
@@ -361,7 +374,7 @@ export default function FinanceDashboardSupabase() {
             className="w-full py-3 bg-success hover:bg-success/90 text-white rounded-lg font-semibold
               transition-all duration-200 active:scale-98"
           >
-            Done
+            {t('cta.close')}
           </button>
         </div>
       )}
@@ -371,7 +384,7 @@ export default function FinanceDashboardSupabase() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg md:text-xl font-semibold text-text-secondary">
-            Your Financial Runway
+            {t('dashboard:runway.title')}
           </h2>
           {runway > 24 ? (
             <Shield className="w-10 h-10 text-success" />
@@ -462,11 +475,10 @@ export default function FinanceDashboardSupabase() {
         <div className="bg-primary-light rounded-xl shadow-md p-6 border-2 border-dashed border-primary/30 text-center">
           <Target className="w-12 h-12 text-primary mx-auto mb-3" />
           <h3 className="text-xl font-bold text-text-primary mb-2">
-            Set Your First Goal
+            {t('dashboard:goals.setGoal')}
           </h3>
           <p className="text-text-secondary mb-4 max-w-md mx-auto">
-            Track your progress toward a specific runway target or savings amount. 
-            Setting goals makes you <strong>40% more likely</strong> to achieve them!
+            {t('dashboard:goals.noGoals')}
           </p>
           <button
             onClick={() => {
@@ -478,7 +490,7 @@ export default function FinanceDashboardSupabase() {
               transform hover:-translate-y-0.5 active:scale-98
               transition-all duration-200"
           >
-            Set Goal
+            {t('dashboard:goals.setGoal')}
           </button>
         </div>
       )}
@@ -554,7 +566,7 @@ export default function FinanceDashboardSupabase() {
       <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-5">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-base md:text-lg font-semibold text-text-primary">
-            Recent Expenses
+            {t('dashboard:expenses.title')}
           </h3>
           <button
             onClick={() => setShowExpenseForm(!showExpenseForm)}
@@ -563,11 +575,11 @@ export default function FinanceDashboardSupabase() {
               text-white rounded-lg text-sm font-semibold
               shadow-md hover:shadow-lg
               active:scale-98 transition-all duration-200"
-            aria-label="Add new expense"
+            aria-label={t('dashboard:expenses.addExpense')}
           >
             <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Expense</span>
-            <span className="sm:hidden">Add</span>
+            <span className="hidden sm:inline">{t('dashboard:expenses.addExpense')}</span>
+            <span className="sm:hidden">{t('cta.add')}</span>
           </button>
         </div>
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Target, PartyPopper, BarChart3, DollarSign, Sparkles, Edit2, Trash2, X } from 'lucide-react';
 import type { UserGoal } from '../types';
+import { useI18n } from '../contexts/I18nContext';
 
 interface GoalProgressProps {
   goal: UserGoal;
@@ -19,6 +20,7 @@ export default function GoalProgress({
   onEdit,
   onDelete,
 }: GoalProgressProps) {
+  const { t } = useI18n();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Calculate progress based on goal type
@@ -45,7 +47,7 @@ export default function GoalProgress({
   // Format numbers
   const formatValue = (value: number) => {
     if (goal.goalType === 'runway') {
-      return `${value.toFixed(1)} ${value === 1 ? 'month' : 'months'}`;
+      return `${value.toFixed(1)} ${value === 1 ? t('goals:progress.month') : t('goals:progress.months')}`;
     } else {
       return `$${value.toLocaleString()}`;
     }
@@ -63,12 +65,12 @@ export default function GoalProgress({
           )}
           <div>
             <h3 className="text-base sm:text-xl font-bold text-text-primary">
-              {isAchieved ? 'Goal Achieved!' : 'Your Goal'}
+              {isAchieved ? t('goals:progress.achieved') : t('goals:progress.yourGoal')}
             </h3>
             <p className="text-sm text-text-tertiary">
               {goal.goalType === 'runway' 
-                ? `${goal.targetValue}-Month Runway` 
-                : `$${goal.targetValue.toLocaleString()} Savings`}
+                ? t('goals:progress.runwayGoal', { months: goal.targetValue.toString() })
+                : t('goals:progress.savingsGoal', { amount: goal.targetValue.toLocaleString() })}
             </p>
           </div>
         </div>
@@ -129,7 +131,7 @@ export default function GoalProgress({
           <div className="flex items-start gap-3 text-xs sm:text-sm">
             <BarChart3 className="w-5 h-5 text-primary flex-shrink-0" />
             <span className="text-text-secondary">
-              Current: <span className="font-semibold text-primary">
+              {t('goals:progress.current')}: <span className="font-semibold text-primary">
                 {formatValue(currentValue)}
               </span>
             </span>
@@ -137,8 +139,8 @@ export default function GoalProgress({
           <div className="flex items-start gap-3 text-xs sm:text-sm">
             <DollarSign className="w-5 h-5 text-primary flex-shrink-0" />
             <span className="text-text-secondary">
-              Need: <span className="font-semibold text-primary">
-                {formatValue(deficit)} more
+              {t('goals:progress.need')}: <span className="font-semibold text-primary">
+                {formatValue(deficit)} {t('goals:progress.more')}
               </span>
             </span>
           </div>
@@ -148,7 +150,7 @@ export default function GoalProgress({
           <div className="flex items-center gap-3 text-xs sm:text-sm text-success">
             <Sparkles className="w-5 h-5 flex-shrink-0" />
             <span className="font-semibold">
-              Congratulations! You've reached your goal.
+              {t('goals:progress.congratulations')}
             </span>
           </div>
         </div>
@@ -166,7 +168,7 @@ export default function GoalProgress({
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-text-primary">
-                Delete Goal?
+                {t('goals:progress.deleteConfirm.title')}
               </h3>
               <button
                 onClick={() => setShowDeleteConfirm(false)}
@@ -177,7 +179,7 @@ export default function GoalProgress({
               </button>
             </div>
             <p className="text-text-secondary mb-6">
-              Are you sure you want to delete this goal? This action cannot be undone.
+              {t('goals:progress.deleteConfirm.message')}
             </p>
             <div className="flex gap-3">
               <button
@@ -187,7 +189,7 @@ export default function GoalProgress({
                   text-text-primary rounded-lg font-medium
                   transition-all duration-200 active:scale-98"
               >
-                Cancel
+                {t('goals:progress.deleteConfirm.cancel')}
               </button>
               <button
                 onClick={() => {
@@ -199,7 +201,7 @@ export default function GoalProgress({
                   text-white rounded-lg font-medium
                   transition-all duration-200 active:scale-98"
               >
-                Delete
+                {t('goals:progress.deleteConfirm.delete')}
               </button>
             </div>
           </div>

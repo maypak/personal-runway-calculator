@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Clock, CheckCircle, XCircle, Shield, Cloud, Sparkles, Wallet } from 'lucide-react';
+import { useI18n } from '../contexts/I18nContext';
 
 export default function Auth({ onSuccess }: { onSuccess: () => void }) {
+  const { t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +29,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
         });
 
         if (error) throw error;
-        setMessage({ type: 'success', text: 'Check your email for confirmation link!' });
+        setMessage({ type: 'success', text: t('auth:messages.confirmEmail') });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -35,11 +37,11 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
         });
 
         if (error) throw error;
-        setMessage({ type: 'success', text: 'Signed in successfully!' });
+        setMessage({ type: 'success', text: t('auth:messages.signedIn') });
         onSuccess();
       }
     } catch (error) {
-      const text = error instanceof Error ? error.message : 'An error occurred';
+      const text = error instanceof Error ? error.message : t('auth:messages.error');
       setMessage({ type: 'error', text });
     } finally {
       setLoading(false);
@@ -60,7 +62,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
       
       if (error) throw error;
     } catch (error) {
-      const text = error instanceof Error ? error.message : 'An error occurred';
+      const text = error instanceof Error ? error.message : t('auth:messages.error');
       setMessage({ type: 'error', text });
       setLoading(false);
     }
@@ -76,30 +78,26 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
               <div className="relative w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all duration-300 hover:rotate-6">
                 <Clock className="w-8 h-8 text-white relative z-10" />
-                {/* Pulse animation */}
                 <div className="absolute inset-0 bg-primary-light rounded-2xl animate-ping opacity-20"></div>
               </div>
               <div className="text-left">
-                <h1 className="text-2xl font-bold text-text-primary">Personal Runway</h1>
-                <p className="text-sm text-text-tertiary">Financial Freedom Tracker</p>
+                <h1 className="text-2xl font-bold text-text-primary">{t('auth:hero.logo')}</h1>
+                <p className="text-sm text-text-tertiary">{t('auth:hero.subtitle')}</p>
               </div>
             </div>
             
             {/* Hero Message */}
             <h2 className="text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
-              Your money isn&apos;t just money.{' '}
-              <span className="bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent">
-                It&apos;s TIME.
-              </span>
+              {t('auth:hero.title')}
             </h2>
             
             <p className="text-base md:text-lg text-text-secondary mb-8 leading-relaxed">
-              How much <strong className="text-primary">time</strong> do you have to chase your dream? Build your startup? Find yourself?
+              {t('auth:hero.description')}
             </p>
             
             <p className="text-base text-text-primary mb-8 font-medium flex items-center justify-center md:justify-start gap-2">
               <Clock className="w-5 h-5 text-primary" />
-              Calculate your <span className="text-primary font-bold">TIME</span> in 30 seconds.
+              {t('auth:hero.cta')}
             </p>
             
             {/* Social Proof */}
@@ -108,19 +106,19 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 <div className="w-8 h-8 bg-success/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Shield className="w-5 h-5 text-success" />
                 </div>
-                <span className="font-medium">Secure & Private</span>
+                <span className="font-medium">{t('auth:hero.features.secure')}</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2 group">
                 <div className="w-8 h-8 bg-info/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Cloud className="w-5 h-5 text-info" />
                 </div>
-                <span className="font-medium">Cloud Sync</span>
+                <span className="font-medium">{t('auth:hero.features.cloud')}</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2 group">
                 <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Sparkles className="w-5 h-5 text-primary" />
                 </div>
-                <span className="font-medium">100% Free</span>
+                <span className="font-medium">{t('auth:hero.features.free')}</span>
               </div>
             </div>
 
@@ -132,8 +130,8 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-white animate-pulse"></div>
                 </div>
                 <div>
-                  <div className="text-sm text-text-tertiary">Your TIME</div>
-                  <div className="text-lg font-bold text-text-primary">24 months</div>
+                  <div className="text-sm text-text-tertiary">{t('auth:hero.preview.label')}</div>
+                  <div className="text-lg font-bold text-text-primary">24 {t('auth:hero.preview.months')}</div>
                 </div>
               </div>
               <div className="w-full bg-bg-tertiary rounded-full h-2 overflow-hidden">
@@ -141,7 +139,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
               </div>
               <p className="text-xs text-text-tertiary mt-2 flex items-center gap-1">
                 <Wallet className="w-3 h-3 text-info" />
-                Looking good! You&apos;re on track.
+                {t('auth:hero.preview.status')}
               </p>
             </div>
           </div>
@@ -151,12 +149,10 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-text-primary mb-2">
-                  {mode === 'signin' ? 'Welcome back' : 'Get started'}
+                  {mode === 'signin' ? t('auth:card.welcomeBack') : t('auth:card.getStarted')}
                 </h3>
                 <p className="text-text-tertiary">
-                  {mode === 'signin' 
-                    ? 'Sign in to check your TIME' 
-                    : 'Create your free account 🚀'}
+                  {mode === 'signin' ? t('auth:card.signInSubtitle') : t('auth:card.signUpSubtitle')}
                 </p>
               </div>
 
@@ -170,7 +166,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                       : 'bg-surface-hover text-text-secondary hover:bg-surface-active'
                   }`}
                 >
-                  Sign In
+                  {t('auth:card.signIn')}
                 </button>
                 <button
                   onClick={() => setMode('signup')}
@@ -180,7 +176,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                       : 'bg-surface-hover text-text-secondary hover:bg-surface-active'
                   }`}
                 >
-                  Sign Up
+                  {t('auth:card.signUp')}
                 </button>
               </div>
 
@@ -198,7 +194,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
-                  Continue with Google
+                  {t('auth:social.continueWithGoogle')}
                 </button>
                 
                 <button
@@ -210,7 +206,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd"/>
                   </svg>
-                  Continue with GitHub
+                  {t('auth:social.continueWithGithub')}
                 </button>
               </div>
 
@@ -220,14 +216,14 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   <div className="w-full border-t border-border-subtle"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-surface-card text-text-tertiary font-medium">Or continue with email</span>
+                  <span className="px-4 bg-surface-card text-text-tertiary font-medium">{t('auth:social.divider')}</span>
                 </div>
               </div>
 
               <form onSubmit={handleAuth} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-text-secondary mb-2">
-                    Email
+                    {t('auth:form.email')}
                   </label>
                   <input
                     type="email"
@@ -238,13 +234,13 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                       bg-surface-card text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                       transition-all duration-200 hover:border-border-strong"
-                    placeholder="your@email.com"
+                    placeholder={t('auth:form.emailPlaceholder')}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-text-secondary mb-2">
-                    Password
+                    {t('auth:form.password')}
                   </label>
                   <input
                     type="password"
@@ -256,10 +252,10 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                       bg-surface-card text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                       transition-all duration-200 hover:border-border-strong"
-                    placeholder="••••••••"
+                    placeholder={t('auth:form.passwordPlaceholder')}
                   />
                   {mode === 'signup' && (
-                    <p className="text-xs text-text-tertiary mt-2">At least 6 characters</p>
+                    <p className="text-xs text-text-tertiary mt-2">{t('auth:form.passwordHint')}</p>
                   )}
                 </div>
 
@@ -280,10 +276,10 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Loading...
+                      {t('auth:form.loading')}
                     </span>
                   ) : (
-                    mode === 'signin' ? 'Sign In →' : 'Create Account →'
+                    mode === 'signin' ? t('auth:form.signInButton') : t('auth:form.signUpButton')
                   )}
                 </button>
               </form>
@@ -307,10 +303,10 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 {mode === 'signup' ? (
                   <p className="flex items-center justify-center gap-1">
                     <Shield className="w-4 h-4" />
-                    By signing up, your data is stored securely with Supabase
+                    {t('auth:footer.privacy')}
                   </p>
                 ) : (
-                  <p>Don&apos;t have an account? Click <strong className="text-primary">Sign Up</strong> above</p>
+                  <p>{t('auth:footer.switchMode')}</p>
                 )}
               </div>
             </div>
