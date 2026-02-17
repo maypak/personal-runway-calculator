@@ -60,6 +60,12 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       higherIsBetter: false, // Earlier is better
     },
     {
+      key: 'calculatedFirstIncomeMonth',
+      labelKey: 'scenarios:comparison.table.metrics.firstIncome',
+      format: (v, t) => v !== undefined && v !== null ? t('scenarios:comparison.table.values.month', { count: v }) : t('scenarios:comparison.table.values.never'),
+      higherIsBetter: false, // Earlier is better
+    },
+    {
       key: 'calculatedEndSavings',
       labelKey: 'scenarios:comparison.table.metrics.endSavings',
       format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : '$0',
@@ -127,8 +133,8 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     
     if (best === null || worst === null) return '';
     
-    // Special handling for breakeven month (null means never)
-    if (metric.key === 'calculatedBreakevenMonth' && value === null) {
+    // Special handling for breakeven/firstIncome month (null means never)
+    if ((metric.key === 'calculatedBreakevenMonth' || metric.key === 'calculatedFirstIncomeMonth') && value === null) {
       return 'text-gray-500';
     }
     
@@ -152,8 +158,8 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     
     if (best === null || worst === null) return '';
     
-    // Special handling for breakeven month (null means never)
-    if (metric.key === 'calculatedBreakevenMonth' && value === null) {
+    // Special handling for breakeven/firstIncome month (null means never)
+    if ((metric.key === 'calculatedBreakevenMonth' || metric.key === 'calculatedFirstIncomeMonth') && value === null) {
       return '';
     }
     

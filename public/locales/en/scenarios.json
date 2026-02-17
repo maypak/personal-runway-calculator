@@ -149,6 +149,7 @@
         "runway": "Total Runway",
         "burnRate": "Monthly Burn Rate",
         "breakeven": "Break-even Month",
+        "firstIncome": "First Income Month",
         "endSavings": "End Savings",
         "startSavings": "Starting Savings",
         "monthlyExpenses": "Monthly Expenses",

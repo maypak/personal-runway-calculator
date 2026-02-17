@@ -71,6 +71,7 @@ export function useScenarios() {
           calculatedRunway: row.calculated_runway ? Number(row.calculated_runway) : undefined,
           calculatedBurnRate: row.calculated_burn_rate ? Number(row.calculated_burn_rate) : undefined,
           calculatedBreakevenMonth: row.calculated_breakeven_month ?? undefined,
+          calculatedFirstIncomeMonth: row.calculated_first_income_month ?? undefined,
           calculatedEndSavings: row.calculated_end_savings ? Number(row.calculated_end_savings) : undefined,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
@@ -209,6 +210,7 @@ export function useScenarios() {
           calculated_runway: result.runway,
           calculated_burn_rate: result.burnRate,
           calculated_breakeven_month: result.breakevenMonth,
+          calculated_first_income_month: result.firstIncomeMonth,
           calculated_end_savings: result.endSavings,
         })
         .select()
@@ -233,6 +235,7 @@ export function useScenarios() {
         calculatedRunway: Number(data.calculated_runway),
         calculatedBurnRate: Number(data.calculated_burn_rate),
         calculatedBreakevenMonth: data.calculated_breakeven_month ?? undefined,
+        calculatedFirstIncomeMonth: data.calculated_first_income_month ?? undefined,
         calculatedEndSavings: Number(data.calculated_end_savings),
         createdAt: data.created_at,
         updatedAt: data.updated_at,
@@ -304,6 +307,7 @@ export function useScenarios() {
       dbPayload.calculated_runway = result.runway;
       dbPayload.calculated_burn_rate = result.burnRate;
       dbPayload.calculated_breakeven_month = result.breakevenMonth;
+      dbPayload.calculated_first_income_month = result.firstIncomeMonth;
       dbPayload.calculated_end_savings = result.endSavings;
 
       console.log('🔍 [updateScenario] DB payload:', dbPayload);
@@ -327,6 +331,7 @@ export function useScenarios() {
                 calculatedRunway: result.runway,
                 calculatedBurnRate: result.burnRate,
                 calculatedBreakevenMonth: result.breakevenMonth ?? undefined,
+                calculatedFirstIncomeMonth: result.firstIncomeMonth ?? undefined,
                 calculatedEndSavings: result.endSavings,
               }
             : s

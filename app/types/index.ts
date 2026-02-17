@@ -149,7 +149,8 @@ export interface MonthData {
 export interface RunwayResult {
   runway: number; // Total months until savings depleted
   burnRate: number; // Average monthly burn rate
-  breakevenMonth: number | null; // Month when income >= expenses (null if never)
+  breakevenMonth: number | null; // Month when income >= expenses (fully sustainable, null if never)
+  firstIncomeMonth: number | null; // Month when any income > 0 (burn rate reduction starts, null if never)
   endSavings: number; // Final savings amount
   monthlyData: MonthData[]; // Month-by-month breakdown
 }
@@ -172,6 +173,7 @@ export interface Scenario {
   calculatedRunway?: number;
   calculatedBurnRate?: number;
   calculatedBreakevenMonth?: number | null;
+  calculatedFirstIncomeMonth?: number | null;
   calculatedEndSavings?: number;
   
   createdAt: string;

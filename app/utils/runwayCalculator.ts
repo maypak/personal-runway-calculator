@@ -99,14 +99,19 @@ export function calculateRunway(scenario: Scenario): RunwayResult {
   const totalSpent = scenario.totalSavings - finalSavings;
   const burnRate = totalMonths > 0 ? totalSpent / totalMonths : 0;
   
-  // Breakeven month = first month where net change >= 0 (if any)
+  // Breakeven month = first month where net change >= 0 (income >= expenses, fully sustainable)
   const breakevenMonth = monthlyData.findIndex(m => m.netChange >= 0);
   const breakevenResult = breakevenMonth >= 0 ? breakevenMonth : null;
+  
+  // First income month = first month where income > 0 (burn rate reduction starts)
+  const firstIncomeMonth = monthlyData.findIndex(m => m.income > 0);
+  const firstIncomeResult = firstIncomeMonth >= 0 ? firstIncomeMonth : null;
   
   const result: RunwayResult = {
     runway: totalMonths,
     burnRate,
     breakevenMonth: breakevenResult,
+    firstIncomeMonth: firstIncomeResult,
     endSavings: finalSavings,
     monthlyData,
   };
@@ -115,6 +120,7 @@ export function calculateRunway(scenario: Scenario): RunwayResult {
     runway: result.runway,
     burnRate: result.burnRate.toFixed(2),
     breakevenMonth: result.breakevenMonth,
+    firstIncomeMonth: result.firstIncomeMonth,
     endSavings: result.endSavings,
   });
   
