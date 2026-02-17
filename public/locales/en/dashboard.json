@@ -8,6 +8,8 @@
     "label": "Financial Runway",
     "months": "months",
     "month": "month",
+    "yr": "yr",
+    "mo": "mo",
     "description": "Time until funds run out at current burn rate",
     "infinite": "Infinite! You're growing.",
     "status": {
@@ -15,16 +17,34 @@
       "warning": "Warning! Consider reducing expenses.",
       "ok": "You have breathing room.",
       "good": "Looking good! Keep it up.",
-      "excellent": "Excellent! You're on track."
-    }
+      "excellent": "Excellent! You're on track.",
+      "great": "You're in great shape! Feel free to take new risks.",
+      "solid": "Looking solid. You're on the right track.",
+      "tight": "Getting tight. Consider cutting expenses.",
+      "attention": "Needs attention. Boost income or reduce spending."
+    },
+    "details": {
+      "available": "Available",
+      "monthly": "Monthly",
+      "dailyBurn": "Daily burn"
+    },
+    "goalProgress": "36mo (3yr goal)"
   },
   "stats": {
     "totalIncome": "Total Income",
+    "totalSpent": "Total Spent",
     "totalExpenses": "Total Expenses",
     "remainingFunds": "Remaining Funds",
     "monthlyBurn": "Monthly Burn",
     "daysSince": "Days Since Start",
     "averageDaily": "Average Daily Spend"
+  },
+  "budget": {
+    "title": "This Month's Budget",
+    "used": "used",
+    "overBudget": "Over budget!",
+    "almostSpent": "Almost spent",
+    "lookingGood": "Looking good"
   },
   "goals": {
     "title": "Goals",
@@ -36,15 +56,18 @@
   "expenses": {
     "title": "Recent Expenses",
     "addExpense": "Add Expense",
-    "noExpenses": "No expenses yet. Start tracking!",
+    "noExpenses": "No expenses yet. Add your first expense above!",
     "amount": "Amount",
+    "amountPlaceholder": "Amount ($)",
     "category": "Category",
     "memo": "Memo",
+    "memoPlaceholder": "Memo (optional)",
     "optional": "optional",
     "categories": {
       "Food": "Food",
       "Transport": "Transport",
       "Housing": "Housing",
+      "Health": "Health",
       "Healthcare": "Healthcare",
       "Entertainment": "Entertainment",
       "Shopping": "Shopping",
@@ -54,17 +77,26 @@
     },
     "delete": "Delete",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "add": "Add",
+    "validation": {
+      "invalidAmount": "Please enter a valid amount"
+    }
   },
   "simulator": {
-    "title": "What-If Simulator",
+    "title": "Runway Simulator",
     "description": "Experiment with different scenarios",
     "monthlyExpense": "Monthly Expense",
+    "monthlyExpenseLabel": "Monthly Expense: $",
     "additionalIncome": "Additional Income",
+    "additionalIncomeLabel": "Additional Monthly Income: $",
     "oneTimeExpense": "One-Time Expense",
+    "oneTimeExpenseLabel": "One-time Expense: $",
     "currentScenario": "Current Scenario",
     "newScenario": "New Scenario",
+    "simulatedRunway": "Simulated Runway",
     "difference": "Difference",
+    "vsCurrent": "months vs current",
     "months": "months",
     "month": "month",
     "increase": "increase",
@@ -75,16 +107,21 @@
   "settings": {
     "title": "Settings",
     "currentSavings": "Current Savings",
+    "currentSavingsLabel": "Current Savings ($)",
     "currentSavingsHint": "Money you have right now",
     "lumpSum": "Lump Sum",
+    "lumpSumLabel": "Lump Sum ($)",
     "lumpSumHint": "One-time money (severance, bonus, etc.)",
     "monthlyIncome": "Monthly Income",
+    "monthlyIncomeLabel": "Monthly Income ($)",
     "monthlyIncomeHint": "Recurring monthly income",
     "incomeMonths": "Income Months",
     "incomeMonthsHint": "How many months you'll receive this income",
     "monthlyFixed": "Monthly Fixed Costs",
+    "monthlyFixedLabel": "Monthly Fixed ($)",
     "monthlyFixedHint": "Rent, utilities, insurance, etc.",
     "monthlyVariable": "Monthly Variable Costs",
+    "monthlyVariableLabel": "Monthly Variable ($)",
     "monthlyVariableHint": "Food, transport, etc.",
     "startDate": "Start Date",
     "startDateHint": "When did you start tracking?",

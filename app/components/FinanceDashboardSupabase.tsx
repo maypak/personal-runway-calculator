@@ -124,7 +124,7 @@ export default function FinanceDashboardSupabase() {
 
   const handleAddExpense = async () => {
     if (!newExpense.amount || parseFloat(newExpense.amount) <= 0) {
-      alert('Please enter a valid amount');
+      alert(t('dashboard:expenses.validation.invalidAmount'));
       return;
     }
 
@@ -231,7 +231,7 @@ export default function FinanceDashboardSupabase() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Current Savings ($)
+                {t('dashboard:settings.currentSavingsLabel')}
               </label>
               <input
                 type="number"
@@ -247,8 +247,8 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Lump Sum ($)
-                <span className="text-text-tertiary text-xs ml-1">(optional)</span>
+                {t('dashboard:settings.lumpSumLabel')}
+                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
               </label>
               <input
                 type="number"
@@ -265,8 +265,8 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Monthly Income ($)
-                <span className="text-text-tertiary text-xs ml-1">(optional)</span>
+                {t('dashboard:settings.monthlyIncomeLabel')}
+                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
               </label>
               <input
                 type="number"
@@ -283,8 +283,8 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Income Months
-                <span className="text-text-tertiary text-xs ml-1">(optional)</span>
+                {t('dashboard:settings.incomeMonths')}
+                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
               </label>
               <input
                 type="number"
@@ -301,7 +301,7 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Monthly Fixed ($)
+                {t('dashboard:settings.monthlyFixedLabel')}
               </label>
               <input
                 type="number"
@@ -317,8 +317,8 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Monthly Variable ($)
-                <span className="text-text-tertiary text-xs ml-1">(optional)</span>
+                {t('dashboard:settings.monthlyVariableLabel')}
+                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
               </label>
               <input
                 type="number"
@@ -335,7 +335,7 @@ export default function FinanceDashboardSupabase() {
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-text-secondary mb-1">
-                Start Date
+                {t('dashboard:settings.startDate')}
               </label>
               <input
                 type="date"
@@ -401,23 +401,23 @@ export default function FinanceDashboardSupabase() {
             {runwayYears > 0 && (
               <span>
                 {runwayYears}
-                <span className="text-3xl text-text-tertiary">yr</span>
+                <span className="text-3xl text-text-tertiary">{t('dashboard:runway.yr')}</span>
                 {' '}
               </span>
             )}
             {runwayMonths}
-            <span className="text-3xl text-text-tertiary">mo</span>
+            <span className="text-3xl text-text-tertiary">{t('dashboard:runway.mo')}</span>
           </div>
           
           {/* Emotional Message */}
           <p className="text-base md:text-lg text-text-secondary max-w-md mx-auto leading-relaxed">
             {runway > 24 
-              ? 'You\'re in great shape! Feel free to take new risks.' 
+              ? t('dashboard:runway.status.great')
               : runway > 12 
-              ? 'Looking solid. You\'re on the right track.'
+              ? t('dashboard:runway.status.solid')
               : runway > 6
-              ? 'Getting tight. Consider cutting expenses.'
-              : 'Needs attention. Boost income or reduce spending.'}
+              ? t('dashboard:runway.status.tight')
+              : t('dashboard:runway.status.attention')}
           </p>
         </div>
         
@@ -434,27 +434,27 @@ export default function FinanceDashboardSupabase() {
             />
           </div>
           <div className="flex justify-between text-xs text-text-tertiary mt-2">
-            <span>0mo</span>
-            <span className="font-medium">36mo (3yr goal)</span>
+            <span>0{t('dashboard:runway.mo')}</span>
+            <span className="font-medium">{t('dashboard:runway.goalProgress')}</span>
           </div>
         </div>
         
         {/* Details */}
         <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border-subtle">
           <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">Available</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.available')}</div>
             <div className="text-base md:text-lg font-semibold text-success">
               ${remainingFunds.toLocaleString()}
             </div>
           </div>
           <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">Monthly</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.monthly')}</div>
             <div className="text-base md:text-lg font-semibold text-error">
               ${monthlyExpense.toLocaleString()}
             </div>
           </div>
           <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">Daily burn</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.dailyBurn')}</div>
             <div className="text-base md:text-lg font-semibold text-text-primary">
               ${Math.round(monthlyExpense / 30).toLocaleString()}
             </div>
@@ -499,7 +499,7 @@ export default function FinanceDashboardSupabase() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs md:text-sm text-text-tertiary">Total Income</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:stats.totalIncome')}</div>
             <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-success" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-success">
@@ -508,7 +508,7 @@ export default function FinanceDashboardSupabase() {
         </div>
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs md:text-sm text-text-tertiary">Total Spent</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:stats.totalSpent')}</div>
             <TrendingDown className="w-5 h-5 md:w-6 md:h-6 text-error" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-error">
@@ -517,7 +517,7 @@ export default function FinanceDashboardSupabase() {
         </div>
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs md:text-sm text-text-tertiary">Days Since Start</div>
+            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:stats.daysSince')}</div>
             <Calendar className="w-5 h-5 md:w-6 md:h-6 text-info" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-info">
@@ -530,7 +530,7 @@ export default function FinanceDashboardSupabase() {
       <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm md:text-base font-semibold text-text-secondary">
-            This Month&apos;s Budget
+            {t('dashboard:budget.title')}
           </span>
           <span className="text-xs md:text-sm font-medium text-text-tertiary">
             ${thisMonthExpenses.toLocaleString()} / ${monthlyBudget.toLocaleString()}
@@ -550,14 +550,14 @@ export default function FinanceDashboardSupabase() {
         </div>
         <div className="mt-2 flex justify-between items-center">
           <span className="text-xs text-text-tertiary">
-            {budgetUsagePercent.toFixed(0)}% used
+            {budgetUsagePercent.toFixed(0)}% {t('dashboard:budget.used')}
           </span>
           <span className={`text-xs font-semibold ${
             budgetUsagePercent >= 100 ? 'text-error' :
             budgetUsagePercent >= 80 ? 'text-warning' : 'text-success'
           }`}>
-            {budgetUsagePercent >= 100 ? 'Over budget!' :
-             budgetUsagePercent >= 80 ? 'Almost spent' : 'Looking good'}
+            {budgetUsagePercent >= 100 ? t('dashboard:budget.overBudget') :
+             budgetUsagePercent >= 80 ? t('dashboard:budget.almostSpent') : t('dashboard:budget.lookingGood')}
           </span>
         </div>
       </div>
@@ -588,7 +588,7 @@ export default function FinanceDashboardSupabase() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input
                 type="number"
-                placeholder="Amount ($)"
+                placeholder={t('dashboard:expenses.amountPlaceholder')}
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
                 className="px-4 py-3 border border-border-default rounded-lg
@@ -605,13 +605,13 @@ export default function FinanceDashboardSupabase() {
                   transition-all duration-200"
               >
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>{t(`dashboard:expenses.categories.${cat}`)}</option>
                 ))}
               </select>
             </div>
             <input
               type="text"
-              placeholder="Memo (optional)"
+              placeholder={t('dashboard:expenses.memoPlaceholder')}
               value={newExpense.memo}
               onChange={(e) => setNewExpense({ ...newExpense, memo: e.target.value })}
               className="w-full px-4 py-3 border border-border-default rounded-lg
@@ -625,14 +625,14 @@ export default function FinanceDashboardSupabase() {
                 className="flex-1 py-3 bg-success hover:bg-success/90 text-white rounded-lg font-semibold
                   active:scale-98 transition-all duration-200"
               >
-                Add
+                {t('dashboard:expenses.add')}
               </button>
               <button
                 onClick={() => setShowExpenseForm(false)}
                 className="px-4 py-3 bg-surface-hover hover:bg-surface-active text-text-primary rounded-lg font-semibold
                   transition-all duration-200"
               >
-                Cancel
+                {t('dashboard:expenses.cancel')}
               </button>
             </div>
           </div>
@@ -643,7 +643,7 @@ export default function FinanceDashboardSupabase() {
             <div key={exp.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-surface-hover rounded-lg hover:bg-surface-active transition-colors duration-200">
               <div className="flex-1">
                 <div className="text-sm md:text-base font-semibold text-text-primary">
-                  ${exp.amount} - {exp.category}
+                  ${exp.amount} - {t(`dashboard:expenses.categories.${exp.category}`)}
                 </div>
                 <div className="text-xs md:text-sm text-text-tertiary">
                   {exp.date} {exp.memo && `• ${exp.memo}`}
@@ -653,15 +653,15 @@ export default function FinanceDashboardSupabase() {
                 onClick={() => deleteExpense(exp.id)}
                 className="w-full sm:w-auto px-3 py-1 bg-error hover:bg-error/90 text-white rounded-lg text-xs md:text-sm font-medium
                   active:scale-98 transition-all duration-200"
-                aria-label={`Delete ${exp.category} expense of $${exp.amount}`}
+                aria-label={`${t('dashboard:expenses.delete')} ${t(`dashboard:expenses.categories.${exp.category}`)} ${t('dashboard:expenses.amount')} $${exp.amount}`}
               >
-                Delete
+                {t('dashboard:expenses.delete')}
               </button>
             </div>
           ))}
           {expenses.length === 0 && (
             <div className="text-center text-text-tertiary py-8">
-              No expenses yet. Add your first expense above!
+              {t('dashboard:expenses.noExpenses')}
             </div>
           )}
         </div>
@@ -673,11 +673,11 @@ export default function FinanceDashboardSupabase() {
           onClick={() => setShowSimulator(!showSimulator)}
           className="w-full flex justify-between items-center text-lg font-semibold mb-4 text-text-primary"
           aria-expanded={showSimulator}
-          aria-label="Toggle runway simulator"
+          aria-label={t('dashboard:simulator.title')}
         >
           <span className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-primary" />
-            Runway Simulator
+            {t('dashboard:simulator.title')}
           </span>
           <span className="text-2xl text-text-tertiary">
             {showSimulator ? '▼' : '▶'}
@@ -688,7 +688,7 @@ export default function FinanceDashboardSupabase() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                Monthly Expense: ${simMonthlyExpense}
+                {t('dashboard:simulator.monthlyExpenseLabel')}{simMonthlyExpense}
               </label>
               <input
                 type="range"
@@ -703,7 +703,7 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                Additional Monthly Income: ${simAdditionalIncome}
+                {t('dashboard:simulator.additionalIncomeLabel')}{simAdditionalIncome}
               </label>
               <input
                 type="range"
@@ -718,7 +718,7 @@ export default function FinanceDashboardSupabase() {
 
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                One-time Expense: ${simOneTimeExpense}
+                {t('dashboard:simulator.oneTimeExpenseLabel')}{simOneTimeExpense}
               </label>
               <input
                 type="range"
@@ -732,13 +732,13 @@ export default function FinanceDashboardSupabase() {
             </div>
 
             <div className="bg-primary-light rounded-lg p-4 text-center">
-              <div className="text-sm text-text-tertiary mb-2">Simulated Runway</div>
+              <div className="text-sm text-text-tertiary mb-2">{t('dashboard:simulator.simulatedRunway')}</div>
               <div className="text-4xl font-bold text-primary">
-                {simRunwayYears > 0 && `${simRunwayYears}y `}
-                {simRunwayMonths}m
+                {simRunwayYears > 0 && `${simRunwayYears}${t('dashboard:runway.yr')} `}
+                {simRunwayMonths}{t('dashboard:runway.mo')}
               </div>
               <div className={`mt-2 text-sm font-medium ${runwayDiff >= 0 ? 'text-success' : 'text-error'}`}>
-                {runwayDiff >= 0 ? '+' : ''}{runwayDiff} months vs current
+                {runwayDiff >= 0 ? '+' : ''}{runwayDiff} {t('dashboard:simulator.vsCurrent')}
               </div>
             </div>
           </div>
