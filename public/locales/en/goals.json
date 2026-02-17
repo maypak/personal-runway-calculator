@@ -1,0 +1,48 @@
+{
+  "setting": {
+    "title": "Set Your Goal",
+    "editTitle": "Edit Goal",
+    "goalType": "Goal Type",
+    "runway": {
+      "title": "Runway (months)",
+      "description": "How many months you want to survive"
+    },
+    "savings": {
+      "title": "Savings Amount ($)",
+      "description": "Target amount of money to save"
+    },
+    "targetLabel": "Target",
+    "targetMonths": "Target Months",
+    "targetAmount": "Target Amount ($)",
+    "placeholderMonths": "e.g., 6",
+    "placeholderAmount": "e.g., 30000",
+    "hintMonths": "Recommended: 3-12 months",
+    "hintAmount": "Enter your target savings amount",
+    "descriptionLabel": "Why this goal?",
+    "descriptionOptional": "(optional)",
+    "descriptionPlaceholder": "e.g., Safe quit my job",
+    "charactersCount": "characters",
+    "freeTierNotice": "Free tier: You can set 1 active goal. Setting a new goal will replace your current one.",
+    "cancel": "Cancel",
+    "save": "Save Goal",
+    "update": "Update Goal"
+  },
+  "progress": {
+    "yourGoal": "Your Goal",
+    "achieved": "Goal Achieved!",
+    "runwayGoal": "{{months}}-Month Runway",
+    "savingsGoal": "${{amount}} Savings",
+    "current": "Current",
+    "need": "Need",
+    "more": "more",
+    "congratulations": "Congratulations! You've reached your goal.",
+    "month": "month",
+    "months": "months",
+    "deleteConfirm": {
+      "title": "Delete Goal?",
+      "message": "Are you sure you want to delete this goal? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "header": {
+    "title": "Financial Runway",
+    "signOut": "Sign Out"
+  },
+  "runway": {
+    "title": "Your Runway",
+    "label": "Financial Runway",
+    "months": "months",
+    "month": "month",
+    "description": "Time until funds run out at current burn rate",
+    "infinite": "Infinite! You're growing.",
+    "status": {
+      "critical": "Critical! Review your expenses immediately.",
+      "warning": "Warning! Consider reducing expenses.",
+      "ok": "You have breathing room.",
+      "good": "Looking good! Keep it up.",
+      "excellent": "Excellent! You're on track."
+    }
+  },
+  "stats": {
+    "totalIncome": "Total Income",
+    "totalExpenses": "Total Expenses",
+    "remainingFunds": "Remaining Funds",
+    "monthlyBurn": "Monthly Burn",
+    "daysSince": "Days Since Start",
+    "averageDaily": "Average Daily Spend"
+  },
+  "goals": {
+    "title": "Goals",
+    "setGoal": "Set Goal",
+    "noGoals": "No goals set yet. Click 'Set Goal' to create one!",
+    "editGoal": "Edit Goal",
+    "deleteGoal": "Delete Goal"
+  },
+  "expenses": {
+    "title": "Recent Expenses",
+    "addExpense": "Add Expense",
+    "noExpenses": "No expenses yet. Start tracking!",
+    "amount": "Amount",
+    "category": "Category",
+    "memo": "Memo",
+    "optional": "optional",
+    "categories": {
+      "Food": "Food",
+      "Transport": "Transport",
+      "Housing": "Housing",
+      "Healthcare": "Healthcare",
+      "Entertainment": "Entertainment",
+      "Shopping": "Shopping",
+      "Utilities": "Utilities",
+      "Education": "Education",
+      "Other": "Other"
+    },
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "simulator": {
+    "title": "What-If Simulator",
+    "description": "Experiment with different scenarios",
+    "monthlyExpense": "Monthly Expense",
+    "additionalIncome": "Additional Income",
+    "oneTimeExpense": "One-Time Expense",
+    "currentScenario": "Current Scenario",
+    "newScenario": "New Scenario",
+    "difference": "Difference",
+    "months": "months",
+    "month": "month",
+    "increase": "increase",
+    "decrease": "decrease",
+    "noChange": "no change",
+    "close": "Close"
+  },
+  "settings": {
+    "title": "Settings",
+    "currentSavings": "Current Savings",
+    "currentSavingsHint": "Money you have right now",
+    "lumpSum": "Lump Sum",
+    "lumpSumHint": "One-time money (severance, bonus, etc.)",
+    "monthlyIncome": "Monthly Income",
+    "monthlyIncomeHint": "Recurring monthly income",
+    "incomeMonths": "Income Months",
+    "incomeMonthsHint": "How many months you'll receive this income",
+    "monthlyFixed": "Monthly Fixed Costs",
+    "monthlyFixedHint": "Rent, utilities, insurance, etc.",
+    "monthlyVariable": "Monthly Variable Costs",
+    "monthlyVariableHint": "Food, transport, etc.",
+    "startDate": "Start Date",
+    "startDateHint": "When did you start tracking?",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "updated": "Settings updated successfully!"
+  }
+}

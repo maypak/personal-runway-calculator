@@ -1,7 +1,8 @@
 {
   "app": {
     "title": "Personal Runway Calculator",
-    "tagline": "Know exactly how long you can survive"
+    "tagline": "Know exactly how long you can survive",
+    "yourMoneyIsTime": "Your Money is TIME"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -14,9 +15,34 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "close": "Close",
+    "add": "Add",
+    "update": "Update"
   },
-  "test": {
-    "hello": "Hello, World!"
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "months": "months",
+    "month": "month",
+    "days": "days",
+    "day": "day",
+    "yes": "Yes",
+    "no": "No",
+    "optional": "optional",
+    "required": "required"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "invalidNumber": "Please enter a valid number",
+    "invalidEmail": "Please enter a valid email",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "required": "This field is required"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "toggle": "Toggle Theme"
   }
 }

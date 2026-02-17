@@ -1,0 +1,48 @@
+{
+  "setting": {
+    "title": "목표 설정하기",
+    "editTitle": "목표 수정",
+    "goalType": "목표 유형",
+    "runway": {
+      "title": "런웨이 (개월)",
+      "description": "버티고 싶은 개월 수"
+    },
+    "savings": {
+      "title": "저축 금액 ($)",
+      "description": "목표 저축 금액"
+    },
+    "targetLabel": "목표",
+    "targetMonths": "목표 개월 수",
+    "targetAmount": "목표 금액 ($)",
+    "placeholderMonths": "예: 6",
+    "placeholderAmount": "예: 30000",
+    "hintMonths": "권장: 3-12개월",
+    "hintAmount": "목표 저축 금액을 입력하세요",
+    "descriptionLabel": "이 목표를 세우는 이유는?",
+    "descriptionOptional": "(선택사항)",
+    "descriptionPlaceholder": "예: 안전하게 퇴사하기",
+    "charactersCount": "글자",
+    "freeTierNotice": "무료 등급: 1개의 활성 목표를 설정할 수 있습니다. 새 목표를 설정하면 현재 목표가 대체됩니다.",
+    "cancel": "취소",
+    "save": "목표 저장",
+    "update": "목표 업데이트"
+  },
+  "progress": {
+    "yourGoal": "당신의 목표",
+    "achieved": "목표 달성!",
+    "runwayGoal": "{{months}}개월 런웨이",
+    "savingsGoal": "${{amount}} 저축",
+    "current": "현재",
+    "need": "필요",
+    "more": "더",
+    "congratulations": "축하합니다! 목표를 달성하셨습니다.",
+    "month": "개월",
+    "months": "개월",
+    "deleteConfirm": {
+      "title": "목표를 삭제하시겠습니까?",
+      "message": "정말로 이 목표를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+      "cancel": "취소",
+      "delete": "삭제"
+    }
+  }
+}
