@@ -25,6 +25,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
@@ -33,7 +34,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 export default function FinanceDashboardSupabase() {
   const { signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const {
     settings,
     expenses,
@@ -473,19 +474,19 @@ export default function FinanceDashboardSupabase() {
           <div className="text-center">
             <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.available')}</div>
             <div className="text-base md:text-lg font-semibold text-success">
-              ${remainingFunds.toLocaleString()}
+              {formatCurrency(remainingFunds, locale)}
             </div>
           </div>
           <div className="text-center">
             <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.monthly')}</div>
             <div className="text-base md:text-lg font-semibold text-error">
-              ${monthlyExpense.toLocaleString()}
+              {formatCurrency(monthlyExpense, locale)}
             </div>
           </div>
           <div className="text-center">
             <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.dailyBurn')}</div>
             <div className="text-base md:text-lg font-semibold text-text-primary">
-              ${Math.round(monthlyExpense / 30).toLocaleString()}
+              {formatCurrency(Math.round(monthlyExpense / 30), locale)}
             </div>
           </div>
         </div>
@@ -532,7 +533,7 @@ export default function FinanceDashboardSupabase() {
             <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-success" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-success">
-            ${totalIncome.toLocaleString()}
+            {formatCurrency(totalIncome, locale)}
           </div>
         </div>
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
@@ -541,7 +542,7 @@ export default function FinanceDashboardSupabase() {
             <TrendingDown className="w-5 h-5 md:w-6 md:h-6 text-error" />
           </div>
           <div className="text-xl md:text-2xl font-bold text-error">
-            ${totalExpenses.toLocaleString()}
+            {formatCurrency(totalExpenses, locale)}
           </div>
         </div>
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
@@ -562,7 +563,7 @@ export default function FinanceDashboardSupabase() {
             {t('dashboard:budget.title')}
           </span>
           <span className="text-xs md:text-sm font-medium text-text-tertiary">
-            ${thisMonthExpenses.toLocaleString()} / ${monthlyBudget.toLocaleString()}
+            {formatCurrency(thisMonthExpenses, locale)} / {formatCurrency(monthlyBudget, locale)}
           </span>
         </div>
         <div className="w-full bg-bg-tertiary rounded-full h-3 overflow-hidden">

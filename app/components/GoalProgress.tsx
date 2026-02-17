@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Target, PartyPopper, BarChart3, DollarSign, Sparkles, Edit2, Trash2, X } from 'lucide-react';
 import type { UserGoal } from '../types';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 
 interface GoalProgressProps {
   goal: UserGoal;
@@ -20,7 +21,7 @@ export default function GoalProgress({
   onEdit,
   onDelete,
 }: GoalProgressProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Calculate progress based on goal type
@@ -49,7 +50,7 @@ export default function GoalProgress({
     if (goal.goalType === 'runway') {
       return `${value.toFixed(1)} ${value === 1 ? t('goals:progress.month') : t('goals:progress.months')}`;
     } else {
-      return `$${value.toLocaleString()}`;
+      return formatCurrency(value, locale);
     }
   };
 
@@ -70,7 +71,7 @@ export default function GoalProgress({
             <p className="text-sm text-text-tertiary">
               {goal.goalType === 'runway' 
                 ? t('goals:progress.runwayGoal', { months: goal.targetValue.toString() })
-                : t('goals:progress.savingsGoal', { amount: goal.targetValue.toLocaleString() })}
+                : t('goals:progress.savingsGoal', { amount: formatCurrency(goal.targetValue, locale) })}
             </p>
           </div>
         </div>

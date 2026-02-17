@@ -13,6 +13,8 @@
 
 import { Phase } from '@/app/types'
 import { calculatePhaseTotalBurn } from '@/app/utils/phaseCalculator'
+import { formatCurrency } from '@/app/utils/currencyFormatter'
+import { useI18n } from '@/app/contexts/I18nContext'
 import { GripVertical, Edit2, Trash2, Copy, ChevronUp, ChevronDown } from 'lucide-react'
 
 export interface PhaseCardProps {
@@ -38,6 +40,7 @@ export function PhaseCard({
   isLast = false,
   draggable = true,
 }: PhaseCardProps) {
+  const { locale } = useI18n()
   const duration = phase.endMonth - phase.startMonth
   const totalBurn = calculatePhaseTotalBurn(phase)
   const avgMonthlyBurn = totalBurn / duration
@@ -138,7 +141,7 @@ export function PhaseCard({
                 Monthly Expenses
               </div>
               <div className="text-base font-semibold text-gray-900 dark:text-white">
-                ${phase.monthlyExpenses.toLocaleString()}
+                {formatCurrency(phase.monthlyExpenses, locale)}
               </div>
             </div>
 
@@ -149,7 +152,7 @@ export function PhaseCard({
                   Monthly Income
                 </div>
                 <div className="text-base font-semibold text-green-600 dark:text-green-400">
-                  ${phase.monthlyIncome.toLocaleString()}
+                  {formatCurrency(phase.monthlyIncome, locale)}
                 </div>
               </div>
             )}
@@ -166,7 +169,7 @@ export function PhaseCard({
                     : 'text-red-600 dark:text-red-400'
                 }`}
               >
-                {netMonthly >= 0 ? '+' : ''}${netMonthly.toLocaleString()}
+                {netMonthly >= 0 ? '+' : ''}{formatCurrency(Math.abs(netMonthly), locale)}
               </div>
             </div>
 
@@ -176,7 +179,7 @@ export function PhaseCard({
                 Total Burn
               </div>
               <div className="text-base font-semibold text-gray-900 dark:text-white">
-                ${totalBurn.toLocaleString()}
+                {formatCurrency(totalBurn, locale)}
               </div>
             </div>
           </div>
@@ -195,7 +198,7 @@ export function PhaseCard({
                   >
                     <span className="font-medium">{expense.name}</span>
                     <span className="text-gray-500">
-                      ${expense.amount.toLocaleString()}
+                      {formatCurrency(expense.amount, locale)}
                     </span>
                     <span className="text-gray-400">
                       (Mo {expense.month})

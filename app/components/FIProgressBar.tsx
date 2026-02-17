@@ -17,6 +17,7 @@
 import { useState } from 'react';
 import { Target } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 
 interface FIProgressBarProps {
   currentSavings: number;
@@ -43,7 +44,7 @@ export default function FIProgressBar({
   fiNumber,
   className = '',
 }: FIProgressBarProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [hoveredMilestone, setHoveredMilestone] = useState<number | null>(null);
 
   // Sanitize inputs
@@ -79,8 +80,8 @@ export default function FIProgressBar({
           </span>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {t('fire:progress.currentAmount', { 
-              current: `$${safeSavings.toLocaleString()}`,
-              target: `$${safeFINumber.toLocaleString()}`
+              current: formatCurrency(safeSavings, locale),
+              target: formatCurrency(safeFINumber, locale)
             })}
           </p>
         </div>
@@ -96,7 +97,7 @@ export default function FIProgressBar({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(cappedProgress)}
-          aria-valuetext={`${currentProgress.toFixed(1)}% towards financial independence. ${safeSavings.toLocaleString()} out of ${safeFINumber.toLocaleString()} dollars.`}
+          aria-valuetext={`${currentProgress.toFixed(1)}% towards financial independence. ${formatCurrency(safeSavings, locale)} out of ${formatCurrency(safeFINumber, locale)}.`}
         >
           {/* Progress fill */}
           <div
@@ -128,7 +129,7 @@ export default function FIProgressBar({
                   <div className="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-10">
                     <div className="font-semibold">{t(`fire:progress.milestones.${milestone.labelKey}`)} FI</div>
                     <div className="text-gray-300">
-                      ${milestoneAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                      {formatCurrency(milestoneAmount, locale)}
                     </div>
                     {isAchieved && (
                       <div className="text-green-400 text-xs mt-1">{t('fire:progress.milestones.achieved')}</div>

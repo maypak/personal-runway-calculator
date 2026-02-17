@@ -12,7 +12,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 import { Phase } from '@/app/types'
 import { usePhases } from '@/app/hooks/usePhases'
@@ -20,9 +20,11 @@ import { calculateRunwayWithPhases } from '@/app/utils/phaseCalculator'
 import { PhaseCard } from './PhaseCard'
 import { PhaseEditor } from './PhaseEditor'
 import { PhaseTimelineChart } from './PhaseTimelineChart'
-import PhaseBurnChart from './PhaseBurnChart'
 import { PHASE_TEMPLATES } from '@/app/data/phaseTemplates'
 import { Plus, AlertCircle, Loader2, Sparkles } from 'lucide-react'
+
+// Lazy load heavy chart component (Recharts bundle)
+const PhaseBurnChart = lazy(() => import('./PhaseBurnChart'))
 
 export interface PhaseTimelineProps {
   scenarioId?: string | null
@@ -334,7 +336,13 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Monthly Burn Rate by Phase
             </h3>
-            <PhaseBurnChart result={runwayResult} />
+            <Suspense fallback={
+              <div className="h-64 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+              </div>
+            }>
+              <PhaseBurnChart result={runwayResult} />
+            </Suspense>
           </div>
         </div>
       )}

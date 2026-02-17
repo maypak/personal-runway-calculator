@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { TrendingDown, Target, TrendingUp, Calendar, DollarSign } from 'lucide-react';
 import { calculateFIDate, calculateFIProgress } from '../utils/fireCalculator';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 
 interface FIScenarioCardsProps {
   currentSavings: number;
@@ -86,7 +87,7 @@ export default function FIScenarioCards({
   onScenarioSelect,
   className = '',
 }: FIScenarioCardsProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [selectedScenario, setSelectedScenario] = useState<'lean' | 'regular' | 'fat'>('regular');
 
   const handleScenarioClick = (scenarioId: 'lean' | 'regular' | 'fat') => {
@@ -172,10 +173,10 @@ export default function FIScenarioCards({
                   <span>{t('fire:scenarios.fiNumberLabel')}</span>
                 </div>
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  ${(metrics.fiNumber / 1000).toFixed(0)}K
+                  {formatCurrency(metrics.fiNumber, locale).replace(/,000$/, 'K').replace(/000$/, 'K')}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {t('fire:scenarios.annualExpenses', { amount: metrics.targetExpenses.toLocaleString() })}
+                  {t('fire:scenarios.annualExpenses', { amount: formatCurrency(metrics.targetExpenses, locale) })}
                 </div>
               </div>
 

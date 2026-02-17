@@ -16,7 +16,7 @@
 
 import { useI18n } from '../contexts/I18nContext';
 import type { Scenario } from '../types';
-import { formatCurrency } from '../utils/runwayCalculator';
+import { formatCurrency } from '../utils/currencyFormatter';
 
 interface ComparisonTableProps {
   scenarios: Scenario[];
@@ -30,7 +30,7 @@ interface Metric {
 }
 
 export function ComparisonTable({ scenarios }: ComparisonTableProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   if (scenarios.length === 0) {
     return (
@@ -50,7 +50,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     {
       key: 'calculatedBurnRate',
       labelKey: 'scenarios:comparison.table.metrics.burnRate',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : t('scenarios:comparison.table.values.na'),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : t('scenarios:comparison.table.values.na'),
       higherIsBetter: false,
     },
     {
@@ -68,25 +68,25 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     {
       key: 'calculatedEndSavings',
       labelKey: 'scenarios:comparison.table.metrics.endSavings',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : '$0',
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
       higherIsBetter: true,
     },
     {
       key: 'totalSavings',
       labelKey: 'scenarios:comparison.table.metrics.startSavings',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : '$0',
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
       higherIsBetter: false, // Not really comparable
     },
     {
       key: 'monthlyExpenses',
       labelKey: 'scenarios:comparison.table.metrics.monthlyExpenses',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : '$0',
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
       higherIsBetter: false,
     },
     {
       key: 'monthlyIncome',
       labelKey: 'scenarios:comparison.table.metrics.monthlyIncome',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v) : '$0',
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
       higherIsBetter: true,
     },
   ];

@@ -16,6 +16,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Phase, PhaseOneTimeExpense } from '@/app/types'
 import { calculatePhaseTotalBurn } from '@/app/utils/phaseCalculator'
+import { formatCurrency } from '@/app/utils/currencyFormatter'
+import { useI18n } from '@/app/contexts/I18nContext'
 import { X, Plus, Trash2 } from 'lucide-react'
 
 export interface PhaseEditorProps {
@@ -33,6 +35,7 @@ export function PhaseEditor({
   onCancel,
   scenarioId,
 }: PhaseEditorProps) {
+  const { locale } = useI18n()
   const [formData, setFormData] = useState<
     Omit<Phase, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
   >({
@@ -429,7 +432,7 @@ export function PhaseEditor({
                   Total Burn
                 </div>
                 <div className="text-lg font-semibold text-blue-900 dark:text-blue-200">
-                  ${totalBurn.toLocaleString()}
+                  {formatCurrency(totalBurn, locale)}
                 </div>
               </div>
               <div>
@@ -437,7 +440,7 @@ export function PhaseEditor({
                   Avg Monthly Burn
                 </div>
                 <div className="text-lg font-semibold text-blue-900 dark:text-blue-200">
-                  ${duration > 0 ? Math.round(totalBurn / duration).toLocaleString() : 0}
+                  {duration > 0 ? formatCurrency(Math.round(totalBurn / duration), locale) : formatCurrency(0, locale)}
                 </div>
               </div>
             </div>

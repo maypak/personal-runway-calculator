@@ -18,6 +18,7 @@ import { useMemo } from 'react';
 import { Calendar, CheckCircle2, Clock, Loader2 } from 'lucide-react';
 import { calculateFIMilestones } from '../utils/fireCalculator';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 
 interface FIMilestonesProps {
   currentSavings: number;
@@ -34,7 +35,7 @@ export default function FIMilestones({
   investmentReturnRate = 7.0,
   className = '',
 }: FIMilestonesProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   
   // Calculate milestones using utility function
   const milestones = useMemo(() => {
@@ -157,7 +158,7 @@ export default function FIMilestones({
                     <span className="text-xs">{display.statusIcon}</span>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    ${milestone.targetAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                    {formatCurrency(milestone.targetAmount, locale)}
                   </p>
                 </div>
               </div>

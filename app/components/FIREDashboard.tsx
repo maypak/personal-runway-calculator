@@ -22,6 +22,7 @@ import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, Che
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 import FIProgressBar from './FIProgressBar';
 import FIMilestones from './FIMilestones';
 import FIScenarioCards from './FIScenarioCards';
@@ -31,7 +32,7 @@ import FIRESettings from './FIRESettings';
 const FIProjectionChart = lazy(() => import('./FIProjectionChart'));
 
 export default function FIREDashboard() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const {
     settings,
     calculatedMetrics,
@@ -185,7 +186,7 @@ export default function FIREDashboard() {
           </h3>
         </div>
         <p className="text-4xl font-bold text-gray-900 dark:text-white">
-          ${fiNumber.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+          {formatCurrency(fiNumber, locale)}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           {t('fire:fiNumber.description')}

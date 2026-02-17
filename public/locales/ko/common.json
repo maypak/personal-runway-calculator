@@ -44,5 +44,23 @@
     "light": "라이트 모드",
     "dark": "다크 모드",
     "toggle": "테마 전환"
+  },
+  "currency": {
+    "usd": "미국 달러",
+    "krw": "한국 원",
+    "symbol": {
+      "usd": "$",
+      "krw": "₩"
+    },
+    "code": {
+      "usd": "USD",
+      "krw": "KRW"
+    },
+    "exchangeRate": "1 USD = 1,300 KRW",
+    "selector": {
+      "label": "화폐",
+      "usd": "USD ($)",
+      "krw": "KRW (₩)"
+    }
   }
 }

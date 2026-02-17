@@ -17,6 +17,7 @@
 
 import { Edit, BarChart2, Trash2, TrendingDown } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
+import { formatCurrency } from '../utils/currencyFormatter';
 import type { Scenario } from '../types';
 
 interface ScenarioCardProps {
@@ -34,7 +35,7 @@ export function ScenarioCard({
   onDelete,
   selected = false,
 }: ScenarioCardProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const runway = scenario.calculatedRunway ?? 0;
   const burnRate = scenario.calculatedBurnRate ?? 0;
   const breakevenMonth = scenario.calculatedBreakevenMonth;
@@ -96,7 +97,7 @@ export function ScenarioCard({
         <div className="flex items-center gap-2 text-sm">
           <TrendingDown className="w-4 h-4 text-gray-400" />
           <span className="text-gray-700 dark:text-gray-300">
-            ${burnRate.toLocaleString(undefined, { maximumFractionDigits: 0 })}{t('scenarios:card.burnRate.perMonth')}
+            {formatCurrency(burnRate, locale)}{t('scenarios:card.burnRate.perMonth')}
           </span>
         </div>
 

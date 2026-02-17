@@ -15,14 +15,16 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Download } from 'lucide-react';
+import { ArrowLeft, Download, Loader2 } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
 import { useScenarioContext } from '../contexts/ScenarioContext';
 import { ComparisonTable } from './ComparisonTable';
-import { RunwayChart } from './RunwayChart';
 import { compareScenarios } from '../utils/runwayCalculator';
+
+// Lazy load heavy chart component (Recharts bundle)
+const RunwayChart = lazy(() => import('./RunwayChart').then(mod => ({ default: mod.RunwayChart })));
 
 export function ComparisonView() {
   const router = useRouter();
@@ -204,7 +206,15 @@ export function ComparisonView() {
 
       {/* Chart */}
       <div className="mb-8">
-        <RunwayChart scenarios={selectedScenariosList} height={500} />
+        <Suspense fallback={
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6" style={{ height: 500 }}>
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            </div>
+          </div>
+        }>
+          <RunwayChart scenarios={selectedScenariosList} height={500} />
+        </Suspense>
       </div>
 
       {/* Insights */}
