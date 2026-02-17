@@ -16,8 +16,10 @@ import {
   DollarSign,
   Shield,
   AlertTriangle,
-  AlertCircle
+  AlertCircle,
+  Flame
 } from 'lucide-react';
+import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
@@ -180,6 +182,19 @@ export default function FinanceDashboardSupabase() {
           <div className="hidden sm:block">
             <LanguageSwitcher />
           </div>
+          
+          {/* FIRE Calculator Link */}
+          <Link
+            href="/fire"
+            className="p-2 md:p-3 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20
+              hover:from-orange-100 hover:to-red-100 dark:hover:from-orange-900/30 dark:hover:to-red-900/30
+              border border-orange-200 dark:border-orange-800 rounded-lg
+              transition-all duration-200 active:scale-98 group"
+            aria-label="FIRE Calculator"
+            title="FIRE Calculator"
+          >
+            <Flame className="w-5 h-5 text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300" />
+          </Link>
           
           {/* Theme Toggle */}
           <button

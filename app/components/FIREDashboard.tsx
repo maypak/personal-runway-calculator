@@ -3,21 +3,29 @@
  * 
  * Purpose: Display FIRE (Financial Independence, Retire Early) metrics
  * Features:
- * - FI Number display
- * - Progress bar with milestones
+ * - FI Number display with progress visualization
+ * - Interactive projection chart
+ * - Milestone tracking
+ * - Scenario comparison (Lean/Regular/Fat FIRE)
  * - Settings panel for assumptions
- * - Simple, clean layout
+ * - Fully integrated with new components
  * 
  * Created: 2026-02-17
+ * Updated: 2026-02-17 (Day 3-4 integration)
  * Author: Senior Frontend Developer
  */
 
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Target, TrendingUp, Calendar, Settings, DollarSign } from 'lucide-react';
+import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
+import FIProgressBar from './FIProgressBar';
+import FIProjectionChart from './FIProjectionChart';
+import FIMilestones from './FIMilestones';
+import FIScenarioCards from './FIScenarioCards';
+import FIRESettings from './FIRESettings';
 
 export default function FIREDashboard() {
   const {
@@ -33,18 +41,7 @@ export default function FIREDashboard() {
   const { settings: financeSettings } = useSupabaseFinance();
 
   const [showSettings, setShowSettings] = useState(false);
-  const [localInvestmentRate, setLocalInvestmentRate] = useState('7.0');
-  const [localSWR, setLocalSWR] = useState('4.0');
-  const [localTargetExpenses, setLocalTargetExpenses] = useState('');
-
-  // Sync local state with settings
-  useEffect(() => {
-    if (settings) {
-      setLocalInvestmentRate(settings.investment_return_rate.toString());
-      setLocalSWR(settings.safe_withdrawal_rate.toString());
-      setLocalTargetExpenses(settings.target_annual_expenses?.toString() ?? '');
-    }
-  }, [settings]);
+  const [showScenarios, setShowScenarios] = useState(false);
 
   // Calculate FIRE metrics when finance settings are loaded
   useEffect(() => {
@@ -61,23 +58,27 @@ export default function FIREDashboard() {
     }).catch(err => console.error('Failed to calculate FIRE metrics:', err));
   }, [financeSettings, settings, calculateAndCache]);
 
-  const handleSaveSettings = async () => {
+  // Handle settings changes from FIRESettings component
+  const handleSettingsChange = async (newSettings: {
+    investmentReturnRate: number;
+    safeWithdrawalRate: number;
+    monthlySavings: number;
+    targetAnnualExpenses?: number;
+  }) => {
     try {
       await updateSettings({
-        investment_return_rate: parseFloat(localInvestmentRate),
-        safe_withdrawal_rate: parseFloat(localSWR),
-        target_annual_expenses: localTargetExpenses ? parseFloat(localTargetExpenses) : null,
+        investment_return_rate: newSettings.investmentReturnRate,
+        safe_withdrawal_rate: newSettings.safeWithdrawalRate,
+        target_annual_expenses: newSettings.targetAnnualExpenses || null,
       });
-      setShowSettings(false);
     } catch (err) {
-      console.error('Failed to save settings:', err);
+      console.error('Failed to update settings:', err);
     }
   };
 
   const handleReset = async () => {
     try {
       await resetToDefaults();
-      setShowSettings(false);
     } catch (err) {
       console.error('Failed to reset settings:', err);
     }
@@ -100,11 +101,25 @@ export default function FIREDashboard() {
     );
   }
 
+  if (!financeSettings) {
+    return (
+      <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+        <p className="text-yellow-600 dark:text-yellow-400">
+          Please set up your financial settings first to use the FIRE Calculator.
+        </p>
+      </div>
+    );
+  }
+
+  // Calculate derived values
+  const currentSavings = financeSettings.currentSavings;
+  const monthlyContribution = financeSettings.monthlyIncome - 
+                             (financeSettings.monthlyFixed + financeSettings.monthlyVariable);
+  const annualExpenses = settings?.target_annual_expenses ?? 
+                        (financeSettings.monthlyFixed + financeSettings.monthlyVariable) * 12;
   const fiNumber = calculatedMetrics?.fiNumber ?? settings?.fi_number ?? 0;
-  const currentProgress = calculatedMetrics?.currentProgress ?? 0;
-  const fiDate = calculatedMetrics?.fiDate ?? (settings?.fi_date ? new Date(settings.fi_date) : null);
-  const coastFireDate = calculatedMetrics?.coastFireDate ?? 
-                        (settings?.coast_fire_date ? new Date(settings.coast_fire_date) : null);
+  const investmentReturnRate = settings?.investment_return_rate ?? 7.0;
+  const safeWithdrawalRate = settings?.safe_withdrawal_rate ?? 4.0;
 
   return (
     <div className="space-y-6">
@@ -121,103 +136,32 @@ export default function FIREDashboard() {
         </div>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className={`
+            p-2 rounded-lg transition-colors
+            ${showSettings 
+              ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' 
+              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
+            }
+          `}
           aria-label="Settings"
         >
-          <Settings className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          <SettingsIcon className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Settings Panel */}
+      {/* Settings Panel (Collapsible) */}
       {showSettings && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            FIRE Assumptions
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Investment Return Rate */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Investment Return Rate (%)
-              </label>
-              <input
-                type="number"
-                step="0.1"
-                value={localInvestmentRate}
-                onChange={(e) => setLocalInvestmentRate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Expected annual return (default: 7%)
-              </p>
-            </div>
-
-            {/* Safe Withdrawal Rate */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Safe Withdrawal Rate (%)
-              </label>
-              <input
-                type="number"
-                step="0.1"
-                value={localSWR}
-                onChange={(e) => setLocalSWR(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                4% Rule (default: 4%)
-              </p>
-            </div>
-
-            {/* Target Annual Expenses */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Target Annual Expenses (Optional)
-              </label>
-              <input
-                type="number"
-                step="1000"
-                value={localTargetExpenses}
-                onChange={(e) => setLocalTargetExpenses(e.target.value)}
-                placeholder="Leave empty to use current expenses"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Override current monthly expenses × 12
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={handleSaveSettings}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Save Settings
-            </button>
-            <button
-              onClick={handleReset}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                       hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              Reset to Defaults
-            </button>
-            <button
-              onClick={() => setShowSettings(false)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                       hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        <FIRESettings
+          investmentReturnRate={investmentReturnRate}
+          safeWithdrawalRate={safeWithdrawalRate}
+          monthlySavings={monthlyContribution}
+          targetAnnualExpenses={settings?.target_annual_expenses || undefined}
+          onSettingsChange={handleSettingsChange}
+          onReset={handleReset}
+        />
       )}
 
-      {/* FI Number Card */}
+      {/* FI Number Highlight Card */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 
                     rounded-lg p-6 border border-blue-200 dark:border-blue-800">
         <div className="flex items-center gap-2 mb-2">
@@ -234,68 +178,58 @@ export default function FIREDashboard() {
         </p>
       </div>
 
-      {/* Progress Bar */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            FI Progress
-          </h3>
-          <span className="text-lg font-bold text-gray-900 dark:text-white">
-            {currentProgress.toFixed(1)}%
+      {/* Enhanced Progress Bar */}
+      <FIProgressBar
+        currentSavings={currentSavings}
+        fiNumber={fiNumber}
+      />
+
+      {/* Projection Chart */}
+      <FIProjectionChart
+        currentSavings={currentSavings}
+        monthlyContribution={monthlyContribution}
+        fiNumber={fiNumber}
+        investmentReturnRate={investmentReturnRate}
+        maxYears={30}
+      />
+
+      {/* Milestones */}
+      <FIMilestones
+        currentSavings={currentSavings}
+        monthlyContribution={monthlyContribution}
+        fiNumber={fiNumber}
+        investmentReturnRate={investmentReturnRate}
+      />
+
+      {/* Scenario Comparison (Collapsible) */}
+      <div>
+        <button
+          onClick={() => setShowScenarios(!showScenarios)}
+          className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 
+                   rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 
+                   dark:hover:bg-gray-700 transition-colors"
+        >
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+            Compare FI Scenarios (Lean/Regular/Fat)
           </span>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
-          <div
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500"
-            style={{ width: `${Math.min(currentProgress, 100)}%` }}
-          />
-        </div>
-
-        {/* Milestones */}
-        <div className="mt-4 flex justify-between text-xs text-gray-500 dark:text-gray-400">
-          <span>0%</span>
-          <span>25%</span>
-          <span>50%</span>
-          <span>75%</span>
-          <span>100% FI</span>
-        </div>
-      </div>
-
-      {/* Dates Card */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* FI Date */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2 mb-2">
-            <Calendar className="h-5 w-5 text-green-600" />
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              Projected FI Date
-            </h3>
+          {showScenarios ? (
+            <ChevronUp className="h-5 w-5 text-gray-400" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-400" />
+          )}
+        </button>
+        
+        {showScenarios && (
+          <div className="mt-4">
+            <FIScenarioCards
+              currentSavings={currentSavings}
+              monthlyContribution={monthlyContribution}
+              annualExpenses={annualExpenses}
+              investmentReturnRate={investmentReturnRate}
+              safeWithdrawalRate={safeWithdrawalRate}
+            />
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            {fiDate ? fiDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Not calculated'}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            When you reach FI Number
-          </p>
-        </div>
-
-        {/* Coast FIRE Date */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="h-5 w-5 text-purple-600" />
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              Coast FIRE Date
-            </h3>
-          </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            {coastFireDate ? coastFireDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Already achieved!'}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Stop contributing, let it grow
-          </p>
-        </div>
+        )}
       </div>
 
       {/* Info Note */}
