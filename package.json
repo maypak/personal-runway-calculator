@@ -8,8 +8,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "playwright test",
-    "test:headed": "playwright test --headed",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "screenshots": "node scripts/capture-screenshots.js",
     "lighthouse": "bash scripts/lighthouse-audit.sh",
     "security": "npm run security:secrets && npm run security:deps && npm run lint",
@@ -32,6 +35,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/ui": "^4.0.18",
     "canvas": "^3.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
@@ -40,6 +44,7 @@
     "puppeteer": "^24.37.3",
     "snyk": "^1.1302.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   }
 }

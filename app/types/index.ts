@@ -179,3 +179,62 @@ export interface Scenario {
   createdAt: string;
   updatedAt: string;
 }
+
+// FIRE (Financial Independence, Retire Early) Types - Week 3
+export interface FIRESettings {
+  id?: string;
+  userId?: string;
+  
+  // Investment assumptions
+  investmentReturnRate: number; // % annual return rate (default: 7.0)
+  safeWithdrawalRate: number;   // % SWR (default: 4.0 for 4% rule)
+  
+  // Optional overrides
+  targetAnnualExpenses?: number; // null = use monthly_expenses * 12
+  
+  // Calculated fields (cached)
+  fiNumber?: number;
+  fiDate?: string; // ISO date
+  coastFireDate?: string; // ISO date
+  leanFiNumber?: number;
+  fatFiNumber?: number;
+  
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface FIRECalculationResult {
+  fiNumber: number; // Financial Independence Number
+  leanFiNumber: number; // 70% of regular FI
+  fatFiNumber: number; // 150% of regular FI
+  
+  // Progress
+  currentProgress: number; // % (0-100+)
+  currentMilestone: string; // "25%", "50%", "75%", "Coast FIRE", "FI!"
+  
+  // Dates
+  fiDate: Date | null; // When FI Number will be reached
+  fiMonths: number; // Months until FI (Infinity if never)
+  coastFireDate: Date | null; // When Coast FIRE achieved
+  coastFireMonths: number; // Months until Coast FIRE (0 if already achieved)
+  
+  // Additional metrics
+  isCoastFire: boolean; // Already at Coast FIRE?
+  monthlyContributionNeeded: number; // To maintain current FI date
+}
+
+export interface FIProjectionDataPoint {
+  month: number;
+  savings: number;
+  fiNumber: number;
+  leanFiNumber?: number;
+  fatFiNumber?: number;
+}
+
+export interface FIMilestone {
+  name: string; // "25% FI", "50% FI", "Coast FIRE", etc.
+  targetAmount: number;
+  achieved: boolean;
+  achievedDate?: string; // ISO date
+  estimatedDate?: string; // ISO date (if not achieved yet)
+}
