@@ -16,6 +16,7 @@
 
 import { useState } from 'react';
 import { Target } from 'lucide-react';
+import { useI18n } from '../contexts/I18nContext';
 
 interface FIProgressBarProps {
   currentSavings: number;
@@ -25,16 +26,16 @@ interface FIProgressBarProps {
 
 interface Milestone {
   percentage: number;
-  label: string;
+  labelKey: string;
   color: string;
 }
 
 const MILESTONES: Milestone[] = [
-  { percentage: 25, label: '25%', color: 'bg-red-500' },
-  { percentage: 50, label: '50%', color: 'bg-yellow-500' },
-  { percentage: 75, label: '75%', color: 'bg-blue-500' },
-  { percentage: 90, label: 'Coast', color: 'bg-purple-500' },
-  { percentage: 100, label: 'FI!', color: 'bg-green-500' },
+  { percentage: 25, labelKey: '25', color: 'bg-red-500' },
+  { percentage: 50, labelKey: '50', color: 'bg-yellow-500' },
+  { percentage: 75, labelKey: '75', color: 'bg-blue-500' },
+  { percentage: 90, labelKey: '90', color: 'bg-purple-500' },
+  { percentage: 100, labelKey: '100', color: 'bg-green-500' },
 ];
 
 export default function FIProgressBar({
@@ -42,11 +43,16 @@ export default function FIProgressBar({
   fiNumber,
   className = '',
 }: FIProgressBarProps) {
+  const { t } = useI18n();
   const [hoveredMilestone, setHoveredMilestone] = useState<number | null>(null);
 
+  // Sanitize inputs
+  const safeSavings = isFinite(currentSavings) && !isNaN(currentSavings) ? Math.max(0, currentSavings) : 0;
+  const safeFINumber = isFinite(fiNumber) && !isNaN(fiNumber) && fiNumber > 0 ? fiNumber : 0;
+
   // Calculate current progress percentage
-  const currentProgress = fiNumber > 0 ? (currentSavings / fiNumber) * 100 : 0;
-  const cappedProgress = Math.min(currentProgress, 100);
+  const currentProgress = safeFINumber > 0 ? (safeSavings / safeFINumber) * 100 : 0;
+  const cappedProgress = Math.min(Math.max(0, currentProgress), 100);
 
   // Determine color based on progress
   const getProgressColor = (progress: number): string => {
@@ -64,7 +70,7 @@ export default function FIProgressBar({
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5 text-blue-600" />
           <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            FI Progress
+            {t('fire:progress.title')}
           </h3>
         </div>
         <div className="text-right">
@@ -72,7 +78,10 @@ export default function FIProgressBar({
             {currentProgress.toFixed(1)}%
           </span>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            ${currentSavings.toLocaleString()} / ${fiNumber.toLocaleString()}
+            {t('fire:progress.currentAmount', { 
+              current: `$${safeSavings.toLocaleString()}`,
+              target: `$${safeFINumber.toLocaleString()}`
+            })}
           </p>
         </div>
       </div>
@@ -96,7 +105,7 @@ export default function FIProgressBar({
           {MILESTONES.map((milestone, index) => {
             const isAchieved = currentProgress >= milestone.percentage;
             const isHovered = hoveredMilestone === index;
-            const milestoneAmount = (fiNumber * milestone.percentage) / 100;
+            const milestoneAmount = (safeFINumber * milestone.percentage) / 100;
 
             return (
               <div
@@ -109,12 +118,12 @@ export default function FIProgressBar({
                 {/* Tooltip */}
                 {isHovered && (
                   <div className="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-10">
-                    <div className="font-semibold">{milestone.label} FI</div>
+                    <div className="font-semibold">{t(`fire:progress.milestones.${milestone.labelKey}`)} FI</div>
                     <div className="text-gray-300">
                       ${milestoneAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}
                     </div>
                     {isAchieved && (
-                      <div className="text-green-400 text-xs mt-1">✓ Achieved</div>
+                      <div className="text-green-400 text-xs mt-1">{t('fire:progress.milestones.achieved')}</div>
                     )}
                     {/* Arrow */}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700" />
@@ -139,7 +148,7 @@ export default function FIProgressBar({
                     ${(milestone.percentage === 25 || milestone.percentage === 75) ? 'hidden sm:block' : ''}
                   `}
                 >
-                  {milestone.label}
+                  {t(`fire:progress.milestones.${milestone.labelKey}`)}
                 </span>
               </div>
             );
@@ -151,23 +160,23 @@ export default function FIProgressBar({
       <div className="mt-6 flex flex-wrap gap-3 text-xs text-gray-600 dark:text-gray-400">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full bg-red-500" />
-          <span>Early (0-25%)</span>
+          <span>{t('fire:progress.legend.early')}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <span>Building (25-50%)</span>
+          <span>{t('fire:progress.legend.building')}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full bg-blue-500" />
-          <span>Momentum (50-75%)</span>
+          <span>{t('fire:progress.legend.momentum')}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full bg-purple-500" />
-          <span>Coast (90%)</span>
+          <span>{t('fire:progress.legend.coast')}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span>FI! (100%)</span>
+          <span>{t('fire:progress.legend.fi')}</span>
         </div>
       </div>
     </div>

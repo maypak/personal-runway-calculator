@@ -28,6 +28,14 @@ export function calculateFINumber(
   annualExpenses: number,
   safeWithdrawalRate: number = 4.0
 ): number {
+  // Sanitize inputs
+  if (!isFinite(annualExpenses) || isNaN(annualExpenses)) {
+    throw new Error('Annual expenses must be a valid number');
+  }
+  if (!isFinite(safeWithdrawalRate) || isNaN(safeWithdrawalRate)) {
+    throw new Error('Safe withdrawal rate must be a valid number');
+  }
+  
   if (annualExpenses <= 0) {
     throw new Error('Annual expenses must be greater than 0');
   }
@@ -37,7 +45,14 @@ export function calculateFINumber(
   
   // FI Number = Annual Expenses / (SWR / 100)
   // Example: $48,000 / 0.04 = $1,200,000
-  return annualExpenses / (safeWithdrawalRate / 100);
+  const result = annualExpenses / (safeWithdrawalRate / 100);
+  
+  // Safeguard against Infinity/NaN
+  if (!isFinite(result) || isNaN(result)) {
+    throw new Error('Invalid calculation result');
+  }
+  
+  return result;
 }
 
 /**
@@ -87,6 +102,20 @@ export function calculateFIDate(
   targetFINumber: number,
   annualReturnRate: number = 7.0
 ): { months: number; date: Date | null } {
+  // Sanitize inputs
+  if (!isFinite(currentSavings) || isNaN(currentSavings)) {
+    currentSavings = 0;
+  }
+  if (!isFinite(monthlyContribution) || isNaN(monthlyContribution)) {
+    monthlyContribution = 0;
+  }
+  if (!isFinite(targetFINumber) || isNaN(targetFINumber)) {
+    return { months: Infinity, date: null };
+  }
+  if (!isFinite(annualReturnRate) || isNaN(annualReturnRate)) {
+    annualReturnRate = 0;
+  }
+  
   // Edge case: Already at FI
   if (currentSavings >= targetFINumber) {
     return { months: 0, date: new Date() };
@@ -119,6 +148,11 @@ export function calculateFIDate(
   while (balance < targetFINumber && months < MAX_MONTHS) {
     balance = balance * (1 + monthlyRate) + monthlyContribution;
     months++;
+    
+    // Safety check: break if balance becomes invalid
+    if (!isFinite(balance) || isNaN(balance)) {
+      return { months: Infinity, date: null };
+    }
   }
   
   // If exceeds max months, FI is not achievable in reasonable timeframe

@@ -1,0 +1,155 @@
+{
+  "title": "FIRE Calculator",
+  "subtitle": "Financial Independence, Retire Early",
+  "loading": "Loading FIRE data...",
+  "errors": {
+    "generic": "Error: {{message}}",
+    "noSettings": "Please set up your financial settings first to use the FIRE Calculator.",
+    "calculationFailed": "Failed to calculate FIRE metrics",
+    "updateFailed": "Failed to update settings",
+    "resetFailed": "Failed to reset settings"
+  },
+  "fiNumber": {
+    "label": "Your FI Number",
+    "description": "Portfolio target for financial independence",
+    "infoNote": "<strong>About FIRE:</strong> Financial Independence means having enough invested assets to cover annual expenses using the 4% safe withdrawal rate. Coast FIRE means your current savings will grow to FI Number by retirement age without additional contributions."
+  },
+  "progress": {
+    "title": "FI Progress",
+    "currentAmount": "{{current}} / {{target}}",
+    "milestones": {
+      "25": "25%",
+      "50": "50%",
+      "75": "75%",
+      "90": "Coast",
+      "100": "FI!",
+      "achieved": "✓ Achieved"
+    },
+    "legend": {
+      "early": "Early (0-25%)",
+      "building": "Building (25-50%)",
+      "momentum": "Momentum (50-75%)",
+      "coast": "Coast (90%)",
+      "fi": "FI! (100%)"
+    }
+  },
+  "projection": {
+    "title": "FI Projection",
+    "xAxisLabel": "Years",
+    "yAxisLabel": "Net Worth",
+    "lines": {
+      "currentPath": "Current Path",
+      "coastFire": "Coast FIRE",
+      "fiTarget": "FI Target"
+    },
+    "tooltip": {
+      "year": "Year {{year}}"
+    },
+    "legend": {
+      "currentPath": "<strong>Current Path:</strong> With ${{monthlySavings}}/month contributions at {{returnRate}}% annual return",
+      "coastFire": "<strong>Coast FIRE:</strong> Stop contributing, let current ${{currentSavings}} grow {{achievedText}}",
+      "coastAchieved": "(already achieved!)",
+      "coastNotAchieved": "(needs more time)",
+      "fiTarget": "<strong>FI Target:</strong> ${{fiNumber}} needed for financial independence"
+    }
+  },
+  "milestones": {
+    "title": "FI Milestones",
+    "completeSummary": "{{completed}} / {{total}} complete",
+    "status": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "future": "Future",
+      "achieved": "Achieved"
+    },
+    "timeframe": {
+      "thisMonth": "This month",
+      "nextMonth": "Next month",
+      "months": "{{months}} months",
+      "year": "{{years}} year",
+      "years": "{{years}} years",
+      "yearsMonths": "{{years}}y {{months}}m",
+      "notReachable": "Not reachable"
+    },
+    "next": "Next milestone:",
+    "allComplete": "All complete! 🎉",
+    "names": {
+      "25": "25% FI",
+      "50": "50% FI (Halfway)",
+      "75": "75% FI",
+      "90": "Coast FIRE (90%)",
+      "100": "Full FI (100%)"
+    }
+  },
+  "scenarios": {
+    "title": "FI Scenarios",
+    "subtitle": "Compare different retirement lifestyle scenarios",
+    "toggleLabel": "Compare FI Scenarios (Lean/Regular/Fat)",
+    "types": {
+      "lean": {
+        "name": "Lean FIRE",
+        "description": "Minimal lifestyle (70%)"
+      },
+      "regular": {
+        "name": "Regular FIRE",
+        "description": "Current lifestyle (100%)"
+      },
+      "fat": {
+        "name": "Fat FIRE",
+        "description": "Abundant lifestyle (150%)"
+      }
+    },
+    "fiNumberLabel": "FI Number",
+    "annualExpenses": "${{amount}}/year",
+    "progress": "Progress",
+    "estimatedDate": "Estimated",
+    "timeRemaining": {
+      "months": "{{months}} months away",
+      "years": "{{years}} years away"
+    },
+    "achieved": "Already achieved!",
+    "notReachable": "Not reachable",
+    "infoNote": "<strong>Tip:</strong> Lean FIRE allows you to retire sooner with a minimal lifestyle. Fat FIRE provides more cushion but takes longer to achieve. Choose based on your priorities."
+  },
+  "settings": {
+    "title": "FIRE Settings",
+    "reset": "Reset",
+    "resetTooltip": "Reset to defaults",
+    "autoSaveNote": "<strong>Note:</strong> Changes auto-save and update calculations in real-time. These assumptions significantly impact your FI date—adjust conservatively.",
+    "investmentReturn": {
+      "label": "Investment Return Rate",
+      "tooltip": "Expected annual return on investments. Historical average is 7-10% for stock market.",
+      "rangeLabels": {
+        "conservative": "Conservative (0%)",
+        "aggressive": "Aggressive (15%)"
+      }
+    },
+    "safeWithdrawal": {
+      "label": "Safe Withdrawal Rate",
+      "tooltip": "The 4% Rule: Withdraw 4% of portfolio annually to sustain for 30+ years.",
+      "rangeLabels": {
+        "conservative": "Conservative (2%)",
+        "aggressive": "Aggressive (6%)"
+      }
+    },
+    "monthlySavings": {
+      "label": "Monthly Savings",
+      "description": "Amount you can save and invest each month",
+      "placeholder": "0"
+    },
+    "targetExpenses": {
+      "label": "Target Annual Expenses (Optional)",
+      "description": "Override current expenses if planning lifestyle change",
+      "placeholder": "Leave empty to use current expenses"
+    }
+  },
+  "buttons": {
+    "settings": "Settings",
+    "showScenarios": "Show Scenarios",
+    "hideScenarios": "Hide Scenarios"
+  },
+  "currency": {
+    "thousands": "{{value}}K",
+    "millions": "{{value}}M"
+  }
+}

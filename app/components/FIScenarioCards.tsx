@@ -17,6 +17,7 @@
 import { useState } from 'react';
 import { TrendingDown, Target, TrendingUp, Calendar, DollarSign } from 'lucide-react';
 import { calculateFIDate, calculateFIProgress } from '../utils/fireCalculator';
+import { useI18n } from '../contexts/I18nContext';
 
 interface FIScenarioCardsProps {
   currentSavings: number;
@@ -30,8 +31,6 @@ interface FIScenarioCardsProps {
 
 interface Scenario {
   id: 'lean' | 'regular' | 'fat';
-  name: string;
-  description: string;
   multiplier: number;
   icon: React.ReactNode;
   color: {
@@ -45,8 +44,6 @@ interface Scenario {
 const SCENARIOS: Scenario[] = [
   {
     id: 'lean',
-    name: 'Lean FIRE',
-    description: 'Minimal lifestyle (70%)',
     multiplier: 0.7,
     icon: <TrendingDown className="h-6 w-6" />,
     color: {
@@ -58,8 +55,6 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: 'regular',
-    name: 'Regular FIRE',
-    description: 'Current lifestyle (100%)',
     multiplier: 1.0,
     icon: <Target className="h-6 w-6" />,
     color: {
@@ -71,8 +66,6 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: 'fat',
-    name: 'Fat FIRE',
-    description: 'Abundant lifestyle (150%)',
     multiplier: 1.5,
     icon: <TrendingUp className="h-6 w-6" />,
     color: {
@@ -93,6 +86,7 @@ export default function FIScenarioCards({
   onScenarioSelect,
   className = '',
 }: FIScenarioCardsProps) {
+  const { t } = useI18n();
   const [selectedScenario, setSelectedScenario] = useState<'lean' | 'regular' | 'fat'>('regular');
 
   const handleScenarioClick = (scenarioId: 'lean' | 'regular' | 'fat') => {
@@ -121,10 +115,10 @@ export default function FIScenarioCards({
       {/* Header */}
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          FI Scenarios
+          {t('fire:scenarios.title')}
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Compare different retirement lifestyle scenarios
+          {t('fire:scenarios.subtitle')}
         </p>
       </div>
 
@@ -163,10 +157,10 @@ export default function FIScenarioCards({
                 </div>
                 <div className="flex-1">
                   <h4 className="font-bold text-gray-900 dark:text-white">
-                    {scenario.name}
+                    {t(`fire:scenarios.types.${scenario.id}.name`)}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    {scenario.description}
+                    {t(`fire:scenarios.types.${scenario.id}.description`)}
                   </p>
                 </div>
               </div>
@@ -175,20 +169,20 @@ export default function FIScenarioCards({
               <div className="mb-3">
                 <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mb-1">
                   <DollarSign className="h-3 w-3" />
-                  <span>FI Number</span>
+                  <span>{t('fire:scenarios.fiNumberLabel')}</span>
                 </div>
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
                   ${(metrics.fiNumber / 1000).toFixed(0)}K
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  ${metrics.targetExpenses.toLocaleString()}/year
+                  {t('fire:scenarios.annualExpenses', { amount: metrics.targetExpenses.toLocaleString() })}
                 </div>
               </div>
 
               {/* Progress bar */}
               <div className="mb-3">
                 <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
-                  <span>Progress</span>
+                  <span>{t('fire:scenarios.progress')}</span>
                   <span className="font-semibold">{metrics.progress.toFixed(1)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
@@ -206,8 +200,8 @@ export default function FIScenarioCards({
                   {metrics.fiDate 
                     ? metrics.fiDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
                     : metrics.fiMonths === 0 
-                      ? 'Already achieved!'
-                      : 'Not reachable'}
+                      ? t('fire:scenarios.achieved')
+                      : t('fire:scenarios.notReachable')}
                 </span>
               </div>
 
@@ -215,8 +209,8 @@ export default function FIScenarioCards({
               {metrics.fiDate && metrics.fiMonths > 0 && (
                 <div className="mt-2 text-xs font-medium text-gray-700 dark:text-gray-300">
                   {metrics.fiMonths < 12 
-                    ? `${metrics.fiMonths} months away`
-                    : `${(metrics.fiMonths / 12).toFixed(1)} years away`}
+                    ? t('fire:scenarios.timeRemaining.months', { months: metrics.fiMonths })
+                    : t('fire:scenarios.timeRemaining.years', { years: (metrics.fiMonths / 12).toFixed(1) })}
                 </div>
               )}
             </button>
@@ -226,10 +220,10 @@ export default function FIScenarioCards({
 
       {/* Info note */}
       <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-        <p className="text-xs text-gray-600 dark:text-gray-400">
-          <strong>Tip:</strong> Lean FIRE allows you to retire sooner with a minimal lifestyle. 
-          Fat FIRE provides more cushion but takes longer to achieve. Choose based on your priorities.
-        </p>
+        <p 
+          className="text-xs text-gray-600 dark:text-gray-400"
+          dangerouslySetInnerHTML={{ __html: t('fire:scenarios.infoNote') }}
+        />
       </div>
     </div>
   );

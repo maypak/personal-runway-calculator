@@ -18,6 +18,7 @@
 
 import { useState, useEffect } from 'react';
 import { Settings, Info, DollarSign, TrendingUp, Percent, RotateCcw } from 'lucide-react';
+import { useI18n } from '../contexts/I18nContext';
 
 interface FIRESettingsProps {
   // Current values
@@ -45,14 +46,12 @@ const DEFAULTS = {
   monthlySavings: 0,
 };
 
-// Slider configurations
+// Slider configurations (icons only, labels/tooltips from i18n)
 const SLIDERS = {
   investmentReturn: {
     min: 0,
     max: 15,
     step: 0.5,
-    label: 'Investment Return Rate',
-    tooltip: 'Expected annual return on investments. Historical average is 7-10% for stock market.',
     icon: <TrendingUp className="h-4 w-4" />,
     unit: '%',
   },
@@ -60,8 +59,6 @@ const SLIDERS = {
     min: 2,
     max: 6,
     step: 0.25,
-    label: 'Safe Withdrawal Rate',
-    tooltip: 'The 4% Rule: Withdraw 4% of portfolio annually to sustain for 30+ years.',
     icon: <Percent className="h-4 w-4" />,
     unit: '%',
   },
@@ -76,6 +73,8 @@ export default function FIRESettings({
   onReset,
   className = '',
 }: FIRESettingsProps) {
+  const { t } = useI18n();
+  
   // Local state for real-time updates
   const [localInvestmentRate, setLocalInvestmentRate] = useState(investmentReturnRate);
   const [localSWR, setLocalSWR] = useState(safeWithdrawalRate);
@@ -122,7 +121,7 @@ export default function FIRESettings({
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-blue-600" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            FIRE Settings
+            {t('fire:settings.title')}
           </h3>
         </div>
         <button
@@ -130,10 +129,10 @@ export default function FIRESettings({
           className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 
                    hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 
                    rounded-lg transition-colors"
-          title="Reset to defaults"
+          title={t('fire:settings.resetTooltip')}
         >
           <RotateCcw className="h-3 w-3" />
-          Reset
+          {t('fire:settings.reset')}
         </button>
       </div>
 
@@ -143,7 +142,7 @@ export default function FIRESettings({
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               {SLIDERS.investmentReturn.icon}
-              <span>{SLIDERS.investmentReturn.label}</span>
+              <span>{t('fire:settings.investmentReturn.label')}</span>
               <button
                 onMouseEnter={() => setShowTooltip('investmentReturn')}
                 onMouseLeave={() => setShowTooltip(null)}
@@ -153,7 +152,7 @@ export default function FIRESettings({
                 {showTooltip === 'investmentReturn' && (
                   <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-900 dark:bg-gray-700 
                                 text-white text-xs rounded-lg shadow-lg z-10">
-                    {SLIDERS.investmentReturn.tooltip}
+                    {t('fire:settings.investmentReturn.tooltip')}
                     <div className="absolute top-full left-4 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700" />
                   </div>
                 )}
@@ -173,8 +172,8 @@ export default function FIRESettings({
             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-            <span>Conservative (0%)</span>
-            <span>Aggressive (15%)</span>
+            <span>{t('fire:settings.investmentReturn.rangeLabels.conservative')}</span>
+            <span>{t('fire:settings.investmentReturn.rangeLabels.aggressive')}</span>
           </div>
         </div>
 
@@ -183,7 +182,7 @@ export default function FIRESettings({
           <div className="flex items-center justify-between mb-2">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               {SLIDERS.safeWithdrawal.icon}
-              <span>{SLIDERS.safeWithdrawal.label}</span>
+              <span>{t('fire:settings.safeWithdrawal.label')}</span>
               <button
                 onMouseEnter={() => setShowTooltip('safeWithdrawal')}
                 onMouseLeave={() => setShowTooltip(null)}
@@ -193,7 +192,7 @@ export default function FIRESettings({
                 {showTooltip === 'safeWithdrawal' && (
                   <div className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-900 dark:bg-gray-700 
                                 text-white text-xs rounded-lg shadow-lg z-10">
-                    {SLIDERS.safeWithdrawal.tooltip}
+                    {t('fire:settings.safeWithdrawal.tooltip')}
                     <div className="absolute top-full left-4 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700" />
                   </div>
                 )}
@@ -213,8 +212,8 @@ export default function FIRESettings({
             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-            <span>Conservative (2%)</span>
-            <span>Aggressive (6%)</span>
+            <span>{t('fire:settings.safeWithdrawal.rangeLabels.conservative')}</span>
+            <span>{t('fire:settings.safeWithdrawal.rangeLabels.aggressive')}</span>
           </div>
         </div>
 
@@ -222,7 +221,7 @@ export default function FIRESettings({
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             <DollarSign className="h-4 w-4" />
-            <span>Monthly Savings</span>
+            <span>{t('fire:settings.monthlySavings.label')}</span>
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -235,11 +234,11 @@ export default function FIRESettings({
               onChange={(e) => setLocalMonthlySavings(parseFloat(e.target.value) || 0)}
               className="w-full pl-7 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="0"
+              placeholder={t('fire:settings.monthlySavings.placeholder')}
             />
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            Amount you can save and invest each month
+            {t('fire:settings.monthlySavings.description')}
           </p>
         </div>
 
@@ -247,7 +246,7 @@ export default function FIRESettings({
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             <DollarSign className="h-4 w-4" />
-            <span>Target Annual Expenses (Optional)</span>
+            <span>{t('fire:settings.targetExpenses.label')}</span>
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -260,21 +259,21 @@ export default function FIRESettings({
               onChange={(e) => setLocalTargetExpenses(e.target.value)}
               className="w-full pl-7 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              placeholder="Leave empty to use current expenses"
+              placeholder={t('fire:settings.targetExpenses.placeholder')}
             />
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            Override current expenses if planning lifestyle change
+            {t('fire:settings.targetExpenses.description')}
           </p>
         </div>
       </div>
 
       {/* Info footer */}
       <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-600 dark:text-gray-400">
-          <strong>Note:</strong> Changes auto-save and update calculations in real-time. 
-          These assumptions significantly impact your FI date—adjust conservatively.
-        </p>
+        <p 
+          className="text-xs text-gray-600 dark:text-gray-400"
+          dangerouslySetInnerHTML={{ __html: t('fire:settings.autoSaveNote') }}
+        />
       </div>
     </div>
   );

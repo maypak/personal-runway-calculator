@@ -21,6 +21,7 @@ import { useState, useEffect } from 'react';
 import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
+import { useI18n } from '../contexts/I18nContext';
 import FIProgressBar from './FIProgressBar';
 import FIProjectionChart from './FIProjectionChart';
 import FIMilestones from './FIMilestones';
@@ -28,6 +29,7 @@ import FIScenarioCards from './FIScenarioCards';
 import FIRESettings from './FIRESettings';
 
 export default function FIREDashboard() {
+  const { t } = useI18n();
   const {
     settings,
     calculatedMetrics,
@@ -88,7 +90,7 @@ export default function FIREDashboard() {
     return (
       <div className="p-6 text-center">
         <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">Loading FIRE data...</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">{t('fire:loading')}</p>
       </div>
     );
   }
@@ -96,7 +98,7 @@ export default function FIREDashboard() {
   if (error) {
     return (
       <div className="p-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-        <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+        <p className="text-red-600 dark:text-red-400">{t('fire:errors.generic', { message: error })}</p>
       </div>
     );
   }
@@ -105,7 +107,7 @@ export default function FIREDashboard() {
     return (
       <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
         <p className="text-yellow-600 dark:text-yellow-400">
-          Please set up your financial settings first to use the FIRE Calculator.
+          {t('fire:errors.noSettings')}
         </p>
       </div>
     );
@@ -128,10 +130,10 @@ export default function FIREDashboard() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Target className="h-6 w-6 text-blue-600" />
-            FIRE Calculator
+            {t('fire:title')}
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Financial Independence, Retire Early
+            {t('fire:subtitle')}
           </p>
         </div>
         <button
@@ -143,7 +145,7 @@ export default function FIREDashboard() {
               : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400'
             }
           `}
-          aria-label="Settings"
+          aria-label={t('fire:buttons.settings')}
         >
           <SettingsIcon className="h-5 w-5" />
         </button>
@@ -167,14 +169,14 @@ export default function FIREDashboard() {
         <div className="flex items-center gap-2 mb-2">
           <DollarSign className="h-5 w-5 text-blue-600" />
           <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Your FI Number
+            {t('fire:fiNumber.label')}
           </h3>
         </div>
         <p className="text-4xl font-bold text-gray-900 dark:text-white">
           ${fiNumber.toLocaleString('en-US', { maximumFractionDigits: 0 })}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Portfolio target for financial independence
+          {t('fire:fiNumber.description')}
         </p>
       </div>
 
@@ -210,7 +212,7 @@ export default function FIREDashboard() {
                    dark:hover:bg-gray-700 transition-colors"
         >
           <span className="text-sm font-semibold text-gray-900 dark:text-white">
-            Compare FI Scenarios (Lean/Regular/Fat)
+            {t('fire:scenarios.toggleLabel')}
           </span>
           {showScenarios ? (
             <ChevronUp className="h-5 w-5 text-gray-400" />
@@ -234,12 +236,10 @@ export default function FIREDashboard() {
 
       {/* Info Note */}
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          <strong>About FIRE:</strong> Financial Independence means having enough invested 
-          assets to cover annual expenses using the 4% safe withdrawal rate. 
-          Coast FIRE means your current savings will grow to FI Number by retirement age 
-          without additional contributions.
-        </p>
+        <p 
+          className="text-sm text-gray-600 dark:text-gray-400"
+          dangerouslySetInnerHTML={{ __html: t('fire:fiNumber.infoNote') }}
+        />
       </div>
     </div>
   );

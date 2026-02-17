@@ -27,6 +27,7 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { TrendingUp } from 'lucide-react';
+import { useI18n } from '../contexts/I18nContext';
 
 interface FIProjectionChartProps {
   currentSavings: number;
@@ -52,20 +53,30 @@ export default function FIProjectionChart({
   maxYears = 30,
   className = '',
 }: FIProjectionChartProps) {
+  const { t } = useI18n();
+  
   // Generate projection data
   const chartData = useMemo(() => {
-    const data: ChartDataPoint[] = [];
-    const monthlyRate = investmentReturnRate / 100 / 12;
+    // Sanitize inputs
+    const safeCurrentSavings = isFinite(currentSavings) && !isNaN(currentSavings) ? Math.max(0, currentSavings) : 0;
+    const safeMonthlyContribution = isFinite(monthlyContribution) && !isNaN(monthlyContribution) ? monthlyContribution : 0;
+    const safeFINumber = isFinite(fiNumber) && !isNaN(fiNumber) && fiNumber > 0 ? fiNumber : 1;
+    const safeReturnRate = isFinite(investmentReturnRate) && !isNaN(investmentReturnRate) 
+      ? Math.max(0, Math.min(50, investmentReturnRate)) 
+      : 7.0;
     
-    let balanceWithSavings = currentSavings;
-    let balanceCoast = currentSavings;
+    const data: ChartDataPoint[] = [];
+    const monthlyRate = safeReturnRate / 100 / 12;
+    
+    let balanceWithSavings = safeCurrentSavings;
+    let balanceCoast = safeCurrentSavings;
     
     // Add initial point (Year 0)
     data.push({
       year: 0,
-      currentTrajectory: currentSavings,
-      coastFire: currentSavings,
-      fiTarget: fiNumber,
+      currentTrajectory: safeCurrentSavings,
+      coastFire: safeCurrentSavings,
+      fiTarget: safeFINumber,
     });
     
     // Generate yearly data points
@@ -73,21 +84,26 @@ export default function FIProjectionChart({
       // Calculate for 12 months
       for (let month = 0; month < 12; month++) {
         // Current trajectory: with monthly contributions
-        balanceWithSavings = balanceWithSavings * (1 + monthlyRate) + monthlyContribution;
+        balanceWithSavings = balanceWithSavings * (1 + monthlyRate) + safeMonthlyContribution;
         
         // Coast FIRE: no contributions, just compound growth
         balanceCoast = balanceCoast * (1 + monthlyRate);
+        
+        // Safety check: prevent infinite values
+        if (!isFinite(balanceWithSavings) || !isFinite(balanceCoast)) {
+          return data;
+        }
       }
       
       data.push({
         year,
         currentTrajectory: balanceWithSavings,
         coastFire: balanceCoast,
-        fiTarget: fiNumber,
+        fiTarget: safeFINumber,
       });
       
       // Stop if current trajectory far exceeds FI (150%)
-      if (balanceWithSavings > fiNumber * 1.5) {
+      if (balanceWithSavings > safeFINumber * 1.5) {
         break;
       }
     }
@@ -113,7 +129,7 @@ export default function FIProjectionChart({
     return (
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 shadow-lg">
         <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-          Year {label}
+          {t('fire:projection.tooltip.year', { year: label })}
         </p>
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2 text-xs">
@@ -140,7 +156,7 @@ export default function FIProjectionChart({
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="h-5 w-5 text-blue-600" />
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          FI Projection
+          {t('fire:projection.title')}
         </h3>
       </div>
 
@@ -157,7 +173,7 @@ export default function FIProjectionChart({
           />
           <XAxis
             dataKey="year"
-            label={{ value: 'Years', position: 'insideBottom', offset: -5 }}
+            label={{ value: t('fire:projection.xAxisLabel'), position: 'insideBottom', offset: -5 }}
             tick={{ fontSize: 12, fill: '#9CA3AF' }}
             stroke="#9CA3AF"
           />
@@ -180,7 +196,7 @@ export default function FIProjectionChart({
             strokeDasharray="5 5"
             strokeWidth={2}
             label={{
-              value: 'FI Target',
+              value: t('fire:projection.lines.fiTarget'),
               position: 'insideTopRight',
               fill: '#10B981',
               fontSize: 12,
@@ -194,7 +210,7 @@ export default function FIProjectionChart({
             stroke="#3B82F6"
             strokeWidth={3}
             dot={false}
-            name="Current Path"
+            name={t('fire:projection.lines.currentPath')}
             animationDuration={1000}
           />
 
@@ -206,7 +222,7 @@ export default function FIProjectionChart({
             strokeWidth={2}
             strokeDasharray="5 5"
             dot={false}
-            name="Coast FIRE"
+            name={t('fire:projection.lines.coastFire')}
             animationDuration={1000}
           />
         </LineChart>
@@ -216,23 +232,31 @@ export default function FIProjectionChart({
       <div className="mt-4 space-y-2">
         <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
           <div className="w-3 h-0.5 bg-blue-600 mt-1.5" />
-          <p>
-            <strong>Current Path:</strong> With ${monthlyContribution.toLocaleString()}/month contributions
-            at {investmentReturnRate}% annual return
-          </p>
+          <p dangerouslySetInnerHTML={{ 
+            __html: t('fire:projection.legend.currentPath', { 
+              monthlySavings: monthlyContribution.toLocaleString(),
+              returnRate: investmentReturnRate
+            })
+          }} />
         </div>
         <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
           <div className="w-3 h-0.5 bg-purple-600 mt-1.5" style={{ backgroundImage: 'repeating-linear-gradient(to right, #A855F7 0, #A855F7 5px, transparent 5px, transparent 10px)' }} />
-          <p>
-            <strong>Coast FIRE:</strong> Stop contributing, let current ${currentSavings.toLocaleString()} grow
-            {isCoastFireAchieved ? ' (already achieved!)' : ' (needs more time)'}
-          </p>
+          <p dangerouslySetInnerHTML={{ 
+            __html: t('fire:projection.legend.coastFire', { 
+              currentSavings: currentSavings.toLocaleString(),
+              achievedText: isCoastFireAchieved 
+                ? t('fire:projection.legend.coastAchieved')
+                : t('fire:projection.legend.coastNotAchieved')
+            })
+          }} />
         </div>
         <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
           <div className="w-3 h-0.5 bg-green-600 mt-1.5" style={{ backgroundImage: 'repeating-linear-gradient(to right, #10B981 0, #10B981 5px, transparent 5px, transparent 10px)' }} />
-          <p>
-            <strong>FI Target:</strong> ${fiNumber.toLocaleString()} needed for financial independence
-          </p>
+          <p dangerouslySetInnerHTML={{ 
+            __html: t('fire:projection.legend.fiTarget', { 
+              fiNumber: fiNumber.toLocaleString()
+            })
+          }} />
         </div>
       </div>
     </div>

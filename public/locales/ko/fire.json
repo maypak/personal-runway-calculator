@@ -1,0 +1,155 @@
+{
+  "title": "FIRE 계산기",
+  "subtitle": "경제적 자유, 조기 은퇴",
+  "loading": "FIRE 데이터 불러오는 중...",
+  "errors": {
+    "generic": "오류: {{message}}",
+    "noSettings": "FIRE 계산기를 사용하려면 먼저 재무 설정을 완료해주세요.",
+    "calculationFailed": "FIRE 지표 계산에 실패했습니다",
+    "updateFailed": "설정 업데이트에 실패했습니다",
+    "resetFailed": "설정 초기화에 실패했습니다"
+  },
+  "fiNumber": {
+    "label": "나의 FI 목표액",
+    "description": "경제적 자유를 위한 자산 목표",
+    "infoNote": "<strong>FIRE란?</strong> 경제적 자유(Financial Independence)는 4% 안전인출률을 사용하여 연간 지출을 충당할 수 있는 충분한 투자 자산을 보유한 상태를 의미합니다. 코스트 FIRE는 현재 자산이 추가 저축 없이 은퇴 시점까지 성장하여 FI 목표액에 도달하는 것을 말합니다."
+  },
+  "progress": {
+    "title": "FI 진행률",
+    "currentAmount": "{{current}} / {{target}}",
+    "milestones": {
+      "25": "25%",
+      "50": "50%",
+      "75": "75%",
+      "90": "코스트",
+      "100": "FI!",
+      "achieved": "✓ 달성"
+    },
+    "legend": {
+      "early": "초기 (0-25%)",
+      "building": "구축 (25-50%)",
+      "momentum": "가속 (50-75%)",
+      "coast": "코스트 (90%)",
+      "fi": "FI! (100%)"
+    }
+  },
+  "projection": {
+    "title": "FI 전망",
+    "xAxisLabel": "년",
+    "yAxisLabel": "순자산",
+    "lines": {
+      "currentPath": "현재 경로",
+      "coastFire": "코스트 FIRE",
+      "fiTarget": "FI 목표"
+    },
+    "tooltip": {
+      "year": "{{year}}년 후"
+    },
+    "legend": {
+      "currentPath": "<strong>현재 경로:</strong> 매월 ${{monthlySavings}} 저축, 연 {{returnRate}}% 수익률",
+      "coastFire": "<strong>코스트 FIRE:</strong> 저축 중단, 현재 ${{currentSavings}}만 성장 {{achievedText}}",
+      "coastAchieved": "(이미 달성!)",
+      "coastNotAchieved": "(더 많은 시간 필요)",
+      "fiTarget": "<strong>FI 목표:</strong> 경제적 자유를 위해 ${{fiNumber}} 필요"
+    }
+  },
+  "milestones": {
+    "title": "FI 이정표",
+    "completeSummary": "{{completed}} / {{total}} 완료",
+    "status": {
+      "completed": "완료",
+      "inProgress": "진행 중",
+      "future": "예정",
+      "achieved": "달성"
+    },
+    "timeframe": {
+      "thisMonth": "이번 달",
+      "nextMonth": "다음 달",
+      "months": "{{months}}개월",
+      "year": "{{years}}년",
+      "years": "{{years}}년",
+      "yearsMonths": "{{years}}년 {{months}}개월",
+      "notReachable": "도달 불가"
+    },
+    "next": "다음 이정표:",
+    "allComplete": "모두 완료! 🎉",
+    "names": {
+      "25": "25% FI",
+      "50": "50% FI (중간 지점)",
+      "75": "75% FI",
+      "90": "코스트 FIRE (90%)",
+      "100": "완전 FI (100%)"
+    }
+  },
+  "scenarios": {
+    "title": "FI 시나리오",
+    "subtitle": "다양한 은퇴 라이프스타일 시나리오 비교",
+    "toggleLabel": "FI 시나리오 비교 (린/일반/팻)",
+    "types": {
+      "lean": {
+        "name": "린 FIRE",
+        "description": "최소 생활비 (70%)"
+      },
+      "regular": {
+        "name": "일반 FIRE",
+        "description": "현재 생활비 (100%)"
+      },
+      "fat": {
+        "name": "팻 FIRE",
+        "description": "여유로운 생활비 (150%)"
+      }
+    },
+    "fiNumberLabel": "FI 목표액",
+    "annualExpenses": "연 ${{amount}}",
+    "progress": "진행률",
+    "estimatedDate": "예상",
+    "timeRemaining": {
+      "months": "{{months}}개월 남음",
+      "years": "{{years}}년 남음"
+    },
+    "achieved": "이미 달성!",
+    "notReachable": "도달 불가",
+    "infoNote": "<strong>팁:</strong> 린 FIRE는 최소한의 생활비로 더 빨리 은퇴할 수 있습니다. 팻 FIRE는 여유로운 생활을 제공하지만 달성까지 더 오래 걸립니다. 우선순위에 따라 선택하세요."
+  },
+  "settings": {
+    "title": "FIRE 설정",
+    "reset": "초기화",
+    "resetTooltip": "기본값으로 초기화",
+    "autoSaveNote": "<strong>참고:</strong> 변경사항은 자동 저장되며 실시간으로 계산이 업데이트됩니다. 이러한 가정은 FI 달성 시기에 큰 영향을 미치므므로 보수적으로 조정하세요.",
+    "investmentReturn": {
+      "label": "투자 수익률",
+      "tooltip": "투자 자산의 예상 연간 수익률. 주식 시장 평균은 7-10%입니다.",
+      "rangeLabels": {
+        "conservative": "보수적 (0%)",
+        "aggressive": "공격적 (15%)"
+      }
+    },
+    "safeWithdrawal": {
+      "label": "안전 인출률",
+      "tooltip": "4% 규칙: 포트폴리오의 4%를 매년 인출하여 30년 이상 유지.",
+      "rangeLabels": {
+        "conservative": "보수적 (2%)",
+        "aggressive": "공격적 (6%)"
+      }
+    },
+    "monthlySavings": {
+      "label": "월 저축액",
+      "description": "매월 저축하고 투자할 수 있는 금액",
+      "placeholder": "0"
+    },
+    "targetExpenses": {
+      "label": "목표 연간 지출 (선택사항)",
+      "description": "라이프스타일 변화 계획 시 현재 지출 대체",
+      "placeholder": "비워두면 현재 지출 사용"
+    }
+  },
+  "buttons": {
+    "settings": "설정",
+    "showScenarios": "시나리오 보기",
+    "hideScenarios": "시나리오 숨기기"
+  },
+  "currency": {
+    "thousands": "{{value}}천",
+    "millions": "{{value}}백만"
+  }
+}
