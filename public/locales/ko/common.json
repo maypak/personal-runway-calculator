@@ -1,0 +1,22 @@
+{
+  "app": {
+    "title": "런웨이 계산기",
+    "tagline": "정확히 얼마나 버틸 수 있는지 확인하세요"
+  },
+  "nav": {
+    "dashboard": "대시보드",
+    "settings": "설정",
+    "goals": "목표",
+    "signOut": "로그아웃"
+  },
+  "cta": {
+    "calculate": "계산하기",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "수정"
+  },
+  "test": {
+    "hello": "안녕하세요, 세상!"
+  }
+}

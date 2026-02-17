@@ -1,0 +1,22 @@
+{
+  "app": {
+    "title": "Personal Runway Calculator",
+    "tagline": "Know exactly how long you can survive"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "goals": "Goals",
+    "signOut": "Sign Out"
+  },
+  "cta": {
+    "calculate": "Calculate",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
+  },
+  "test": {
+    "hello": "Hello, World!"
+  }
+}
