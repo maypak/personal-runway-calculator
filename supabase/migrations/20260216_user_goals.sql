@@ -3,6 +3,15 @@
 -- Purpose: Allow users to set financial goals (runway or savings amount)
 -- Free tier: 1 active goal, Premium: 3 active goals
 
+-- Create updated_at trigger function if not exists
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE IF NOT EXISTS public.user_goals (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,

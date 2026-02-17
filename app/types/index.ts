@@ -122,3 +122,58 @@ export interface UserGoal {
   createdAt: string;
   updatedAt: string;
 }
+
+// Scenario Comparison (Priority 0 - Week 2)
+export interface OneTimeExpense {
+  name: string;
+  amount: number;
+  month: number; // 0-indexed (0 = first month)
+}
+
+export interface RecurringItem {
+  name: string;
+  amount: number;
+  type: 'income' | 'expense';
+  startMonth: number; // 0-indexed
+  endMonth: number | null; // null = infinite
+}
+
+export interface MonthData {
+  month: number;
+  savings: number;
+  income: number;
+  expenses: number;
+  netChange: number;
+}
+
+export interface RunwayResult {
+  runway: number; // Total months until savings depleted
+  burnRate: number; // Average monthly burn rate
+  breakevenMonth: number | null; // Month when income >= expenses (null if never)
+  endSavings: number; // Final savings amount
+  monthlyData: MonthData[]; // Month-by-month breakdown
+}
+
+export interface Scenario {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  isBase: boolean;
+  
+  // Financial data
+  totalSavings: number;
+  monthlyExpenses: number;
+  monthlyIncome: number;
+  oneTimeExpenses: OneTimeExpense[];
+  recurringItems: RecurringItem[];
+  
+  // Calculated results (cached)
+  calculatedRunway?: number;
+  calculatedBurnRate?: number;
+  calculatedBreakevenMonth?: number | null;
+  calculatedEndSavings?: number;
+  
+  createdAt: string;
+  updatedAt: string;
+}

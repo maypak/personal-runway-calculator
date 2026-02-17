@@ -146,6 +146,28 @@ export type Database = {
         Insert: Omit<Database['public']['Tables']['finance_goals']['Row'], 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Database['public']['Tables']['finance_goals']['Insert']>;
       };
+      scenarios: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          description?: string;
+          is_base: boolean;
+          total_savings: number;
+          monthly_expenses: number;
+          monthly_income: number;
+          one_time_expenses: unknown; // JSONB
+          recurring_items: unknown; // JSONB
+          calculated_runway?: number;
+          calculated_burn_rate?: number;
+          calculated_breakeven_month?: number;
+          calculated_end_savings?: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['scenarios']['Row'], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['scenarios']['Insert']>;
+      };
     };
   };
 };

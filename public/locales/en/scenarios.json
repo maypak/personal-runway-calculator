@@ -1,0 +1,200 @@
+{
+  "manager": {
+    "title": "Your Scenarios",
+    "subtitle": "Compare different financial paths to make better decisions",
+    "empty": {
+      "title": "No Scenarios Yet",
+      "description": "Create your first scenario to start comparing different financial paths. Try \"Conservative\" vs \"Optimistic\" assumptions!",
+      "cta": "Create First Scenario"
+    },
+    "cta": {
+      "new": "New Scenario"
+    },
+    "freeTier": {
+      "title": "Free Tier Limit",
+      "description": "You're on the free tier (1 scenario). Upgrade to Premium for up to 3 scenarios and unlock advanced features!",
+      "learnMore": "Learn more →"
+    }
+  },
+  "card": {
+    "base": "Base",
+    "edit": "Edit",
+    "compare": "Compare",
+    "delete": "Delete",
+    "deleteConfirm": "Delete \"{{name}}\"? This cannot be undone.",
+    "deleteFailed": "Failed to delete scenario",
+    "months": "{{count}} months",
+    "runway": {
+      "label": "Total Runway"
+    },
+    "burnRate": {
+      "label": "burn rate",
+      "perMonth": "/mo burn rate"
+    },
+    "breakeven": {
+      "label": "Breakeven at month {{month}}"
+    }
+  },
+  "create": {
+    "title": "Create New Scenario",
+    "errors": {
+      "nameRequired": "Please enter a scenario name",
+      "failed": "Failed to create scenario",
+      "generic": "An error occurred while creating the scenario"
+    },
+    "fields": {
+      "name": {
+        "label": "Scenario Name",
+        "placeholder": "e.g., Conservative, Optimistic, With Side Income",
+        "required": "required"
+      },
+      "description": {
+        "label": "Description",
+        "optional": "optional",
+        "placeholder": "What assumptions are you testing?"
+      },
+      "cloneFrom": {
+        "label": "Clone From",
+        "current": "Current Financial Settings",
+        "help": "New scenario will copy data from this source"
+      }
+    },
+    "cta": {
+      "cancel": "Cancel",
+      "create": "Create Scenario",
+      "creating": "Creating...",
+      "limitReached": "Limit Reached"
+    },
+    "freeTier": {
+      "warning": "Free tier limit: You can create 1 scenario. Upgrade to Premium for up to 3 scenarios.",
+      "upgrade": "✨ Upgrade to Premium"
+    }
+  },
+  "edit": {
+    "title": "Edit Scenario",
+    "subtitle": "Update your financial assumptions",
+    "sections": {
+      "basic": {
+        "title": "Basic Information",
+        "name": {
+          "label": "Scenario Name",
+          "required": true
+        },
+        "description": {
+          "label": "Description",
+          "optional": true
+        }
+      },
+      "financial": {
+        "title": "Financial Inputs",
+        "savings": "Total Savings",
+        "expenses": "Monthly Expenses",
+        "income": "Monthly Income"
+      },
+      "oneTime": {
+        "title": "One-Time Expenses",
+        "add": "Add Expense",
+        "empty": "No one-time expenses. Click \"Add Expense\" to add one.",
+        "fields": {
+          "name": "Name",
+          "amount": "Amount",
+          "month": "Month"
+        }
+      },
+      "recurring": {
+        "title": "Recurring Items",
+        "addIncome": "Add Income",
+        "addExpense": "Add Expense",
+        "empty": "No recurring items. Click \"Add Income\" or \"Add Expense\" to add one.",
+        "fields": {
+          "name": "Name",
+          "amount": "Amount",
+          "start": "Start",
+          "end": "End (∞)"
+        },
+        "types": {
+          "income": "income",
+          "expense": "expense"
+        }
+      }
+    },
+    "cta": {
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "saving": "Saving...",
+      "back": "Back to scenarios"
+    },
+    "errors": {
+      "notFound": "Scenario not found",
+      "saveFailed": "Failed to save scenario"
+    }
+  },
+  "comparison": {
+    "title": "Compare Scenarios",
+    "subtitle": "Side-by-side comparison of your financial scenarios",
+    "selector": {
+      "title": "Select Scenarios to Compare",
+      "help": "Select 1-3 scenarios (at least 1 required)",
+      "maxReached": "Maximum 3 scenarios for comparison"
+    },
+    "sections": {
+      "metrics": "Metrics Comparison",
+      "chart": "Runway Projection",
+      "insights": "💡 Key Insights"
+    },
+    "table": {
+      "metric": "Metric",
+      "noScenarios": "No scenarios selected for comparison",
+      "metrics": {
+        "runway": "Total Runway",
+        "burnRate": "Monthly Burn Rate",
+        "breakeven": "Break-even Month",
+        "endSavings": "End Savings",
+        "startSavings": "Starting Savings",
+        "monthlyExpenses": "Monthly Expenses",
+        "monthlyIncome": "Monthly Income"
+      },
+      "values": {
+        "months": "{{count}} months",
+        "month": "Month {{count}}",
+        "never": "Never",
+        "na": "N/A"
+      },
+      "legend": {
+        "best": "⬆ Best value",
+        "worst": "⬇ Worst value"
+      }
+    },
+    "chart": {
+      "title": "Runway Projection",
+      "subtitle": "Savings over time for each scenario",
+      "noScenarios": "No scenarios to display",
+      "axes": {
+        "months": "Months",
+        "savings": "Savings"
+      },
+      "tooltip": {
+        "month": "Month {{count}}"
+      },
+      "details": {
+        "months": "{{count}} months",
+        "burnRate": "${{amount}}/mo burn",
+        "breakeven": "✓ Breakeven at month {{month}}"
+      }
+    },
+    "cta": {
+      "back": "Back",
+      "export": "Export PDF",
+      "exportSoon": "Export feature coming soon!",
+      "goToScenarios": "Go to Scenarios"
+    },
+    "empty": {
+      "noScenarios": "No scenarios available. Create scenarios first."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

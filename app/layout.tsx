@@ -4,6 +4,7 @@ import "./globals.css";
 import StructuredData from "./components/StructuredData";
 import { Analytics } from '@vercel/analytics/react';
 import { I18nProvider } from './contexts/I18nContext';
+import { ScenarioProvider } from './contexts/ScenarioContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,7 +82,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <I18nProvider>
-          {children}
+          <ScenarioProvider>
+            {children}
+          </ScenarioProvider>
         </I18nProvider>
         <Analytics />
       </body>

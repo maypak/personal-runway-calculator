@@ -14,7 +14,7 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
-const NAMESPACES = ['common', 'auth', 'dashboard', 'goals'];
+const NAMESPACES = ['common', 'auth', 'dashboard', 'goals', 'scenarios'];
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('en');
