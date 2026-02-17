@@ -1,0 +1,128 @@
+{
+  "page": {
+    "title": "단계별 계획",
+    "description": "재무 패턴이 다른 여러 단계로 여정을 나누세요",
+    "backToDashboard": "대시보드로 돌아가기",
+    "totalSavingsLabel": "총 저축 (런웨이 계산용)",
+    "totalSavingsHint": "모든 단계의 런웨이를 계산하는 데 사용됩니다"
+  },
+  "header": {
+    "yourPhases": "내 단계 ({{count}}/10)",
+    "templates": "템플릿",
+    "addPhase": "단계 추가",
+    "phaseTimeline": "단계 타임라인"
+  },
+  "card": {
+    "months": "개월",
+    "month": "월",
+    "monthRange": "{{start}}월 - {{end}}월",
+    "monthlyExpenses": "월 지출",
+    "monthlyIncome": "월 수입",
+    "netMonthly": "월 순수익",
+    "totalBurn": "총 소진액",
+    "oneTimeExpenses": "일회성 지출 ({{count}}개)",
+    "dragToReorder": "드래그하여 순서 변경",
+    "moveUp": "위로 이동",
+    "moveDown": "아래로 이동",
+    "edit": "단계 수정",
+    "delete": "단계 삭제",
+    "duplicate": "단계 복제"
+  },
+  "editor": {
+    "createTitle": "단계 생성",
+    "editTitle": "단계 수정",
+    "close": "대화상자 닫기",
+    "phaseNameLabel": "단계 이름",
+    "phaseNamePlaceholder": "아시아 여행",
+    "phaseNameRequired": "단계 이름은 필수입니다",
+    "descriptionLabel": "설명",
+    "descriptionPlaceholder": "동남아시아를 탐험하며 저렴한 비용으로 생활",
+    "descriptionOptional": "선택사항",
+    "timeRangeLabel": "기간",
+    "startMonthLabel": "시작 월",
+    "endMonthLabel": "종료 월",
+    "financialLabel": "월별 재무",
+    "monthlyExpensesLabel": "월 지출",
+    "monthlyIncomeLabel": "월 수입",
+    "oneTimeExpensesLabel": "일회성 지출",
+    "oneTimeExpensesHint": "대규모 구매, 장비, 보증금 등",
+    "addOneTimeExpense": "일회성 지출 추가",
+    "oneTimeExpenseName": "이름",
+    "oneTimeExpenseNamePlaceholder": "항공권",
+    "oneTimeExpenseAmount": "금액",
+    "oneTimeExpenseMonth": "월",
+    "oneTimeExpenseMonthHint": "(단계 시작 기준)",
+    "removeExpense": "제거",
+    "summaryLabel": "요약",
+    "duration": "기간",
+    "durationValue": "{{count}}개월",
+    "estimatedBurn": "예상 총 소진액",
+    "avgMonthlyBurn": "평균 월 소진액",
+    "cancel": "취소",
+    "save": "단계 저장",
+    "errorTitle": "다음 오류를 수정하세요:"
+  },
+  "summary": {
+    "title": "단계별 런웨이 요약",
+    "totalRunway": "총 런웨이",
+    "totalBurn": "총 소진액",
+    "breakevenMonth": "손익분기 월",
+    "never": "없음",
+    "phases": "단계",
+    "chartTitle": "단계별 월별 소진율",
+    "noData": "단계 데이터가 없습니다"
+  },
+  "chart": {
+    "month": "월",
+    "monthlyExpenses": "월 지출",
+    "other": "기타",
+    "total": "총합"
+  },
+  "timeline": {
+    "month": "월",
+    "noPhases": "구성된 단계가 없습니다"
+  },
+  "templates": {
+    "title": "단계 템플릿",
+    "apply": "템플릿 적용",
+    "phases": "단계",
+    "sabbatical": {
+      "name": "커리어 안식년 (6개월)",
+      "description": "휴식, 여행 또는 개인 프로젝트를 위한 시간"
+    },
+    "careerTransition": {
+      "name": "커리어 전환 (12개월)",
+      "description": "학습, 네트워킹, 구직 단계를 거쳐 커리어 전환"
+    },
+    "startupBootstrap": {
+      "name": "스타트업 부트스트랩 (18개월)",
+      "description": "MVP, 테스트, 확장 단계로 스타트업 구축 및 출시"
+    }
+  },
+  "empty": {
+    "title": "아직 단계가 없습니다",
+    "description": "첫 번째 단계를 만들거나 템플릿을 사용하여 단계별 계획을 시작하세요",
+    "browseTemplates": "템플릿 둘러보기",
+    "createPhase": "단계 생성"
+  },
+  "validation": {
+    "phaseNameRequired": "단계 이름은 필수입니다",
+    "invalidTimeRange": "종료 월은 시작 월보다 뒤여야 합니다",
+    "negativeExpenses": "월 지출은 음수일 수 없습니다",
+    "negativeIncome": "월 수입은 음수일 수 없습니다",
+    "maxPhasesExceeded": "최대 10개 단계까지 허용됩니다",
+    "overlappingPhases": "단계가 겹칠 수 없습니다",
+    "deleteConfirm": "이 단계를 삭제하시겠습니까?"
+  },
+  "errors": {
+    "loadFailed": "단계를 불러오는 데 실패했습니다",
+    "saveFailed": "단계 저장에 실패했습니다",
+    "deleteFailed": "단계 삭제에 실패했습니다",
+    "updateFailed": "단계 업데이트에 실패했습니다"
+  },
+  "success": {
+    "phaseSaved": "단계가 성공적으로 저장되었습니다",
+    "phaseDeleted": "단계가 성공적으로 삭제되었습니다",
+    "templateApplied": "템플릿이 성공적으로 적용되었습니다"
+  }
+}

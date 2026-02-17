@@ -1,0 +1,128 @@
+{
+  "page": {
+    "title": "Phase Planning",
+    "description": "Divide your journey into phases with different financial patterns",
+    "backToDashboard": "Back to Dashboard",
+    "totalSavingsLabel": "Total Savings (for runway calculation)",
+    "totalSavingsHint": "This will be used to calculate your runway across all phases"
+  },
+  "header": {
+    "yourPhases": "Your Phases ({{count}}/10)",
+    "templates": "Templates",
+    "addPhase": "Add Phase",
+    "phaseTimeline": "Phase Timeline"
+  },
+  "card": {
+    "months": "months",
+    "month": "month",
+    "monthRange": "Month {{start}} - {{end}}",
+    "monthlyExpenses": "Monthly Expenses",
+    "monthlyIncome": "Monthly Income",
+    "netMonthly": "Net Monthly",
+    "totalBurn": "Total Burn",
+    "oneTimeExpenses": "One-time Expenses ({{count}})",
+    "dragToReorder": "Drag to reorder",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "edit": "Edit phase",
+    "delete": "Delete phase",
+    "duplicate": "Duplicate phase"
+  },
+  "editor": {
+    "createTitle": "Create Phase",
+    "editTitle": "Edit Phase",
+    "close": "Close dialog",
+    "phaseNameLabel": "Phase Name",
+    "phaseNamePlaceholder": "Travel Asia",
+    "phaseNameRequired": "Phase name is required",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Low-cost living while exploring Southeast Asia",
+    "descriptionOptional": "Optional",
+    "timeRangeLabel": "Time Range",
+    "startMonthLabel": "Start Month",
+    "endMonthLabel": "End Month",
+    "financialLabel": "Monthly Financials",
+    "monthlyExpensesLabel": "Monthly Expenses",
+    "monthlyIncomeLabel": "Monthly Income",
+    "oneTimeExpensesLabel": "One-time Expenses",
+    "oneTimeExpensesHint": "Large purchases, equipment, deposits, etc.",
+    "addOneTimeExpense": "Add One-time Expense",
+    "oneTimeExpenseName": "Name",
+    "oneTimeExpenseNamePlaceholder": "Flight tickets",
+    "oneTimeExpenseAmount": "Amount",
+    "oneTimeExpenseMonth": "Month",
+    "oneTimeExpenseMonthHint": "(relative to phase start)",
+    "removeExpense": "Remove",
+    "summaryLabel": "Summary",
+    "duration": "Duration",
+    "durationValue": "{{count}} months",
+    "estimatedBurn": "Estimated Total Burn",
+    "avgMonthlyBurn": "Avg Monthly Burn",
+    "cancel": "Cancel",
+    "save": "Save Phase",
+    "errorTitle": "Please fix the following errors:"
+  },
+  "summary": {
+    "title": "Phase-based Runway Summary",
+    "totalRunway": "Total Runway",
+    "totalBurn": "Total Burn",
+    "breakevenMonth": "Breakeven Month",
+    "never": "Never",
+    "phases": "Phases",
+    "chartTitle": "Monthly Burn Rate by Phase",
+    "noData": "No phase data available"
+  },
+  "chart": {
+    "month": "Month",
+    "monthlyExpenses": "Monthly Expenses",
+    "other": "Other",
+    "total": "Total"
+  },
+  "timeline": {
+    "month": "Month",
+    "noPhases": "No phases configured"
+  },
+  "templates": {
+    "title": "Phase Templates",
+    "apply": "Apply Template",
+    "phases": "phases",
+    "sabbatical": {
+      "name": "Career Sabbatical (6 months)",
+      "description": "Take time off for rest, travel, or personal projects"
+    },
+    "careerTransition": {
+      "name": "Career Transition (12 months)",
+      "description": "Switch careers with learning, networking, and job search phases"
+    },
+    "startupBootstrap": {
+      "name": "Startup Bootstrap (18 months)",
+      "description": "Build and launch a startup with MVP, testing, and scaling phases"
+    }
+  },
+  "empty": {
+    "title": "No phases yet",
+    "description": "Create your first phase or use a template to get started with phase-based planning",
+    "browseTemplates": "Browse Templates",
+    "createPhase": "Create Phase"
+  },
+  "validation": {
+    "phaseNameRequired": "Phase name is required",
+    "invalidTimeRange": "End month must be after start month",
+    "negativeExpenses": "Monthly expenses cannot be negative",
+    "negativeIncome": "Monthly income cannot be negative",
+    "maxPhasesExceeded": "Maximum 10 phases allowed",
+    "overlappingPhases": "Phases cannot overlap",
+    "deleteConfirm": "Are you sure you want to delete this phase?"
+  },
+  "errors": {
+    "loadFailed": "Failed to load phases",
+    "saveFailed": "Failed to save phase",
+    "deleteFailed": "Failed to delete phase",
+    "updateFailed": "Failed to update phase"
+  },
+  "success": {
+    "phaseSaved": "Phase saved successfully",
+    "phaseDeleted": "Phase deleted successfully",
+    "templateApplied": "Template applied successfully"
+  }
+}

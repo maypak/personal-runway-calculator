@@ -20,6 +20,7 @@ import { calculateRunwayWithPhases } from '@/app/utils/phaseCalculator'
 import { PhaseCard } from './PhaseCard'
 import { PhaseEditor } from './PhaseEditor'
 import { PhaseTimelineChart } from './PhaseTimelineChart'
+import PhaseBurnChart from './PhaseBurnChart'
 import { PHASE_TEMPLATES } from '@/app/data/phaseTemplates'
 import { Plus, AlertCircle, Loader2, Sparkles } from 'lucide-react'
 
@@ -85,6 +86,18 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
     await duplicatePhase(id)
   }
 
+  const handleMovePhase = (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === phases.length - 1) return
+
+    const items = Array.from(phases)
+    const targetIndex = direction === 'up' ? index - 1 : index + 1
+    const [moved] = items.splice(index, 1)
+    items.splice(targetIndex, 0, moved)
+
+    reorderPhases(items.map((p) => p.id))
+  }
+
   const handleApplyTemplate = async (templateName: string) => {
     const template = PHASE_TEMPLATES.find((t) => t.name === templateName)
     if (!template) return
@@ -102,8 +115,25 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Skeleton Header */}
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg w-64 mb-2"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg w-96"></div>
+        </div>
+        
+        {/* Skeleton Cards */}
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 animate-pulse">
+            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4"></div>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            </div>
+          </div>
+        ))}
       </div>
     )
   }
@@ -236,6 +266,10 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
                             onEdit={() => setEditingPhase(phase)}
                             onDelete={() => handleDeletePhase(phase.id)}
                             onDuplicate={() => handleDuplicatePhase(phase.id)}
+                            onMoveUp={() => handleMovePhase(index, 'up')}
+                            onMoveDown={() => handleMovePhase(index, 'down')}
+                            isFirst={index === 0}
+                            isLast={index === phases.length - 1}
                             draggable
                           />
                         </div>
@@ -252,45 +286,55 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
 
       {/* Runway Summary */}
       {runwayResult && validation.valid && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Phase-based Runway Summary
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Total Runway
+        <div className="space-y-6">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Phase-based Runway Summary
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Total Runway
+                </div>
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                  {runwayResult.runway} mo
+                </div>
               </div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {runwayResult.runway} mo
+              <div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Total Burn
+                </div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  ${runwayResult.totalBurn.toLocaleString()}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Breakeven Month
+                </div>
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                  {runwayResult.breakevenMonth !== null
+                    ? `${runwayResult.breakevenMonth} mo`
+                    : 'Never'}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Phases
+                </div>
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                  {runwayResult.phaseBreakdown.length}
+                </div>
               </div>
             </div>
-            <div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Total Burn
-              </div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                ${runwayResult.totalBurn.toLocaleString()}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Breakeven Month
-              </div>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                {runwayResult.breakevenMonth !== null
-                  ? `${runwayResult.breakevenMonth} mo`
-                  : 'Never'}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Phases
-              </div>
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                {runwayResult.phaseBreakdown.length}
-              </div>
-            </div>
+          </div>
+
+          {/* Phase Burn Chart */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Monthly Burn Rate by Phase
+            </h3>
+            <PhaseBurnChart result={runwayResult} />
           </div>
         </div>
       )}

@@ -17,7 +17,8 @@ import {
   Shield,
   AlertTriangle,
   AlertCircle,
-  Flame
+  Flame,
+  Layers
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
@@ -194,6 +195,19 @@ export default function FinanceDashboardSupabase() {
             title="FIRE Calculator"
           >
             <Flame className="w-5 h-5 text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300" />
+          </Link>
+          
+          {/* Phase Planning Link */}
+          <Link
+            href="/phases"
+            className="p-2 md:p-3 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20
+              hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30
+              border border-blue-200 dark:border-blue-800 rounded-lg
+              transition-all duration-200 active:scale-98 group"
+            aria-label="Phase Planning"
+            title="Phase Planning"
+          >
+            <Layers className="w-5 h-5 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300" />
           </Link>
           
           {/* Theme Toggle */}

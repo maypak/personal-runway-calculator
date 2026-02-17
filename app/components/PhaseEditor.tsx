@@ -13,7 +13,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Phase, PhaseOneTimeExpense } from '@/app/types'
 import { calculatePhaseTotalBurn } from '@/app/utils/phaseCalculator'
 import { X, Plus, Trash2 } from 'lucide-react'
@@ -48,6 +48,7 @@ export function PhaseEditor({
   })
 
   const [errors, setErrors] = useState<string[]>([])
+  const modalRef = useRef<HTMLDivElement>(null)
 
   // Initialize form with existing phase data
   useEffect(() => {
@@ -65,6 +66,22 @@ export function PhaseEditor({
       })
     }
   }, [phase])
+
+  // Keyboard: Escape to close
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel()
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [onCancel])
+
+  // Focus trap: focus modal on mount
+  useEffect(() => {
+    modalRef.current?.focus()
+  }, [])
 
   // Calculate total burn in real-time
   const totalBurn = calculatePhaseTotalBurn({
@@ -159,16 +176,26 @@ export function PhaseEditor({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="phase-editor-title"
+    >
+      <div 
+        ref={modalRef}
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        tabIndex={-1}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 id="phase-editor-title" className="text-2xl font-bold text-gray-900 dark:text-white">
             {phase ? 'Edit Phase' : 'Create Phase'}
           </h2>
           <button
             onClick={onCancel}
             className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded transition"
+            aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
           </button>

@@ -10,6 +10,8 @@
 import { useState, useEffect } from 'react'
 import { PhaseTimeline } from '@/app/components/PhaseTimeline'
 import { supabase } from '@/app/lib/supabase'
+import Link from 'next/link'
+import { ArrowLeft, Wallet } from 'lucide-react'
 
 export default function PhasesPage() {
   const [totalSavings, setTotalSavings] = useState(50000)
@@ -59,6 +61,17 @@ export default function PhasesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+      {/* Back to Dashboard */}
+      <div className="max-w-6xl mx-auto mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Dashboard</span>
+        </Link>
+      </div>
+
       {/* Settings */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">

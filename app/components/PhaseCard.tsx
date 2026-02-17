@@ -13,13 +13,17 @@
 
 import { Phase } from '@/app/types'
 import { calculatePhaseTotalBurn } from '@/app/utils/phaseCalculator'
-import { GripVertical, Edit2, Trash2, Copy } from 'lucide-react'
+import { GripVertical, Edit2, Trash2, Copy, ChevronUp, ChevronDown } from 'lucide-react'
 
 export interface PhaseCardProps {
   phase: Phase
   onEdit?: () => void
   onDelete?: () => void
   onDuplicate?: () => void
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  isFirst?: boolean
+  isLast?: boolean
   draggable?: boolean
 }
 
@@ -28,6 +32,10 @@ export function PhaseCard({
   onEdit,
   onDelete,
   onDuplicate,
+  onMoveUp,
+  onMoveDown,
+  isFirst = false,
+  isLast = false,
   draggable = true,
 }: PhaseCardProps) {
   const duration = phase.endMonth - phase.startMonth
@@ -37,16 +45,38 @@ export function PhaseCard({
   const oneTimeCount = phase.oneTimeExpenses.length
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-[1.01]">
       <div className="flex items-start gap-3">
-        {/* Drag Handle */}
+        {/* Drag Handle (Desktop) */}
         {draggable && (
           <button
-            className="mt-1 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="hidden md:block mt-1 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="Drag to reorder"
           >
             <GripVertical className="w-5 h-5" />
           </button>
+        )}
+
+        {/* Mobile Reorder Buttons */}
+        {draggable && (onMoveUp || onMoveDown) && (
+          <div className="flex flex-col md:hidden gap-1 mt-1">
+            <button
+              onClick={onMoveUp}
+              disabled={isFirst}
+              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-30 disabled:cursor-not-allowed rounded transition"
+              aria-label="Move up"
+            >
+              <ChevronUp className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onMoveDown}
+              disabled={isLast}
+              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-30 disabled:cursor-not-allowed rounded transition"
+              aria-label="Move down"
+            >
+              <ChevronDown className="w-4 h-4" />
+            </button>
+          </div>
         )}
 
         {/* Content */}
@@ -73,7 +103,7 @@ export function PhaseCard({
               {onDuplicate && (
                 <button
                   onClick={onDuplicate}
-                  className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition"
+                  className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-all duration-150 active:scale-95"
                   aria-label="Duplicate phase"
                 >
                   <Copy className="w-4 h-4" />
@@ -82,7 +112,7 @@ export function PhaseCard({
               {onEdit && (
                 <button
                   onClick={onEdit}
-                  className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition"
+                  className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-all duration-150 active:scale-95"
                   aria-label="Edit phase"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -91,7 +121,7 @@ export function PhaseCard({
               {onDelete && (
                 <button
                   onClick={onDelete}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition"
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all duration-150 active:scale-95"
                   aria-label="Delete phase"
                 >
                   <Trash2 className="w-4 h-4" />
