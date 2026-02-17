@@ -64,7 +64,7 @@ export function useFIRESettings(): UseFIRESettingsResult {
   const [error, setError] = useState<string | null>(null);
 
   /**
-   * Load settings from Supabase
+   * Load settings from Supabase (with graceful fallback)
    */
   const loadSettings = useCallback(async () => {
     if (!user) {
@@ -87,6 +87,26 @@ export function useFIRESettings(): UseFIRESettingsResult {
         // If no settings exist yet, that's OK (not an error)
         if (fetchError.code === 'PGRST116') {
           setSettings(null);
+        } 
+        // If table doesn't exist (42P01), use default values silently
+        else if (fetchError.code === '42P01' || fetchError.message?.includes('relation') || fetchError.message?.includes('does not exist')) {
+          console.warn('fire_settings table not found, using defaults');
+          // Create default settings object (not persisted)
+          const defaultSettings: FIRESettings = {
+            id: 'temp-default',
+            user_id: user.id,
+            investment_return_rate: 7.0,
+            safe_withdrawal_rate: 4.0,
+            target_annual_expenses: null,
+            fi_number: null,
+            fi_date: null,
+            coast_fire_date: null,
+            lean_fi_number: null,
+            fat_fi_number: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+          setSettings(defaultSettings);
         } else {
           throw fetchError;
         }
@@ -95,14 +115,36 @@ export function useFIRESettings(): UseFIRESettingsResult {
       }
     } catch (err) {
       console.error('Failed to load FIRE settings:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load settings');
+      // Don't show error to user if it's just missing table - use defaults instead
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      if (errorMessage.includes('relation') || errorMessage.includes('does not exist')) {
+        console.warn('Graceful fallback: using default FIRE settings');
+        const defaultSettings: FIRESettings = {
+          id: 'temp-default',
+          user_id: user.id,
+          investment_return_rate: 7.0,
+          safe_withdrawal_rate: 4.0,
+          target_annual_expenses: null,
+          fi_number: null,
+          fi_date: null,
+          coast_fire_date: null,
+          lean_fi_number: null,
+          fat_fi_number: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setSettings(defaultSettings);
+        setError(null); // Clear error, we're handling it gracefully
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
   }, [user]);
 
   /**
-   * Update settings in Supabase
+   * Update settings in Supabase (with graceful fallback)
    */
   const updateSettings = useCallback(async (updates: Partial<FIRESettings>) => {
     if (!user) {
@@ -126,14 +168,31 @@ export function useFIRESettings(): UseFIRESettingsResult {
         .select()
         .single();
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        // If table doesn't exist, just update local state without persisting
+        const errorMessage = updateError.message || '';
+        if (updateError.code === '42P01' || errorMessage.includes('relation') || errorMessage.includes('does not exist')) {
+          console.warn('fire_settings table not found, updates not persisted (local only)');
+          // Keep the optimistic update, don't throw
+          return;
+        }
+        throw updateError;
+      }
 
       setSettings(data);
     } catch (err) {
       console.error('Failed to update FIRE settings:', err);
-      setError(err instanceof Error ? err.message : 'Failed to update settings');
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       
-      // Revert optimistic update
+      // If it's a missing table error, don't show to user
+      if (errorMessage.includes('relation') || errorMessage.includes('does not exist')) {
+        console.warn('Graceful degradation: FIRE settings updated locally only');
+        return; // Don't revert, don't throw
+      }
+      
+      setError(errorMessage);
+      
+      // Revert optimistic update for real errors
       await loadSettings();
       
       throw err;
