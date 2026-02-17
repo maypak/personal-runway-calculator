@@ -17,16 +17,18 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useI18n } from '../contexts/I18nContext';
 import FIProgressBar from './FIProgressBar';
-import FIProjectionChart from './FIProjectionChart';
 import FIMilestones from './FIMilestones';
 import FIScenarioCards from './FIScenarioCards';
 import FIRESettings from './FIRESettings';
+
+// Lazy load heavy chart component for better initial page load
+const FIProjectionChart = lazy(() => import('./FIProjectionChart'));
 
 export default function FIREDashboard() {
   const { t } = useI18n();
@@ -138,6 +140,12 @@ export default function FIREDashboard() {
         </div>
         <button
           onClick={() => setShowSettings(!showSettings)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowSettings(!showSettings);
+            }
+          }}
           className={`
             p-2 rounded-lg transition-colors
             ${showSettings 
@@ -146,6 +154,8 @@ export default function FIREDashboard() {
             }
           `}
           aria-label={t('fire:buttons.settings')}
+          aria-expanded={showSettings}
+          aria-controls="fire-settings-panel"
         >
           <SettingsIcon className="h-5 w-5" />
         </button>
@@ -153,6 +163,7 @@ export default function FIREDashboard() {
 
       {/* Settings Panel (Collapsible) */}
       {showSettings && (
+        <div id="fire-settings-panel">
         <FIRESettings
           investmentReturnRate={investmentReturnRate}
           safeWithdrawalRate={safeWithdrawalRate}
@@ -161,6 +172,7 @@ export default function FIREDashboard() {
           onSettingsChange={handleSettingsChange}
           onReset={handleReset}
         />
+        </div>
       )}
 
       {/* FI Number Highlight Card */}
@@ -186,14 +198,28 @@ export default function FIREDashboard() {
         fiNumber={fiNumber}
       />
 
-      {/* Projection Chart */}
-      <FIProjectionChart
-        currentSavings={currentSavings}
-        monthlyContribution={monthlyContribution}
-        fiNumber={fiNumber}
-        investmentReturnRate={investmentReturnRate}
-        maxYears={30}
-      />
+      {/* Projection Chart - Lazy Loaded for Performance */}
+      <Suspense
+        fallback={
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="h-5 w-5 text-blue-600 animate-pulse" />
+              <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+            <div className="h-64 bg-gray-100 dark:bg-gray-900 rounded animate-pulse flex items-center justify-center">
+              <div className="text-sm text-gray-500 dark:text-gray-400">Loading chart...</div>
+            </div>
+          </div>
+        }
+      >
+        <FIProjectionChart
+          currentSavings={currentSavings}
+          monthlyContribution={monthlyContribution}
+          fiNumber={fiNumber}
+          investmentReturnRate={investmentReturnRate}
+          maxYears={30}
+        />
+      </Suspense>
 
       {/* Milestones */}
       <FIMilestones
@@ -207,22 +233,31 @@ export default function FIREDashboard() {
       <div>
         <button
           onClick={() => setShowScenarios(!showScenarios)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowScenarios(!showScenarios);
+            }
+          }}
           className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 
                    rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 
                    dark:hover:bg-gray-700 transition-colors"
+          aria-expanded={showScenarios}
+          aria-controls="fire-scenarios-panel"
+          aria-label={t('fire:scenarios.toggleLabel')}
         >
           <span className="text-sm font-semibold text-gray-900 dark:text-white">
             {t('fire:scenarios.toggleLabel')}
           </span>
           {showScenarios ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-gray-400" aria-hidden="true" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-gray-400" aria-hidden="true" />
           )}
         </button>
         
         {showScenarios && (
-          <div className="mt-4">
+          <div id="fire-scenarios-panel" className="mt-4">
             <FIScenarioCards
               currentSavings={currentSavings}
               monthlyContribution={monthlyContribution}

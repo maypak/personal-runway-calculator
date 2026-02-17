@@ -14,7 +14,7 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -54,6 +54,19 @@ export default function FIProjectionChart({
   className = '',
 }: FIProjectionChartProps) {
   const { t } = useI18n();
+  
+  // Detect mobile for performance optimizations
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Generate projection data
   const chartData = useMemo(() => {
@@ -110,6 +123,14 @@ export default function FIProjectionChart({
     
     return data;
   }, [currentSavings, monthlyContribution, fiNumber, investmentReturnRate, maxYears]);
+  
+  // Optimize chart data for mobile (reduce data points)
+  const optimizedChartData = useMemo(() => {
+    if (!isMobile || chartData.length <= 50) return chartData;
+    
+    // Sample every other data point on mobile for performance
+    return chartData.filter((_, index) => index % 2 === 0);
+  }, [chartData, isMobile]);
 
   // Format currency for tooltips
   const formatCurrency = (value: number): string => {
@@ -149,6 +170,12 @@ export default function FIProjectionChart({
 
   // Determine if Coast FIRE already achieved
   const isCoastFireAchieved = chartData[chartData.length - 1]?.coastFire >= fiNumber;
+  
+  // Calculate when FI will be reached for screen readers
+  const fiYear = chartData.findIndex(d => d.currentTrajectory >= fiNumber);
+  const chartDescription = fiYear > 0 
+    ? `Financial independence projection chart. Your assets will reach your FI Number of ${formatCurrency(fiNumber)} in approximately ${fiYear} years at current savings rate of $${monthlyContribution.toLocaleString()} per month.`
+    : `Financial independence projection chart showing growth over ${maxYears} years.`;
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 ${className}`}>
@@ -161,10 +188,11 @@ export default function FIProjectionChart({
       </div>
 
       {/* Chart */}
-      <ResponsiveContainer width="100%" height={300}>
+      <div role="img" aria-label={chartDescription}>
+        <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
         <LineChart
-          data={chartData}
-          margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+          data={optimizedChartData}
+          margin={{ top: 5, right: isMobile ? 5 : 10, left: isMobile ? 0 : 10, bottom: 5 }}
         >
           <CartesianGrid
             strokeDasharray="3 3"
@@ -211,7 +239,8 @@ export default function FIProjectionChart({
             strokeWidth={3}
             dot={false}
             name={t('fire:projection.lines.currentPath')}
-            animationDuration={1000}
+            isAnimationActive={!isMobile}
+            animationDuration={isMobile ? 0 : 1000}
           />
 
           {/* Coast FIRE line (no savings, just growth) */}
@@ -223,10 +252,12 @@ export default function FIProjectionChart({
             strokeDasharray="5 5"
             dot={false}
             name={t('fire:projection.lines.coastFire')}
-            animationDuration={1000}
+            isAnimationActive={!isMobile}
+            animationDuration={isMobile ? 0 : 1000}
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
 
       {/* Info footer */}
       <div className="mt-4 space-y-2">

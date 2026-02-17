@@ -169,6 +169,11 @@ export default function FIRESettings({
             step={SLIDERS.investmentReturn.step}
             value={localInvestmentRate}
             onChange={(e) => setLocalInvestmentRate(parseFloat(e.target.value))}
+            aria-label={t('fire:settings.investmentReturn.label')}
+            aria-valuemin={SLIDERS.investmentReturn.min}
+            aria-valuemax={SLIDERS.investmentReturn.max}
+            aria-valuenow={localInvestmentRate}
+            aria-valuetext={`${localInvestmentRate.toFixed(1)} percent annual return`}
             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -209,6 +214,11 @@ export default function FIRESettings({
             step={SLIDERS.safeWithdrawal.step}
             value={localSWR}
             onChange={(e) => setLocalSWR(parseFloat(e.target.value))}
+            aria-label={t('fire:settings.safeWithdrawal.label')}
+            aria-valuemin={SLIDERS.safeWithdrawal.min}
+            aria-valuemax={SLIDERS.safeWithdrawal.max}
+            aria-valuenow={localSWR}
+            aria-valuetext={`${localSWR.toFixed(2)} percent safe withdrawal rate`}
             className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer"
           />
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">

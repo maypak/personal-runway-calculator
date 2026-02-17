@@ -89,7 +89,15 @@ export default function FIProgressBar({
       {/* Progress Bar Container */}
       <div className="relative">
         {/* Background track */}
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8 overflow-hidden relative">
+        <div 
+          className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8 overflow-hidden relative"
+          role="progressbar"
+          aria-label={t('fire:progress.title')}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(cappedProgress)}
+          aria-valuetext={`${currentProgress.toFixed(1)}% towards financial independence. ${safeSavings.toLocaleString()} out of ${safeFINumber.toLocaleString()} dollars.`}
+        >
           {/* Progress fill */}
           <div
             className={`h-full bg-gradient-to-r ${getProgressColor(cappedProgress)} transition-all duration-500 relative`}

@@ -42,8 +42,12 @@ export default function FIREPage() {
   return (
     <ClientOnly>
       <div className="min-h-screen bg-bg-primary transition-colors duration-200">
-        {/* Content Area */}
-        <main className="max-w-4xl mx-auto px-4 py-8 pb-12">
+        {/* Main Content - Accessibility Landmark */}
+        <main 
+          role="main" 
+          aria-label="FIRE Calculator Dashboard"
+          className="max-w-4xl mx-auto px-4 py-8 pb-12"
+        >
           {/* Back button */}
           <div className="mb-6">
             <Link
