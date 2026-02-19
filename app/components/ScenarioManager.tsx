@@ -44,7 +44,6 @@ export function ScenarioManager() {
       const result = await createScenario(name, cloneFromId);
       
       if (result.success) {
-        console.log('✅ [ScenarioManager] Scenario created:', result.data?.name);
         setShowModal(false);
         
         // Navigate to edit page for new scenario

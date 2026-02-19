@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { I18nProvider } from './contexts/I18nContext';
 import { ScenarioProvider } from './contexts/ScenarioContext';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -87,11 +88,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ServiceWorkerRegister />
-        <I18nProvider>
-          <ScenarioProvider>
-            {children}
-          </ScenarioProvider>
-        </I18nProvider>
+        <ErrorBoundary>
+          <I18nProvider>
+            <ScenarioProvider>
+              {children}
+            </ScenarioProvider>
+          </I18nProvider>
+        </ErrorBoundary>
         <Analytics />
       </body>
     </html>

@@ -33,7 +33,6 @@ export function useScenarios() {
    * Load scenarios from database
    */
   const loadScenarios = async () => {
-    console.log('🔍 [useScenarios] Loading scenarios...');
     
     if (!user) {
       console.warn('⚠️ [useScenarios] No user authenticated');
@@ -54,7 +53,6 @@ export function useScenarios() {
 
       if (fetchError) throw fetchError;
 
-      console.log('🔍 [useScenarios] Loaded', data?.length || 0, 'scenarios');
 
       if (data) {
         const parsedScenarios: Scenario[] = data.map((row) => ({
@@ -102,7 +100,6 @@ export function useScenarios() {
     name: string,
     basedOnId?: string
   ): Promise<{ success: boolean; data?: Scenario; error?: string }> => {
-    console.log('🔍 [createScenario] Creating scenario:', name, 'basedOn:', basedOnId);
 
     if (!user) {
       console.error('❌ [createScenario] No user authenticated');
@@ -130,7 +127,6 @@ export function useScenarios() {
             oneTimeExpenses: [...baseScenario.oneTimeExpenses],
             recurringItems: [...baseScenario.recurringItems],
           };
-          console.log('🔍 [createScenario] Cloning from scenario:', baseScenario.name);
         } else {
           console.warn('⚠️ [createScenario] Base scenario not found, using defaults');
           baseData = {
@@ -143,7 +139,6 @@ export function useScenarios() {
         }
       } else {
         // Load from finance_settings
-        console.log('🔍 [createScenario] Loading from finance_settings');
         const { data: settingsData } = await supabase
           .from('finance_settings')
           .select('*')
@@ -158,7 +153,6 @@ export function useScenarios() {
             oneTimeExpenses: [],
             recurringItems: [],
           };
-          console.log('🔍 [createScenario] Using finance_settings as base');
         } else {
           baseData = {
             totalSavings: 0,
@@ -218,7 +212,6 @@ export function useScenarios() {
 
       if (insertError) throw insertError;
 
-      console.log('✅ [createScenario] Successfully created scenario:', data.id);
 
       // Parse and add to state
       const createdScenario: Scenario = {
@@ -262,7 +255,6 @@ export function useScenarios() {
     id: string,
     updates: Partial<Omit<Scenario, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>
   ): Promise<{ success: boolean; error?: string }> => {
-    console.log('🔍 [updateScenario] Updating scenario:', id, updates);
 
     if (!user) {
       console.error('❌ [updateScenario] No user authenticated');
@@ -310,7 +302,6 @@ export function useScenarios() {
       dbPayload.calculated_first_income_month = result.firstIncomeMonth;
       dbPayload.calculated_end_savings = result.endSavings;
 
-      console.log('🔍 [updateScenario] DB payload:', dbPayload);
 
       const { error: updateError } = await supabase
         .from('scenarios')
@@ -319,7 +310,6 @@ export function useScenarios() {
 
       if (updateError) throw updateError;
 
-      console.log('✅ [updateScenario] Successfully updated scenario');
 
       // Update state
       setScenarios(prev =>
@@ -353,7 +343,6 @@ export function useScenarios() {
    * @returns Success status
    */
   const deleteScenario = async (id: string): Promise<{ success: boolean; error?: string }> => {
-    console.log('🔍 [deleteScenario] Deleting scenario:', id);
 
     if (!user) {
       console.error('❌ [deleteScenario] No user authenticated');
@@ -375,7 +364,6 @@ export function useScenarios() {
 
       if (deleteError) throw deleteError;
 
-      console.log('✅ [deleteScenario] Successfully deleted scenario');
 
       setScenarios(prev => prev.filter(s => s.id !== id));
 

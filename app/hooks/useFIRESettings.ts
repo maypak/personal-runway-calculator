@@ -159,14 +159,39 @@ export function useFIRESettings(): UseFIRESettingsResult {
         setSettings({ ...settings, ...updates });
       }
 
-      const { data, error: updateError } = await supabase
+      // CLAUDE.md principle: Use explicit INSERT/UPDATE instead of UPSERT
+      // First, check if settings exist
+      const { data: existing } = await supabase
         .from('fire_settings')
-        .upsert({
-          user_id: user.id,
-          ...updates,
-        })
-        .select()
-        .single();
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      let data;
+      let updateError;
+
+      if (existing) {
+        // Update existing record
+        const result = await supabase
+          .from('fire_settings')
+          .update(updates)
+          .eq('user_id', user.id)
+          .select()
+          .single();
+        
+        data = result.data;
+        updateError = result.error;
+      } else {
+        // Insert new record
+        const result = await supabase
+          .from('fire_settings')
+          .insert({ ...updates, user_id: user.id })
+          .select()
+          .single();
+        
+        data = result.data;
+        updateError = result.error;
+      }
 
       if (updateError) {
         // If table doesn't exist, just update local state without persisting
@@ -305,7 +330,6 @@ export function useFIRESettings(): UseFIRESettingsResult {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('FIRE settings changed:', payload);
           if (payload.new) {
             setSettings(payload.new as FIRESettings);
           } else if (payload.eventType === 'DELETE') {

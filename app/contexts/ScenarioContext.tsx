@@ -72,7 +72,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
    * Set active scenario by ID
    */
   const setActiveScenario = (id: string | null) => {
-    console.log('🔍 [ScenarioContext] Setting active scenario:', id);
     
     if (id === null) {
       setActiveScenarioState(null);
@@ -82,7 +81,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
     const scenario = scenarios.find(s => s.id === id);
     if (scenario) {
       setActiveScenarioState(scenario);
-      console.log('✅ [ScenarioContext] Active scenario set:', scenario.name);
     } else {
       console.warn('⚠️ [ScenarioContext] Scenario not found:', id);
     }
@@ -94,14 +92,12 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
   const toggleComparisonMode = () => {
     setComparisonMode(prev => {
       const newMode = !prev;
-      console.log('🔍 [ScenarioContext] Comparison mode:', newMode);
       
       // Reset selection when entering comparison mode
       if (newMode && selectedScenarios.length === 0 && scenarios.length >= 2) {
         // Auto-select first 2 scenarios
         const autoSelect = scenarios.slice(0, 2).map(s => s.id);
         setSelectedScenarios(autoSelect);
-        console.log('✅ [ScenarioContext] Auto-selected for comparison:', autoSelect);
       }
       
       return newMode;
@@ -112,7 +108,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
    * Select scenarios for comparison
    */
   const selectForComparison = (ids: string[]) => {
-    console.log('🔍 [ScenarioContext] Selecting scenarios for comparison:', ids);
     
     // Limit to max 3 scenarios for comparison
     if (ids.length > 3) {
@@ -122,7 +117,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
     }
     
     setSelectedScenarios(ids);
-    console.log('✅ [ScenarioContext] Scenarios selected:', ids.length);
   };
   
   /**
@@ -170,7 +164,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
       const defaultScenario = baseScenario || scenarios[0];
       
       setActiveScenarioState(defaultScenario);
-      console.log('✅ [ScenarioContext] Auto-selected active scenario:', defaultScenario.name);
     }
   }, [scenarios]);
   
@@ -178,7 +171,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
    * Clear cache when scenarios change
    */
   useEffect(() => {
-    console.log('🔍 [ScenarioContext] Scenarios changed, clearing cache');
     setCalculationCache(new Map());
   }, [scenarios]);
   

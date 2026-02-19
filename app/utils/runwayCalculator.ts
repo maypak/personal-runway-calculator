@@ -30,7 +30,6 @@ import type { Scenario, RunwayResult, MonthData, OneTimeExpense, RecurringItem }
  * @returns RunwayResult with runway, burn rate, and monthly breakdown
  */
 export function calculateRunway(scenario: Scenario): RunwayResult {
-  console.log('🧮 [calculateRunway] Starting calculation for:', scenario.name);
   
   let savings = scenario.totalSavings;
   let month = 0;
@@ -85,7 +84,6 @@ export function calculateRunway(scenario: Scenario): RunwayResult {
     
     // Log first 3 months for debugging
     if (month < 3) {
-      console.log(`  Month ${month}: Income=$${totalIncome}, Expenses=$${totalExpenses}, Net=$${netChange}, Savings=$${savings}`);
     }
     
     month++;
@@ -116,14 +114,6 @@ export function calculateRunway(scenario: Scenario): RunwayResult {
     monthlyData,
   };
   
-  console.log('✅ [calculateRunway] Result:', {
-    runway: result.runway,
-    burnRate: result.burnRate.toFixed(2),
-    breakevenMonth: result.breakevenMonth,
-    firstIncomeMonth: result.firstIncomeMonth,
-    endSavings: result.endSavings,
-  });
-  
   return result;
 }
 
@@ -134,7 +124,6 @@ export function calculateRunway(scenario: Scenario): RunwayResult {
  * @returns Map of scenario ID to RunwayResult
  */
 export function calculateMultipleRunways(scenarios: Scenario[]): Map<string, RunwayResult> {
-  console.log('🧮 [calculateMultipleRunways] Calculating', scenarios.length, 'scenarios');
   
   const results = new Map<string, RunwayResult>();
   
@@ -143,7 +132,6 @@ export function calculateMultipleRunways(scenarios: Scenario[]): Map<string, Run
     results.set(scenario.id, result);
   });
   
-  console.log('✅ [calculateMultipleRunways] Complete');
   return results;
 }
 
