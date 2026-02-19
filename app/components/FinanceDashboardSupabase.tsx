@@ -68,7 +68,8 @@ export default function FinanceDashboardSupabase() {
   // Initialize simulator with actual monthly expense
   useEffect(() => {
     if (settings) {
-      setSimMonthlyExpense(settings.monthlyFixed + settings.monthlyVariable);
+      const expense = (settings.monthlyFixed || 0) + (settings.monthlyVariable || 0);
+      setSimMonthlyExpense(expense || 3000); // Fallback to $3000 if 0
     }
   }, [settings]);
 
@@ -722,11 +723,11 @@ export default function FinanceDashboardSupabase() {
               </label>
               <input
                 type="range"
-                min="0"
-                max={Math.max(monthlyExpense * 2, 10000)}
-                step="100"
-                value={simMonthlyExpense}
-                onChange={(e) => setSimMonthlyExpense(parseInt(e.target.value))}
+                min={0}
+                max={Math.max(monthlyExpense * 2, 10000) || 10000}
+                step={100}
+                value={Math.min(simMonthlyExpense, Math.max(monthlyExpense * 2, 10000) || 10000)}
+                onChange={(e) => setSimMonthlyExpense(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
               />
             </div>
@@ -737,11 +738,11 @@ export default function FinanceDashboardSupabase() {
               </label>
               <input
                 type="range"
-                min="0"
-                max="10000"
-                step="100"
-                value={simAdditionalIncome}
-                onChange={(e) => setSimAdditionalIncome(parseInt(e.target.value))}
+                min={0}
+                max={10000}
+                step={100}
+                value={Math.min(simAdditionalIncome, 10000)}
+                onChange={(e) => setSimAdditionalIncome(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-success"
               />
             </div>
@@ -752,11 +753,11 @@ export default function FinanceDashboardSupabase() {
               </label>
               <input
                 type="range"
-                min="0"
-                max={Math.max(remainingFunds, 50000)}
-                step="1000"
-                value={simOneTimeExpense}
-                onChange={(e) => setSimOneTimeExpense(parseInt(e.target.value))}
+                min={0}
+                max={Math.max(remainingFunds, 50000) || 50000}
+                step={1000}
+                value={Math.min(simOneTimeExpense, Math.max(remainingFunds, 50000) || 50000)}
+                onChange={(e) => setSimOneTimeExpense(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-error"
               />
             </div>
