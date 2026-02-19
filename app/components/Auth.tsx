@@ -13,6 +13,15 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  const validatePassword = (pw: string): string | null => {
+    if (pw.length < 12) return 'Password must be at least 12 characters';
+    if (!/[A-Z]/.test(pw)) return 'Password must include an uppercase letter';
+    if (!/[a-z]/.test(pw)) return 'Password must include a lowercase letter';
+    if (!/[0-9]/.test(pw)) return 'Password must include a number';
+    if (!/[^A-Za-z0-9]/.test(pw)) return 'Password must include a special character';
+    return null;
+  };
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -20,6 +29,12 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
     try {
       if (mode === 'signup') {
+        const pwError = validatePassword(password);
+        if (pwError) {
+          setMessage({ type: 'error', text: pwError });
+          setLoading(false);
+          return;
+        }
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -247,7 +262,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={12}
                     className="w-full px-4 py-3 border-2 border-border-default rounded-lg
                       bg-surface-card text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
@@ -299,7 +314,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 </div>
               )}
 
-              <div className="mt-6 text-center text-sm text-text-tertiary">
+              <div className="mt-6 text-center text-sm text-text-tertiary space-y-2">
                 {mode === 'signup' ? (
                   <p className="flex items-center justify-center gap-1">
                     <Shield className="w-4 h-4" />
@@ -308,6 +323,11 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 ) : (
                   <p>{t('auth:footer.switchMode')}</p>
                 )}
+                <p>
+                  <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                  </a>
+                </p>
               </div>
             </div>
           </div>
