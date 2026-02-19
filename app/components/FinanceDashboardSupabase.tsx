@@ -718,7 +718,7 @@ export default function FinanceDashboardSupabase() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                {t('dashboard:simulator.monthlyExpenseLabel')}{simMonthlyExpense}
+                {t('dashboard:simulator.monthlyExpenseLabel')}{formatCurrency(simMonthlyExpense, locale)}
               </label>
               <input
                 type="range"
@@ -727,13 +727,13 @@ export default function FinanceDashboardSupabase() {
                 step="100"
                 value={simMonthlyExpense}
                 onChange={(e) => setSimMonthlyExpense(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                {t('dashboard:simulator.additionalIncomeLabel')}{simAdditionalIncome}
+                {t('dashboard:simulator.additionalIncomeLabel')}{formatCurrency(simAdditionalIncome, locale)}
               </label>
               <input
                 type="range"
@@ -742,13 +742,13 @@ export default function FinanceDashboardSupabase() {
                 step="100"
                 value={simAdditionalIncome}
                 onChange={(e) => setSimAdditionalIncome(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-success"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2 text-text-secondary">
-                {t('dashboard:simulator.oneTimeExpenseLabel')}{simOneTimeExpense}
+                {t('dashboard:simulator.oneTimeExpenseLabel')}{formatCurrency(simOneTimeExpense, locale)}
               </label>
               <input
                 type="range"
@@ -757,7 +757,7 @@ export default function FinanceDashboardSupabase() {
                 step="1000"
                 value={simOneTimeExpense}
                 onChange={(e) => setSimOneTimeExpense(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-error"
               />
             </div>
 
