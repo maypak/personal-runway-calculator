@@ -100,12 +100,12 @@ export default function FinanceDashboardSupabase() {
   const startDate = new Date(settings.startDate);
   const daysSince = Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
   
-  const totalIncome = settings.currentSavings + settings.lumpSum + (settings.monthlyIncome * settings.incomeMonths);
+  const totalIncome = (settings.currentSavings || 0) + (settings.lumpSum || 0) + ((settings.monthlyIncome || 0) * (settings.incomeMonths || 0));
   
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
   const remainingFunds = totalIncome - totalExpenses;
   
-  const monthlyExpense = settings.monthlyFixed + settings.monthlyVariable;
+  const monthlyExpense = (settings.monthlyFixed || 0) + (settings.monthlyVariable || 0);
   const runway = monthlyExpense > 0 ? Math.floor(remainingFunds / monthlyExpense) : 999;
   const runwayYears = Math.floor(runway / 12);
   const runwayMonths = runway % 12;
