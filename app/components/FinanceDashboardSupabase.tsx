@@ -723,7 +723,7 @@ export default function FinanceDashboardSupabase() {
               <input
                 type="range"
                 min="0"
-                max={monthlyExpense * 2}
+                max={Math.max(monthlyExpense * 2, 10000)}
                 step="100"
                 value={simMonthlyExpense}
                 onChange={(e) => setSimMonthlyExpense(parseInt(e.target.value))}
@@ -738,7 +738,7 @@ export default function FinanceDashboardSupabase() {
               <input
                 type="range"
                 min="0"
-                max="5000"
+                max="10000"
                 step="100"
                 value={simAdditionalIncome}
                 onChange={(e) => setSimAdditionalIncome(parseInt(e.target.value))}
@@ -753,7 +753,7 @@ export default function FinanceDashboardSupabase() {
               <input
                 type="range"
                 min="0"
-                max={remainingFunds}
+                max={Math.max(remainingFunds, 50000)}
                 step="1000"
                 value={simOneTimeExpense}
                 onChange={(e) => setSimOneTimeExpense(parseInt(e.target.value))}
