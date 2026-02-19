@@ -7,6 +7,7 @@ import { I18nProvider } from './contexts/I18nContext';
 import { ScenarioProvider } from './contexts/ScenarioContext';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import BetaBanner from './components/BetaBanner';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -89,6 +90,7 @@ export default function RootLayout({
       >
         <ServiceWorkerRegister />
         <ErrorBoundary>
+          <BetaBanner />
           <I18nProvider>
             <ScenarioProvider>
               {children}
