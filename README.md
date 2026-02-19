@@ -56,6 +56,20 @@ Now I'm sharing this tool with you.
 
 ## 🚀 Quick Start
 
+### 🎉 Join Private Beta (New!)
+
+We're accepting a limited number of beta testers! Get early access and help shape the product.
+
+**Beta Tester Perks:**
+- ✅ Lifetime 50% discount (when we launch pricing)
+- ✅ Priority feature requests
+- ✅ Early access to all new features (FIRE calculator, scenario planning, phase-based planning)
+- ✅ Direct line to the founding team
+
+**👉 [Apply for Private Beta](#)** _(Google Form - link coming soon!)_
+
+---
+
 ### Use the App (Recommended)
 
 1. Visit [https://personal-runway-calculator.vercel.app](https://personal-runway-calculator.vercel.app)
