@@ -10,7 +10,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [mode, setMode] = useState<'signin' | 'signup' | 'reset'>('signin');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const validatePassword = (pw: string): string | null => {
@@ -80,6 +80,35 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
     } catch (error) {
       const text = error instanceof Error ? error.message : t('auth:messages.error');
       setMessage({ type: 'error', text });
+      setLoading(false);
+    }
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage(null);
+
+    if (!email) {
+      setMessage({ type: 'error', text: 'Please enter your email address' });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/` : undefined,
+      });
+
+      if (error) throw error;
+      setMessage({ 
+        type: 'success', 
+        text: 'Password reset email sent! Check your inbox.' 
+      });
+    } catch (error) {
+      const text = error instanceof Error ? error.message : 'Failed to send reset email';
+      setMessage({ type: 'error', text });
+    } finally {
       setLoading(false);
     }
   };
@@ -165,15 +194,15 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-text-primary mb-2">
-                  {mode === 'signin' ? t('auth:card.welcomeBack') : t('auth:card.getStarted')}
+                  {mode === 'reset' ? 'Reset Password' : mode === 'signin' ? t('auth:card.welcomeBack') : t('auth:card.getStarted')}
                 </h3>
                 <p className="text-text-tertiary">
-                  {mode === 'signin' ? t('auth:card.signInSubtitle') : t('auth:card.signUpSubtitle')}
+                  {mode === 'reset' ? 'Enter your email to receive a password reset link' : mode === 'signin' ? t('auth:card.signInSubtitle') : t('auth:card.signUpSubtitle')}
                 </p>
               </div>
 
               {/* Mode Toggle */}
-              <div className="flex gap-2 mb-6">
+              {mode !== 'reset' && <div className="flex gap-2 mb-6">
                 <button
                   onClick={() => setMode('signin')}
                   className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
@@ -194,10 +223,10 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 >
                   {t('auth:card.signUp')}
                 </button>
-              </div>
+              </div>}
 
               {/* Social Login Buttons */}
-              <div className="space-y-3 mb-6">
+              {mode !== 'reset' && <div className="space-y-3 mb-6">
                 <button
                   type="button"
                   onClick={() => handleSocialAuth('google')}
@@ -224,19 +253,19 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   </svg>
                   {t('auth:social.continueWithGithub')}
                 </button>
-              </div>
+              </div>}
 
               {/* Divider */}
-              <div className="relative mb-6">
+              {mode !== 'reset' && <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border-subtle"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-surface-card text-text-tertiary font-medium">{t('auth:social.divider')}</span>
                 </div>
-              </div>
+              </div>}
 
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={mode === 'reset' ? handlePasswordReset : handleAuth} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-text-secondary mb-2">
                     {t('auth:form.email')}
@@ -254,26 +283,39 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-text-secondary mb-2">
-                    {t('auth:form.password')}
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={12}
-                    className="w-full px-4 py-3 border-2 border-border-default rounded-lg
-                      bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
-                      focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
-                      transition-all duration-200 hover:border-border-strong"
-                    placeholder={t('auth:form.passwordPlaceholder')}
-                  />
-                  {mode === 'signup' && (
-                    <p className="text-xs text-text-tertiary mt-2">{t('auth:form.passwordHint')}</p>
-                  )}
-                </div>
+                {mode !== 'reset' && (
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-semibold text-text-secondary">
+                        {t('auth:form.password')}
+                      </label>
+                      {mode === 'signin' && (
+                        <button
+                          type="button"
+                          onClick={() => setMode('reset')}
+                          className="text-xs text-primary hover:text-primary-hover transition-colors"
+                        >
+                          Forgot password?
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={12}
+                      className="w-full px-4 py-3 border-2 border-border-default rounded-lg
+                        bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
+                        focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                        transition-all duration-200 hover:border-border-strong"
+                      placeholder={t('auth:form.passwordPlaceholder')}
+                    />
+                    {mode === 'signup' && (
+                      <p className="text-xs text-text-tertiary mt-2">{t('auth:form.passwordHint')}</p>
+                    )}
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -294,6 +336,8 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                       </svg>
                       {t('auth:form.loading')}
                     </span>
+                  ) : mode === 'reset' ? (
+                    'Send Reset Link →'
                   ) : (
                     mode === 'signin' ? t('auth:form.signInButton') : t('auth:form.signUpButton')
                   )}
@@ -316,7 +360,17 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
               )}
 
               <div className="mt-6 text-center text-sm text-text-tertiary space-y-2">
-                {mode === 'signup' ? (
+                {mode === 'reset' ? (
+                  <p>
+                    <button
+                      type="button"
+                      onClick={() => setMode('signin')}
+                      className="text-primary hover:text-primary-hover transition-colors"
+                    >
+                      ← Back to sign in
+                    </button>
+                  </p>
+                ) : mode === 'signup' ? (
                   <p className="flex items-center justify-center gap-1">
                     <Shield className="w-4 h-4" />
                     {t('auth:footer.privacy')}
@@ -324,11 +378,13 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 ) : (
                   <p>{t('auth:footer.switchMode')}</p>
                 )}
-                <p>
-                  <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
-                    Privacy Policy
-                  </a>
-                </p>
+                {mode !== 'reset' && (
+                  <p>
+                    <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                      Privacy Policy
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
