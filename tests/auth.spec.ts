@@ -22,7 +22,7 @@ test.describe('Authentication Flow', () => {
     
     // Verify sign up mode
     await expect(page.getByText('Create your free account')).toBeVisible();
-    await expect(page.getByText('At least 6 characters')).toBeVisible();
+    await expect(page.getByText('12+ characters with uppercase, lowercase, number, and special character')).toBeVisible();
   });
 
   test('should attempt email signup', async ({ page }) => {
