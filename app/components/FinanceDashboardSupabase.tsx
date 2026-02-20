@@ -523,6 +523,39 @@ export default function FinanceDashboardSupabase() {
             <LanguageSwitcher />
           </div>
 
+          {/* Data Management */}
+          <div className="pt-6 mt-6 border-t border-border-subtle">
+            <h3 className="text-sm font-semibold text-text-primary mb-3">
+              Data Management
+            </h3>
+            <div className="space-y-2">
+              <button
+                onClick={async () => {
+                  try {
+                    const { exportAllData } = await import('../utils/exportData');
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (!user) return;
+                    await exportAllData({ userId: user.id, format: 'csv' });
+                  } catch (error) {
+                    console.error('Export failed:', error);
+                    alert('Failed to export data. Please try again.');
+                  }
+                }}
+                className="w-full px-4 py-3 bg-surface-hover hover:bg-surface-active border border-border-default rounded-lg
+                  text-text-primary font-medium text-sm flex items-center justify-center gap-2
+                  transition-all duration-200"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export My Data (CSV)
+              </button>
+              <p className="text-xs text-text-tertiary px-1">
+                Download all your data in CSV format (GDPR compliant)
+              </p>
+            </div>
+          </div>
+
           {/* Delete Account */}
           <div className="pt-6 mt-6 border-t border-error/20">
             <div className="bg-error/10 rounded-lg p-4 mb-3">
