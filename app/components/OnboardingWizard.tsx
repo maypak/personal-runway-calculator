@@ -10,14 +10,16 @@ interface OnboardingWizardProps {
   isOpen: boolean;
   onComplete: (data: { savings: number; monthlyExpense: number }) => void;
   onSkip?: () => void;
+  currency?: string;
 }
 
 export default function OnboardingWizard({ 
   isOpen, 
   onComplete,
-  onSkip 
+  onSkip,
+  currency = 'USD'
 }: OnboardingWizardProps) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const [step, setStep] = useState(1);
   const [savings, setSavings] = useState<string>('');
   const [monthlyExpense, setMonthlyExpense] = useState<string>('');
@@ -309,13 +311,13 @@ export default function OnboardingWizard({
                   <div className="flex justify-between">
                     <span className="text-text-secondary">Savings:</span>
                     <span className="font-semibold text-text-primary">
-                      {formatCurrency(parseFloat(savings) || 0, locale)}
+                      {formatCurrency(parseFloat(savings) || 0, currency as any)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-text-secondary">Monthly Expenses:</span>
                     <span className="font-semibold text-text-primary">
-                      {formatCurrency(parseFloat(monthlyExpense) || 0, locale)}
+                      {formatCurrency(parseFloat(monthlyExpense) || 0, currency as any)}
                     </span>
                   </div>
                   <div className="border-t border-border-subtle pt-2 mt-2 flex justify-between">

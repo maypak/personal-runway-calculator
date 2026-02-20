@@ -72,6 +72,7 @@ export interface FinanceSettings {
   startDate: string; // Start date
   monthlyIncome: number; // Monthly income (freelance, unemployment benefit, etc.)
   incomeMonths: number; // How many months of income
+  currency: string; // Currency code (USD, KRW, EUR, etc.) - independent from language
 }
 
 // Monthly Budget

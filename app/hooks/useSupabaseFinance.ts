@@ -36,6 +36,7 @@ export function useSupabaseFinance() {
           startDate: settingsData.start_date,
           monthlyIncome: Number(settingsData.monthly_income),
           incomeMonths: settingsData.income_months,
+          currency: settingsData.currency || 'USD',
         });
       } else {
         // Initialize default settings
@@ -47,6 +48,7 @@ export function useSupabaseFinance() {
           startDate: new Date().toISOString().split('T')[0],
           monthlyIncome: 0,
           incomeMonths: 0,
+          currency: 'USD',
         };
         setSettings(defaultSettings);
 

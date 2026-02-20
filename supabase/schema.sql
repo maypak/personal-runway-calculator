@@ -21,9 +21,11 @@ CREATE TABLE IF NOT EXISTS public.finance_settings (
   start_date DATE DEFAULT CURRENT_DATE,
   monthly_income NUMERIC DEFAULT 0,
   income_months INTEGER DEFAULT 0,
+  currency TEXT DEFAULT 'USD',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id)
+  UNIQUE(user_id),
+  CONSTRAINT valid_currency CHECK (currency IN ('USD', 'KRW', 'EUR', 'GBP', 'JPY', 'CNY', 'AUD', 'CAD'))
 );
 
 -- Expenses

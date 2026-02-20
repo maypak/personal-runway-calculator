@@ -39,10 +39,7 @@ CREATE TABLE IF NOT EXISTS public.phases (
   CONSTRAINT valid_duration CHECK (end_month > start_month),
   CONSTRAINT valid_expenses CHECK (monthly_expenses >= 0),
   CONSTRAINT valid_income CHECK (monthly_income >= 0),
-  CONSTRAINT valid_start_month CHECK (start_month >= 0),
-  CONSTRAINT max_phases_per_user CHECK (
-    (SELECT COUNT(*) FROM public.phases WHERE user_id = phases.user_id) <= 10
-  )
+  CONSTRAINT valid_start_month CHECK (start_month >= 0)
 );
 
 -- Create indexes for performance
