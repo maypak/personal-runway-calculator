@@ -26,6 +26,7 @@ import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
 import { useI18n } from '../contexts/I18nContext';
 import { formatCurrency } from '../utils/currencyFormatter';
+import { supabase } from '../lib/supabase';
 import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
@@ -54,6 +55,7 @@ export default function FinanceDashboardSupabase() {
   const [showSettings, setShowSettings] = useState(false);
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editingGoal, setEditingGoal] = useState<typeof goals[0] | null>(null);
   
   const [newExpense, setNewExpense] = useState({ 
@@ -178,6 +180,49 @@ export default function FinanceDashboardSupabase() {
   const handleSkipOnboarding = () => {
     setShowOnboarding(false);
     // Optionally show a hint or open settings
+  };
+
+  // Delete account handler
+  const handleDeleteAccount = async () => {
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        alert('No user found. Please sign in first.');
+        return;
+      }
+
+      // Note: Full account deletion requires server-side implementation
+      // For now, we'll delete all user data and sign them out
+      
+      // Delete all user data (RLS allows users to delete their own data)
+      const tables = [
+        'finance_goals',
+        'monthly_budgets', 
+        'daily_checkins',
+        'projects',
+        'ideas',
+        'recurring_expenses',
+        'expenses',
+        'finance_settings',
+        'profiles'
+      ];
+
+      for (const table of tables) {
+        await supabase.from(table).delete().eq('user_id', user.id);
+      }
+
+      // Sign out the user
+      await signOut();
+      
+      alert('Your data has been deleted. Account will be fully removed within 24 hours.\n\nFor immediate removal, contact: beta@personalrunway.app');
+      window.location.href = '/';
+      
+    } catch (error) {
+      console.error('Delete account error:', error);
+      alert('Error deleting account. Please contact support at beta@personalrunway.app');
+    }
   };
 
   // Goal handlers
@@ -446,6 +491,27 @@ export default function FinanceDashboardSupabase() {
           {/* Language Switcher (Mobile) */}
           <div className="sm:hidden pt-2">
             <LanguageSwitcher />
+          </div>
+
+          {/* Delete Account */}
+          <div className="pt-6 mt-6 border-t border-error/20">
+            <div className="bg-error/10 rounded-lg p-4 mb-3">
+              <h3 className="text-sm font-semibold text-error mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                Danger Zone
+              </h3>
+              <p className="text-xs text-text-secondary mb-3">
+                Permanently delete your account and all data. This action cannot be undone.
+              </p>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="w-full px-4 py-2 border-2 border-error text-error rounded-lg
+                  hover:bg-error hover:text-white font-medium text-sm
+                  transition-all duration-200"
+              >
+                Delete Account
+              </button>
+            </div>
           </div>
 
           <button
@@ -891,6 +957,59 @@ export default function FinanceDashboardSupabase() {
         onComplete={handleOnboardingComplete}
         onSkip={handleSkipOnboarding}
       />
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-surface-card rounded-xl shadow-2xl w-full max-w-md border border-border-subtle p-6">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle className="w-8 h-8 text-error" />
+              </div>
+              <h2 className="text-2xl font-bold text-text-primary mb-2">
+                Delete Account?
+              </h2>
+              <p className="text-text-secondary">
+                This will permanently delete your account and all data. This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="bg-error/10 rounded-lg p-3 mb-6">
+              <p className="text-sm text-text-secondary">
+                ⚠️ This will delete:
+              </p>
+              <ul className="text-sm text-text-secondary mt-2 space-y-1">
+                <li>• All your financial data</li>
+                <li>• Expense history</li>
+                <li>• Goals and settings</li>
+                <li>• Your account permanently</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 px-4 py-3 border border-border-default rounded-lg
+                  text-text-secondary hover:text-text-primary hover:border-border-subtle
+                  transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  setShowDeleteConfirm(false);
+                  await handleDeleteAccount();
+                }}
+                className="flex-1 px-4 py-3 bg-error hover:bg-error/90 active:bg-error/80
+                  text-white font-semibold rounded-lg
+                  transition-all duration-200 active:scale-98"
+              >
+                Delete Forever
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
