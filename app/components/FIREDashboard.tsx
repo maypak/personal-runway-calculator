@@ -55,6 +55,12 @@ export default function FIREDashboard() {
     const annualExpenses = settings.target_annual_expenses ?? 
                           (financeSettings.monthlyFixed + financeSettings.monthlyVariable) * 12;
 
+    // FIXED: Skip calculation if no expenses data yet (new users)
+    if (annualExpenses <= 0) {
+      console.log('Skipping FIRE calculation: no expense data yet');
+      return;
+    }
+
     calculateAndCache({
       currentSavings: financeSettings.currentSavings,
       monthlyContribution: financeSettings.monthlyIncome - 
@@ -129,6 +135,51 @@ export default function FIREDashboard() {
                              (financeSettings.monthlyFixed + financeSettings.monthlyVariable);
   const annualExpenses = settings?.target_annual_expenses ?? 
                         (financeSettings.monthlyFixed + financeSettings.monthlyVariable) * 12;
+
+  // FIXED: Show empty state if no expense data yet
+  if (annualExpenses <= 0) {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <Target className="h-6 w-6 text-blue-600" />
+            FIRE Calculator
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Financial Independence, Retire Early
+          </p>
+        </div>
+
+        {/* Empty State */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-8 border border-blue-200 dark:border-blue-800 text-center">
+          <div className="max-w-md mx-auto">
+            <Target className="h-16 w-16 text-blue-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Add Your Expenses First
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              To calculate your FIRE number, we need to know your monthly expenses.
+            </p>
+            <a
+              href="/"
+              className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            >
+              Go to Dashboard →
+            </a>
+          </div>
+        </div>
+
+        {/* Info */}
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            <strong>What is FIRE?</strong> Financial Independence, Retire Early. 
+            The FIRE calculator shows you how much money you need to never work again (4% Rule).
+          </p>
+        </div>
+      </div>
+    );
+  }
   const fiNumber = calculatedMetrics?.fiNumber ?? settings?.fi_number ?? 0;
   const investmentReturnRate = settings?.investment_return_rate ?? 7.0;
   const safeWithdrawalRate = settings?.safe_withdrawal_rate ?? 4.0;
