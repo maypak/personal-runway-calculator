@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useScenarios, Scenario } from '../hooks/useScenarios';
 import ScenarioCard from './ScenarioCard';
 import ComparisonView from './ComparisonView';
+import EditScenarioModal from './EditScenarioModal';
 import { Plus, BarChart3 } from 'lucide-react';
 
 export default function ScenarioManager() {
@@ -62,6 +63,12 @@ export default function ScenarioManager() {
     if (!confirm(`Delete scenario "${scenario.name}"?`)) return;
 
     await deleteScenario(id);
+  };
+
+  // Handle edit save
+  const handleEditSave = async (id: string, updates: Partial<Scenario>): Promise<boolean> => {
+    const result = await updateScenario(id, updates);
+    return result.success;
   };
 
   // Toggle scenario for comparison
@@ -171,6 +178,15 @@ export default function ScenarioManager() {
             setCompareMode(false);
             setSelectedForComparison([]);
           }}
+        />
+      )}
+
+      {/* Edit Modal */}
+      {editingScenario && (
+        <EditScenarioModal
+          scenario={editingScenario}
+          onSave={handleEditSave}
+          onClose={() => setEditingScenario(null)}
         />
       )}
 
