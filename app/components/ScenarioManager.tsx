@@ -108,7 +108,14 @@ export default function ScenarioManager() {
         <div className="flex items-center gap-3">
           {scenarios.length > 0 && (
             <button
-              onClick={() => setCompareMode(!compareMode)}
+              onClick={() => {
+                // Validate minimum scenarios for comparison
+                if (!compareMode && scenarios.length < 2) {
+                  alert('비교하려면 최소 2개의 시나리오가 필요합니다.');
+                  return;
+                }
+                setCompareMode(!compareMode);
+              }}
               className={`
                 px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2
                 ${compareMode ? 'bg-primary text-white' : 'bg-surface-card text-text-secondary border border-border-subtle'}
