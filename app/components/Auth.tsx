@@ -116,8 +116,8 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4">
-      {/* Language Switcher - Fixed Top Right */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Language Switcher - Fixed Position (avoids beta banner) */}
+      <div className="fixed top-24 right-4 md:top-20 md:right-6 z-40">
         <LanguageSwitcher />
       </div>
       
