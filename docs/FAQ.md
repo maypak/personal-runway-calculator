@@ -102,13 +102,17 @@ You'll be able to create multiple scenarios like:
 And see side-by-side runway comparisons.
 
 ### Can I calculate my FIRE date?
-**Coming in Week 3!** (Early March 2026)
+**Yes!** The FIRE Calculator is now available at `/fire`.
 
-We're building a FIRE calculator that includes:
+It includes:
 - **FI Number** (based on 4% rule)
-- **Projected FI Date** (with investment returns)
-- **Coast FIRE** calculation
-- Progress tracking
+- **Projected FI Date** (with investment returns and monthly contributions)
+- **Coast FIRE** calculation (when you can stop saving)
+- **Progress tracking** (visual progress bar with milestones)
+- **Lean/Fat FIRE** scenarios
+- **Interactive projection chart** (10-year forecast)
+
+**Note:** You need to add your monthly expenses first (on the main Dashboard) for the FIRE calculator to work.
 
 ### Can I plan different life phases?
 **Coming in Week 4!** (Mid March 2026)
@@ -146,6 +150,22 @@ Phase-based planning lets you break your runway into stages:
 1. **Network issue:** Check your internet connection
 2. **Session expired:** Try logging out and back in
 3. **Browser issue:** Try a different browser (Chrome recommended)
+
+### The FIRE Calculator page is empty / shows "Add Your Expenses First"
+This is normal for new users! The FIRE calculator needs your expense data to calculate your FI Number.
+
+**Solution:**
+1. Go to the **main Dashboard** (/)
+2. Click **Settings** (gear icon)
+3. Add your **monthly expenses** (Fixed + Variable)
+4. Return to the **FIRE page** (/fire)
+5. Your FIRE metrics will now appear!
+
+**Why?** The FIRE calculator uses the **4% rule**, which requires knowing your annual expenses:
+- FI Number = Annual Expenses × 25
+- Example: $4,000/month × 12 = $48,000/year → FI Number = $1,200,000
+
+Without expense data, we can't calculate your FI Number.
 
 **If it keeps happening:** Report a bug at beta@personalrunway.app
 

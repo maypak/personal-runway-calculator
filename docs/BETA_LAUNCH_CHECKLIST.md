@@ -5,8 +5,8 @@ Successfully launch Private Beta with 20-50 users, gather feedback, and prepare 
 
 ## 📅 Timeline
 
-**Target Launch Date:** TBD (After Beta Signup Form is ready)
-**Private Beta Duration:** 2 weeks
+**Target Launch Date:** **Monday, February 24, 2026** 🎯
+**Private Beta Duration:** 2 weeks (Feb 24 - Mar 9)
 **Public Beta Target:** After P0-4 completion (Mid-March 2026)
 
 ---
@@ -29,13 +29,13 @@ Successfully launch Private Beta with 20-50 users, gather feedback, and prepare 
 
 ### Content & Documentation
 - [x] README.md updated (English version)
-- [ ] Beta Signup Form created (Google Forms)
+- [ ] Beta Signup Form created (Google Forms) — **Template ready, needs user to create**
 - [ ] Beta Signup Form embedded on landing page
-- [ ] Screenshots ready (5 total: 2 now, 3 after P0-2/P0-3)
-- [ ] Onboarding guide for beta testers
-- [ ] FAQ page (common questions)
-- [ ] Feedback template (for beta testers)
-- [ ] Known issues list (transparent about limitations)
+- [ ] Screenshots ready (5 total: 2 now, 3 after P0-2/P0-3) — **Guide ready, needs user to capture**
+- [x] Onboarding guide for beta testers (`BETA_QUICK_START.md`)
+- [x] FAQ page (common questions) — **Updated Feb 21 with FIRE calculator Q&A**
+- [x] Feedback template (for beta testers) (`BETA_FEEDBACK_TEMPLATE.md`)
+- [x] Known issues list (transparent about limitations) — **Updated Feb 21 with recent fixes**
 
 ### Marketing Materials
 - [x] Reddit posts drafted (5 subreddits)
@@ -43,7 +43,7 @@ Successfully launch Private Beta with 20-50 users, gather feedback, and prepare 
 - [x] Product Hunt guide ready
 - [x] HackerNews strategy ready
 - [x] LinkedIn posts ready
-- [ ] Email templates (welcome, weekly updates, survey)
+- [x] Email templates (welcome, weekly updates, survey) — **7 templates in `EMAIL_TEMPLATES.md`**
 - [ ] Social media graphics (optional)
 
 ### Legal & Compliance

@@ -1,6 +1,6 @@
 # Known Issues & Limitations
 
-**Last updated:** February 20, 2026
+**Last updated:** February 21, 2026
 
 This is a **Private Beta**. We're transparent about what works and what doesn't. Below are known issues we're actively working on.
 
@@ -10,10 +10,47 @@ This is a **Private Beta**. We're transparent about what works and what doesn't.
 
 ### None Currently! 🎉
 
-All P0 (critical) bugs have been fixed as of Feb 19, 2026. Daily QA tests running at 3 AM KST.
+All P0 (critical) bugs have been fixed as of Feb 20, 2026. Daily QA tests running at 3 AM KST.
 
-**Last QA run:** Feb 20, 2026 03:00 AM  
-**Status:** ✅ 10/10 tests passing
+**Last QA run:** Feb 21, 2026 03:00 AM (expected)
+**Status:** ✅ 10/10 tests passing (last run)
+
+---
+
+## 🔧 Recently Resolved Issues
+
+### FIRE Calculator - "Something went wrong" Error (Feb 20, 2026)
+**Issue:** New users saw React Error #185 when visiting `/fire`
+
+**Root cause:** Three separate issues discovered through iterative debugging:
+1. **Server/client timestamp mismatch** → Server rendered `new Date().toISOString()` differently than client
+2. **i18n hydration mismatch** → Translations loaded differently on server vs client
+3. **Zero expenses handling** → Calculator threw error when `monthlyExpenses = 0` (new users)
+
+**Fix timeline:**
+- 7:54 PM: Error reported by user
+- 8:00 PM: Fix attempt #1 — Remove dynamic timestamps → Still failing
+- 8:20 PM: Fix attempt #2 — Force client-only rendering → Still failing
+- 10:00 PM: User insight: "인풋없을때 생기는 에러?" (Zero input error?)
+- 10:10 PM: Fix attempt #3 — Add empty state for zero expenses → ✅ **Resolved!**
+
+**Solution:**
+```typescript
+// Skip calculation if no expense data
+if (annualExpenses <= 0) {
+  return <EmptyState message="Add Your Expenses First" />;
+}
+```
+
+**Lessons learned:**
+- Always test with **completely fresh accounts** (no data)
+- Edge cases matter: null, 0, empty arrays
+- User insights are invaluable for diagnosis
+
+**Commits:**
+- `586338a` - Hydration fix #1 (timestamps)
+- `d0e6d2f` - Hydration fix #2 (client-only rendering)
+- `8595da9` - Hydration fix #3 (zero expenses handling) ✅
 
 ---
 
@@ -58,19 +95,21 @@ These aren't bugs — they're features we haven't built yet!
 
 ---
 
-### 4. No FIRE Date Calculator
-**Issue:** Can't calculate when you'll achieve Financial Independence
+### 4. ~~No FIRE Date Calculator~~ ✅ IMPLEMENTED!
+**Status:** ✅ **Available now** at `/fire`
 
-**What's missing:**
-- FI Number calculation (4% rule)
-- Projected FI Date (with investment returns)
-- Coast FIRE calculation
-- Progress tracking
+**Implemented (Feb 20, 2026):**
+- ✅ FI Number calculation (4% rule)
+- ✅ Projected FI Date (with investment returns)
+- ✅ Coast FIRE calculation
+- ✅ Progress tracking with milestones
+- ✅ Lean/Fat FIRE scenarios
+- ✅ Interactive projection chart
+- ✅ Customizable assumptions (return rate, SWR)
 
-**Workaround:**
-- Use external FIRE calculators (e.g., networthify.com)
+**Note for new users:** You need to add your monthly expenses on the main Dashboard first. The FIRE calculator requires expense data to calculate your FI Number.
 
-**Coming in:** **Week 3** (Early Mar 2026) — P0-3 feature!
+**Known issue fixed:** Initial "Something went wrong" error for new users (empty state now shows helpful message)
 
 ---
 
