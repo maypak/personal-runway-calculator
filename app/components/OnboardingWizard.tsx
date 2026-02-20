@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, ArrowRight, Sparkles, Wallet, TrendingDown, Trophy } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { useI18n } from '../contexts/I18nContext';
 import { formatCurrency } from '../utils/currencyFormatter';
 
@@ -65,6 +66,52 @@ export default function OnboardingWizard({
       else if (step === 4) handleComplete();
     }
   };
+
+  // Celebration confetti when reaching result step
+  useEffect(() => {
+    if (step === 4 && isOpen) {
+      // Small delay to let the result render first
+      setTimeout(() => {
+        const count = 200;
+        const defaults = {
+          origin: { y: 0.7 },
+          zIndex: 9999,
+        };
+
+        function fire(particleRatio: number, opts: any) {
+          confetti({
+            ...defaults,
+            ...opts,
+            particleCount: Math.floor(count * particleRatio),
+          });
+        }
+
+        // Multiple bursts for dramatic effect
+        fire(0.25, {
+          spread: 26,
+          startVelocity: 55,
+        });
+        fire(0.2, {
+          spread: 60,
+        });
+        fire(0.35, {
+          spread: 100,
+          decay: 0.91,
+          scalar: 0.8,
+        });
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 25,
+          decay: 0.92,
+          scalar: 1.2,
+        });
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 45,
+        });
+      }, 300);
+    }
+  }, [step, isOpen]);
 
   return (
     <div 
