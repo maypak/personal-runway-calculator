@@ -115,9 +115,9 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4 relative">
-      {/* Language Switcher - Top Right */}
-      <div className="absolute top-4 right-4 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4">
+      {/* Language Switcher - Fixed Top Right */}
+      <div className="fixed top-4 right-4 z-50">
         <LanguageSwitcher />
       </div>
       
