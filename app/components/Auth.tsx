@@ -192,12 +192,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
           {/* Auth Card */}
           <div className="order-1 md:order-2">
-            <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300 relative">
-              {/* Language Switcher - Inside Card */}
-              <div className="absolute top-4 right-4 z-10">
-                <LanguageSwitcher />
-              </div>
-              
+            <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-text-primary mb-2">
                   {mode === 'reset' ? 'Reset Password' : mode === 'signin' ? t('auth:card.welcomeBack') : t('auth:card.getStarted')}
@@ -391,6 +386,11 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     </a>
                   </p>
                 )}
+              </div>
+
+              {/* Language Switcher - Bottom of Card */}
+              <div className="mt-4 flex justify-center">
+                <LanguageSwitcher />
               </div>
             </div>
           </div>
