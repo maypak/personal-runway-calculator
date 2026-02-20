@@ -111,6 +111,11 @@ export default function FinanceDashboardSupabase() {
   const runwayYears = Math.floor(runway / 12);
   const runwayMonths = runway % 12;
 
+  // First-run detection for onboarding
+  const isFirstRun = (settings.currentSavings === 0 || !settings.currentSavings) && 
+                     (settings.monthlyFixed === 0 || !settings.monthlyFixed) &&
+                     (settings.monthlyVariable === 0 || !settings.monthlyVariable);
+
   // Simulator calculations
   const simRemainingFunds = remainingFunds - simOneTimeExpense;
   const simNetMonthlyExpense = simMonthlyExpense - simAdditionalIncome;
@@ -261,25 +266,29 @@ export default function FinanceDashboardSupabase() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.currentSavingsLabel')}
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span className="font-semibold">{t('dashboard:settings.currentSavingsLabel')}</span>
+                <span className="text-xs text-error">*</span>
+                <span className="text-xs text-text-tertiary">(Required)</span>
               </label>
               <input
                 type="number"
                 value={settings.currentSavings}
                 onChange={(e) => updateSettings({ ...settings, currentSavings: parseFloat(e.target.value) || 0 })}
+                placeholder="45000"
                 className="w-full px-4 py-3
-                  bg-surface-card border border-border-default rounded-lg
+                  bg-surface-card border-2 border-primary/30 rounded-lg
                   text-text-primary placeholder:text-text-tertiary
-                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">Your total savings available right now</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.lumpSumLabel')}
-                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span>{t('dashboard:settings.lumpSumLabel')}</span>
+                <span className="text-xs text-text-tertiary">(Optional)</span>
               </label>
               <input
                 type="number"
@@ -292,12 +301,13 @@ export default function FinanceDashboardSupabase() {
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">One-time income (e.g., tax refund, bonus)</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.monthlyIncomeLabel')}
-                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span>{t('dashboard:settings.monthlyIncomeLabel')}</span>
+                <span className="text-xs text-text-tertiary">(Optional)</span>
               </label>
               <input
                 type="number"
@@ -310,12 +320,13 @@ export default function FinanceDashboardSupabase() {
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">Monthly income (salary, freelance, etc.)</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.incomeMonths')}
-                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span>{t('dashboard:settings.incomeMonths')}</span>
+                <span className="text-xs text-text-tertiary">(Optional)</span>
               </label>
               <input
                 type="number"
@@ -328,28 +339,33 @@ export default function FinanceDashboardSupabase() {
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">How many months you'll receive this income</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.monthlyFixedLabel')}
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span className="font-semibold">{t('dashboard:settings.monthlyFixedLabel')}</span>
+                <span className="text-xs text-error">*</span>
+                <span className="text-xs text-text-tertiary">(Required)</span>
               </label>
               <input
                 type="number"
                 value={settings.monthlyFixed}
                 onChange={(e) => updateSettings({ ...settings, monthlyFixed: parseFloat(e.target.value) || 0 })}
+                placeholder="3500"
                 className="w-full px-4 py-3
-                  bg-surface-card border border-border-default rounded-lg
+                  bg-surface-card border-2 border-primary/30 rounded-lg
                   text-text-primary placeholder:text-text-tertiary
-                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">Fixed monthly expenses (rent, bills, insurance)</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">
-                {t('dashboard:settings.monthlyVariableLabel')}
-                <span className="text-text-tertiary text-xs ml-1">({t('dashboard:expenses.optional')})</span>
+              <label className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1">
+                <span>{t('dashboard:settings.monthlyVariableLabel')}</span>
+                <span className="text-xs text-text-tertiary">(Optional)</span>
               </label>
               <input
                 type="number"
@@ -362,6 +378,7 @@ export default function FinanceDashboardSupabase() {
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
+              <p className="text-xs text-text-tertiary mt-1">Variable expenses (food, entertainment, shopping)</p>
             </div>
 
             <div className="sm:col-span-2">
@@ -414,83 +431,121 @@ export default function FinanceDashboardSupabase() {
       <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-6 md:p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg md:text-xl font-semibold text-text-secondary">
+          <h2 className="text-lg md:text-xl font-semibold text-text-secondary flex items-center gap-2">
             {t('dashboard:runway.title')}
+            <button 
+              className="group relative"
+              aria-label="What is runway?"
+            >
+              <span className="text-sm text-text-tertiary hover:text-text-primary transition-colors">ⓘ</span>
+              <div className="hidden group-hover:block absolute z-10 left-0 top-8 w-64 p-3 bg-surface-card border border-border-subtle rounded-lg shadow-lg">
+                <p className="text-sm text-text-secondary">
+                  Your <strong>runway</strong> is how many months you can survive on your current savings before running out of money.
+                </p>
+              </div>
+            </button>
           </h2>
-          {runway > 24 ? (
+          {!isFirstRun && (runway > 24 ? (
             <Shield className="w-10 h-10 text-success" />
           ) : runway > 12 ? (
             <AlertTriangle className="w-10 h-10 text-warning" />
           ) : (
             <AlertCircle className="w-10 h-10 text-error" />
-          )}
+          ))}
         </div>
         
-        {/* Main Number */}
-        <div className="text-center mb-6">
-          <div className="text-4xl md:text-6xl font-bold text-text-primary mb-3 tabular-nums">
-            {runwayYears > 0 && (
-              <span>
-                {runwayYears}
-                <span className="text-3xl text-text-tertiary">{t('dashboard:runway.yr')}</span>
-                {' '}
-              </span>
-            )}
-            {runwayMonths}
-            <span className="text-3xl text-text-tertiary">{t('dashboard:runway.mo')}</span>
+        {/* Main Number or Empty State */}
+        {isFirstRun ? (
+          <div className="text-center py-8">
+            <div className="text-6xl md:text-7xl mb-4">🎯</div>
+            <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
+              {t('dashboard:onboarding.title') || 'Calculate Your Runway'}
+            </h3>
+            <p className="text-text-secondary mb-6 max-w-md mx-auto">
+              {t('dashboard:onboarding.description') || 'Enter your savings and monthly expenses to see how long your money will last'}
+            </p>
+            <button
+              onClick={() => setShowSettings(true)}
+              className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active 
+                text-white rounded-xl font-semibold shadow-md hover:shadow-lg
+                transform hover:-translate-y-0.5 active:scale-98
+                transition-all duration-200 text-base md:text-lg"
+            >
+              {t('dashboard:onboarding.cta') || 'Get Started (1 min)'}
+            </button>
           </div>
-          
-          {/* Emotional Message */}
-          <p className="text-base md:text-lg text-text-secondary max-w-md mx-auto leading-relaxed">
-            {runway > 24 
-              ? t('dashboard:runway.status.great')
-              : runway > 12 
-              ? t('dashboard:runway.status.solid')
-              : runway > 6
-              ? t('dashboard:runway.status.tight')
-              : t('dashboard:runway.status.attention')}
-          </p>
-        </div>
+        ) : (
+          <>
+            <div className="text-center mb-6">
+              <div className="text-4xl md:text-6xl font-bold text-text-primary mb-3 tabular-nums">
+                {runwayYears > 0 && (
+                  <span>
+                    {runwayYears}
+                    <span className="text-3xl text-text-tertiary">{t('dashboard:runway.yr')}</span>
+                    {' '}
+                  </span>
+                )}
+                {runwayMonths}
+                <span className="text-3xl text-text-tertiary">{t('dashboard:runway.mo')}</span>
+              </div>
+              
+              {/* Emotional Message */}
+              <p className="text-base md:text-lg text-text-secondary max-w-md mx-auto leading-relaxed">
+                {runway > 24 
+                  ? t('dashboard:runway.status.great')
+                  : runway > 12 
+                  ? t('dashboard:runway.status.solid')
+                  : runway > 6
+                  ? t('dashboard:runway.status.tight')
+                  : t('dashboard:runway.status.attention')}
+              </p>
+            </div>
+          </>
+        )}
         
-        {/* Progress Bar */}
-        <div className="mb-4">
-          <div className="relative w-full h-4 bg-bg-tertiary rounded-full overflow-hidden">
-            <div 
-              className={`absolute h-full rounded-full transition-all duration-500 ease-out ${
-                runway > 24 ? 'bg-success' : 
-                runway > 12 ? 'bg-info' : 
-                runway > 6 ? 'bg-warning' : 'bg-error'
-              }`}
-              style={{ width: `${Math.min((runway / 36) * 100, 100)}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-text-tertiary mt-2">
-            <span>0{t('dashboard:runway.mo')}</span>
-            <span className="font-medium">{t('dashboard:runway.goalProgress')}</span>
-          </div>
-        </div>
-        
-        {/* Details */}
-        <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border-subtle">
-          <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.available')}</div>
-            <div className="text-base md:text-lg font-semibold text-success">
-              {formatCurrency(remainingFunds, locale)}
+        {/* Progress Bar - Only show if data exists */}
+        {!isFirstRun && (
+          <>
+            <div className="mb-4">
+              <div className="relative w-full h-4 bg-bg-tertiary rounded-full overflow-hidden">
+                <div 
+                  className={`absolute h-full rounded-full transition-all duration-500 ease-out ${
+                    runway > 24 ? 'bg-success' : 
+                    runway > 12 ? 'bg-info' : 
+                    runway > 6 ? 'bg-warning' : 'bg-error'
+                  }`}
+                  style={{ width: `${Math.min((runway / 36) * 100, 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-text-tertiary mt-2">
+                <span>0{t('dashboard:runway.mo')}</span>
+                <span className="font-medium">{t('dashboard:runway.goalProgress')}</span>
+              </div>
             </div>
-          </div>
-          <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.monthly')}</div>
-            <div className="text-base md:text-lg font-semibold text-error">
-              {formatCurrency(monthlyExpense, locale)}
+            
+            {/* Details */}
+            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border-subtle">
+              <div className="text-center">
+                <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.available')}</div>
+                <div className="text-base md:text-lg font-semibold text-success">
+                  {formatCurrency(remainingFunds, locale)}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.monthly')}</div>
+                <div className="text-base md:text-lg font-semibold text-error">
+                  {formatCurrency(monthlyExpense, locale)}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.dailyBurn')}</div>
+                <div className="text-base md:text-lg font-semibold text-text-primary">
+                  {formatCurrency(Math.round(monthlyExpense / 30), locale)}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="text-center">
-            <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.dailyBurn')}</div>
-            <div className="text-base md:text-lg font-semibold text-text-primary">
-              {formatCurrency(Math.round(monthlyExpense / 30), locale)}
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
       {/* Goal Progress Section */}
