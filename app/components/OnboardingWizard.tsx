@@ -117,6 +117,7 @@ export default function OnboardingWizard({
 
   return (
     <div 
+      data-testid="onboarding-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
       onKeyDown={handleKeyPress}
     >
@@ -216,6 +217,7 @@ export default function OnboardingWizard({
                     $
                   </span>
                   <input
+                    name="onboarding-savings"
                     type="number"
                     value={savings}
                     onChange={(e) => setSavings(e.target.value)}
@@ -258,6 +260,7 @@ export default function OnboardingWizard({
                     $
                   </span>
                   <input
+                    name="onboarding-expenses"
                     type="number"
                     value={monthlyExpense}
                     onChange={(e) => setMonthlyExpense(e.target.value)}
