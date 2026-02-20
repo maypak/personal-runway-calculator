@@ -1,14 +1,14 @@
 /**
  * Comparison Page - /scenarios/compare
  * 
- * Purpose: Side-by-side scenario comparison
- * Route: /scenarios/compare?ids=id1,id2
+ * NOTE: Comparison is now modal-based in ScenarioManager.
+ * This route redirects to /scenarios.
  * 
  * Created: 2026-02-17
- * Author: Senior Frontend Developer
+ * Updated: 2026-02-21 - Moved to modal
  */
 
-import { ComparisonView } from '../../components/ComparisonView';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'Compare Scenarios | Personal Runway Calculator',
@@ -16,5 +16,5 @@ export const metadata = {
 };
 
 export default function ComparePage() {
-  return <ComparisonView />;
+  redirect('/scenarios');
 }

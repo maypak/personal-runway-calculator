@@ -1,238 +1,347 @@
-/**
- * ComparisonView - Main Scenario Comparison Page
- * 
- * Purpose: Display side-by-side comparison of selected scenarios
- * Features:
- * - Comparison table
- * - Visual chart
- * - Insights panel
- * - Scenario selector
- * - Export functionality (future)
- * 
- * Created: 2026-02-17
- * Author: Senior Frontend Developer
- */
-
 'use client';
 
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Download, Loader2 } from 'lucide-react';
-import { useI18n } from '../contexts/I18nContext';
-import { useScenarioContext } from '../contexts/ScenarioContext';
-import { ComparisonTable } from './ComparisonTable';
-import { compareScenarios } from '../utils/runwayCalculator';
+import { Scenario } from '../types';
+import { TrendingUp, TrendingDown, X } from 'lucide-react';
+import { formatCurrency } from '../utils/currencyFormatter';
 
-// Lazy load heavy chart component (Recharts bundle)
-const RunwayChart = lazy(() => import('./RunwayChart').then(mod => ({ default: mod.RunwayChart })));
+interface ComparisonViewProps {
+  scenarios: Scenario[];
+  onClose: () => void;
+}
 
-export function ComparisonView() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { t } = useI18n();
-  const { scenarios, selectedScenarios, selectForComparison, getComparisonResults } = useScenarioContext();
-  
-  const [localSelection, setLocalSelection] = useState<string[]>([]);
-
-  // Initialize from URL params or context
-  useEffect(() => {
-    const idsParam = searchParams.get('ids');
-    
-    if (idsParam) {
-      const ids = idsParam.split(',').filter(id => scenarios.some(s => s.id === id));
-      setLocalSelection(ids);
-      selectForComparison(ids);
-    } else if (selectedScenarios.length > 0) {
-      setLocalSelection(selectedScenarios);
-    } else if (scenarios.length >= 2) {
-      // Auto-select first 2 scenarios
-      const autoSelect = scenarios.slice(0, 2).map(s => s.id);
-      setLocalSelection(autoSelect);
-      selectForComparison(autoSelect);
-    }
-  }, []);
-
-  const handleToggleScenario = (scenarioId: string) => {
-    setLocalSelection(prev => {
-      let newSelection: string[];
-      
-      if (prev.includes(scenarioId)) {
-        // Deselect (but keep at least 1)
-        if (prev.length > 1) {
-          newSelection = prev.filter(id => id !== scenarioId);
-        } else {
-          return prev; // Can't deselect the last one
-        }
-      } else {
-        // Select (max 3)
-        if (prev.length < 3) {
-          newSelection = [...prev, scenarioId];
-        } else {
-          alert(t('scenarios:comparison.selector.maxReached'));
-          return prev;
-        }
-      }
-      
-      selectForComparison(newSelection);
-      return newSelection;
-    });
-  };
-
-  const selectedScenariosList = scenarios.filter(s => localSelection.includes(s.id));
-
-  // Generate insights
-  const insights = () => {
-    if (selectedScenariosList.length < 2) return [];
-    
-    const results = getComparisonResults();
-    const [scenario1, scenario2] = selectedScenariosList;
-    const result1 = results.get(scenario1.id);
-    const result2 = results.get(scenario2.id);
-    
-    if (!result1 || !result2) return [];
-    
-    const comparison = compareScenarios(
-      { name: scenario1.name, result: result1 },
-      { name: scenario2.name, result: result2 }
-    );
-    
-    return comparison.insights;
-  };
-
+export default function ComparisonView({ scenarios, onClose }: ComparisonViewProps) {
   if (scenarios.length === 0) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {t('scenarios:comparison.empty.noScenarios')}
-          </p>
-          <button
-            onClick={() => router.push('/scenarios')}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-          >
-            {t('scenarios:comparison.cta.goToScenarios')}
-          </button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
+  // Helper to get color class
+  const getValueColor = (value: number, baseline: number) => {
+    if (value > baseline) return 'text-success';
+    if (value < baseline) return 'text-error';
+    return 'text-text-primary';
+  };
+
+  // Helper to format difference
+  const formatDiff = (value: number, baseline: number) => {
+    const diff = value - baseline;
+    if (diff === 0) return '—';
+    const sign = diff > 0 ? '+' : '';
+    return `${sign}${Math.round(diff)}`;
+  };
+
+  // Use first scenario as baseline
+  const baseline = scenarios[0];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => router.push('/scenarios')}
-            className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-            aria-label={t('scenarios:comparison.cta.back')}
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-surface-card rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-auto">
+        {/* Header */}
+        <div className="sticky top-0 bg-surface-card border-b border-border-subtle px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              {t('scenarios:comparison.title')}
-            </h1>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-              {t('scenarios:comparison.subtitle')}
+            <h2 className="text-2xl font-bold text-text-primary">
+              Scenario Comparison
+            </h2>
+            <p className="text-sm text-text-tertiary mt-1">
+              Comparing {scenarios.length} scenario{scenarios.length > 1 ? 's' : ''}
             </p>
           </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6 text-text-secondary" />
+          </button>
         </div>
-        
-        <button
-          onClick={() => alert(t('scenarios:comparison.cta.exportSoon'))}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          {t('scenarios:comparison.cta.export')}
-        </button>
-      </div>
 
-      {/* Scenario Selector */}
-      <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          {t('scenarios:comparison.selector.title')}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {scenarios.map(scenario => (
-            <label
-              key={scenario.id}
-              className={`
-                flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all
-                ${localSelection.includes(scenario.id)
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                }
-              `}
-            >
-              <input
-                type="checkbox"
-                checked={localSelection.includes(scenario.id)}
-                onChange={() => handleToggleScenario(scenario.id)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                disabled={localSelection.length === 1 && localSelection.includes(scenario.id)}
-                aria-label={`Select ${scenario.name} for comparison`}
-              />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                    {scenario.name}
-                  </p>
-                  {scenario.isBase && (
-                    <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded">
-                      {t('scenarios:card.base')}
-                    </span>
-                  )}
+        {/* Comparison Table */}
+        <div className="p-6">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border-subtle">
+                  <th className="text-left py-4 px-4 font-semibold text-text-secondary">
+                    Metric
+                  </th>
+                  {scenarios.map((scenario, idx) => (
+                    <th
+                      key={scenario.id}
+                      className="text-center py-4 px-4 font-semibold text-text-primary"
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <span>{scenario.name}</span>
+                        {idx === 0 && (
+                          <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                            Baseline
+                          </span>
+                        )}
+                        {scenario.isBase && (
+                          <span className="text-xs bg-surface-tertiary text-text-tertiary px-2 py-1 rounded-full">
+                            Current
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {/* Runway */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Total Runway
+                  </td>
+                  {scenarios.map((scenario, idx) => {
+                    const runway = scenario.calculatedRunway || 0;
+                    const years = Math.floor(runway / 12);
+                    const months = Math.floor(runway % 12);
+                    const display = years > 0 ? `${years}y ${months}m` : `${months}m`;
+
+                    return (
+                      <td
+                        key={scenario.id}
+                        className={`py-4 px-4 text-center ${
+                          idx === 0
+                            ? 'font-bold text-text-primary'
+                            : getValueColor(runway, baseline.calculatedRunway || 0)
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-1">
+                          <span className="text-xl">{display}</span>
+                          {idx > 0 && (
+                            <span className="text-xs text-text-tertiary">
+                              {formatDiff(runway, baseline.calculatedRunway || 0)} months
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+
+                {/* Total Savings */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Total Savings
+                  </td>
+                  {scenarios.map((scenario, idx) => (
+                    <td
+                      key={scenario.id}
+                      className={`py-4 px-4 text-center ${
+                        idx === 0
+                          ? 'text-text-primary'
+                          : getValueColor(scenario.totalSavings, baseline.totalSavings)
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{formatCurrency(scenario.totalSavings, 'USD')}</span>
+                        {idx > 0 && (
+                          <span className="text-xs text-text-tertiary">
+                            {formatCurrency(
+                              scenario.totalSavings - baseline.totalSavings,
+                              'USD'
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Monthly Burn Rate */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Monthly Burn Rate
+                  </td>
+                  {scenarios.map((scenario, idx) => {
+                    const burn = scenario.calculatedBurnRate || 0;
+                    const isSurplus = burn < 0;
+
+                    return (
+                      <td
+                        key={scenario.id}
+                        className={`py-4 px-4 text-center ${
+                          idx === 0
+                            ? isSurplus
+                              ? 'text-success'
+                              : 'text-text-primary'
+                            : getValueColor(
+                                Math.abs(burn),
+                                Math.abs(baseline.calculatedBurnRate || 0)
+                              )
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-1">
+                          <span className="flex items-center gap-1">
+                            {isSurplus ? (
+                              <TrendingUp className="w-4 h-4" />
+                            ) : (
+                              <TrendingDown className="w-4 h-4" />
+                            )}
+                            {formatCurrency(Math.abs(burn), 'USD')}/mo
+                          </span>
+                          {idx > 0 && (
+                            <span className="text-xs text-text-tertiary">
+                              {formatCurrency(
+                                burn - (baseline.calculatedBurnRate || 0),
+                                'USD'
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+
+                {/* Monthly Expenses */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Monthly Expenses
+                  </td>
+                  {scenarios.map((scenario, idx) => (
+                    <td
+                      key={scenario.id}
+                      className="py-4 px-4 text-center text-text-primary"
+                    >
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{formatCurrency(scenario.monthlyExpenses, 'USD')}</span>
+                        {idx > 0 && (
+                          <span className="text-xs text-text-tertiary">
+                            {formatCurrency(
+                              scenario.monthlyExpenses - baseline.monthlyExpenses,
+                              'USD'
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Monthly Income */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Monthly Income
+                  </td>
+                  {scenarios.map((scenario, idx) => (
+                    <td
+                      key={scenario.id}
+                      className={`py-4 px-4 text-center ${
+                        scenario.monthlyIncome > 0 ? 'text-success' : 'text-text-tertiary'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center gap-1">
+                        <span>
+                          {scenario.monthlyIncome > 0
+                            ? `+${formatCurrency(scenario.monthlyIncome, 'USD')}`
+                            : '—'}
+                        </span>
+                        {idx > 0 && scenario.monthlyIncome > 0 && (
+                          <span className="text-xs text-text-tertiary">
+                            {formatCurrency(
+                              scenario.monthlyIncome - baseline.monthlyIncome,
+                              'USD'
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+
+                {/* One-time Expenses */}
+                <tr className="border-b border-border-subtle hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    One-time Expenses
+                  </td>
+                  {scenarios.map((scenario) => (
+                    <td
+                      key={scenario.id}
+                      className="py-4 px-4 text-center text-text-tertiary"
+                    >
+                      {scenario.oneTimeExpenses.length > 0
+                        ? `${scenario.oneTimeExpenses.length} item${
+                            scenario.oneTimeExpenses.length > 1 ? 's' : ''
+                          }`
+                        : '—'}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Recurring Items */}
+                <tr className="hover:bg-bg-tertiary/50">
+                  <td className="py-4 px-4 font-medium text-text-primary">
+                    Recurring Items
+                  </td>
+                  {scenarios.map((scenario) => (
+                    <td
+                      key={scenario.id}
+                      className="py-4 px-4 text-center text-text-tertiary"
+                    >
+                      {scenario.recurringItems.length > 0
+                        ? `${scenario.recurringItems.length} item${
+                            scenario.recurringItems.length > 1 ? 's' : ''
+                          }`
+                        : '—'}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Summary */}
+          <div className="mt-8 p-6 bg-bg-tertiary rounded-xl">
+            <h3 className="text-lg font-semibold text-text-primary mb-4">
+              Comparison Insights
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <div className="text-text-tertiary mb-1">Best Runway</div>
+                <div className="font-semibold text-success">
+                  {
+                    [...scenarios].sort(
+                      (a, b) => (b.calculatedRunway || 0) - (a.calculatedRunway || 0)
+                    )[0].name
+                  }
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  {t('scenarios:card.months', { count: scenario.calculatedRunway || 0 })}
-                </p>
               </div>
-            </label>
-          ))}
-        </div>
-        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-          {t('scenarios:comparison.selector.help')}
-        </p>
-      </div>
-
-      {/* Comparison Table */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          {t('scenarios:comparison.sections.metrics')}
-        </h2>
-        <ComparisonTable scenarios={selectedScenariosList} />
-      </div>
-
-      {/* Chart */}
-      <div className="mb-8">
-        <Suspense fallback={
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6" style={{ height: 500 }}>
-            <div className="h-full flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+              <div>
+                <div className="text-text-tertiary mb-1">Lowest Burn Rate</div>
+                <div className="font-semibold text-success">
+                  {
+                    [...scenarios].sort(
+                      (a, b) =>
+                        Math.abs(a.calculatedBurnRate || 0) -
+                        Math.abs(b.calculatedBurnRate || 0)
+                    )[0].name
+                  }
+                </div>
+              </div>
+              <div>
+                <div className="text-text-tertiary mb-1">Highest Income</div>
+                <div className="font-semibold text-success">
+                  {
+                    [...scenarios].sort((a, b) => b.monthlyIncome - a.monthlyIncome)[0]
+                      .name
+                  }
+                </div>
+              </div>
             </div>
           </div>
-        }>
-          <RunwayChart scenarios={selectedScenariosList} height={500} />
-        </Suspense>
-      </div>
-
-      {/* Insights */}
-      {insights().length > 0 && (
-        <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-4">
-            {t('scenarios:comparison.sections.insights')}
-          </h2>
-          <ul className="space-y-2">
-            {insights().map((insight, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-sm text-blue-800 dark:text-blue-200">
-                <span className="text-blue-600 dark:text-blue-400 font-bold">•</span>
-                {insight}
-              </li>
-            ))}
-          </ul>
         </div>
-      )}
+
+        {/* Footer */}
+        <div className="sticky bottom-0 bg-surface-card border-t border-border-subtle px-6 py-4 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-all"
+          >
+            Close Comparison
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

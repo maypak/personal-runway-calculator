@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useScenarios, Scenario } from '../hooks/useScenarios';
 import ScenarioCard from './ScenarioCard';
+import ComparisonView from './ComparisonView';
 import { Plus, BarChart3 } from 'lucide-react';
 
 export default function ScenarioManager() {
@@ -162,18 +163,15 @@ export default function ScenarioManager() {
 
       {/* Comparison View */}
       {compareMode && selectedForComparison.length > 0 && (
-        <div className="mt-6 p-6 bg-surface-card rounded-xl border border-primary">
-          <h3 className="text-lg font-bold text-text-primary mb-4">
-            Comparing {selectedForComparison.length} scenario
-            {selectedForComparison.length > 1 ? 's' : ''}
-          </h3>
-          <div className="text-text-tertiary">
-            Comparison view coming soon! Selected:{' '}
-            {selectedForComparison
-              .map((id) => scenarios.find((s) => s.id === id)?.name)
-              .join(', ')}
-          </div>
-        </div>
+        <ComparisonView
+          scenarios={selectedForComparison
+            .map((id) => scenarios.find((s) => s.id === id))
+            .filter((s): s is Scenario => s !== undefined)}
+          onClose={() => {
+            setCompareMode(false);
+            setSelectedForComparison([]);
+          }}
+        />
       )}
 
       {/* Create Modal */}
