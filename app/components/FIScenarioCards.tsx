@@ -173,10 +173,10 @@ export default function FIScenarioCards({
                   <span>{t('fire:scenarios.fiNumberLabel')}</span>
                 </div>
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {formatCurrency(metrics.fiNumber, locale).replace(/,000$/, 'K').replace(/000$/, 'K')}
+                  {formatCurrency(metrics.fiNumber, "USD" as any).replace(/,000$/, 'K').replace(/000$/, 'K')}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {t('fire:scenarios.annualExpenses', { amount: formatCurrency(metrics.targetExpenses, locale) })}
+                  {t('fire:scenarios.annualExpenses', { amount: formatCurrency(metrics.targetExpenses, "USD" as any) })}
                 </div>
               </div>
 

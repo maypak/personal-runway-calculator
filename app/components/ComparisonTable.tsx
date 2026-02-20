@@ -50,7 +50,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     {
       key: 'calculatedBurnRate',
       labelKey: 'scenarios:comparison.table.metrics.burnRate',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : t('scenarios:comparison.table.values.na'),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, "USD" as any) : t('scenarios:comparison.table.values.na'),
       higherIsBetter: false,
     },
     {
@@ -68,25 +68,25 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     {
       key: 'calculatedEndSavings',
       labelKey: 'scenarios:comparison.table.metrics.endSavings',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, "USD" as any) : formatCurrency(0, "USD" as any),
       higherIsBetter: true,
     },
     {
       key: 'totalSavings',
       labelKey: 'scenarios:comparison.table.metrics.startSavings',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, "USD" as any) : formatCurrency(0, "USD" as any),
       higherIsBetter: false, // Not really comparable
     },
     {
       key: 'monthlyExpenses',
       labelKey: 'scenarios:comparison.table.metrics.monthlyExpenses',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, "USD" as any) : formatCurrency(0, "USD" as any),
       higherIsBetter: false,
     },
     {
       key: 'monthlyIncome',
       labelKey: 'scenarios:comparison.table.metrics.monthlyIncome',
-      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, locale) : formatCurrency(0, locale),
+      format: (v, t) => v !== undefined && v !== null ? formatCurrency(v, "USD" as any) : formatCurrency(0, "USD" as any),
       higherIsBetter: true,
     },
   ];

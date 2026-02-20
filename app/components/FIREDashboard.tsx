@@ -186,7 +186,7 @@ export default function FIREDashboard() {
           </h3>
         </div>
         <p className="text-4xl font-bold text-gray-900 dark:text-white">
-          {formatCurrency(fiNumber, locale)}
+          {formatCurrency(fiNumber, "USD" as any)}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           {t('fire:fiNumber.description')}

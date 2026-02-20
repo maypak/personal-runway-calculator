@@ -50,7 +50,7 @@ export default function GoalProgress({
     if (goal.goalType === 'runway') {
       return `${value.toFixed(1)} ${value === 1 ? t('goals:progress.month') : t('goals:progress.months')}`;
     } else {
-      return formatCurrency(value, locale);
+      return formatCurrency(value, "USD" as any);
     }
   };
 
@@ -71,7 +71,7 @@ export default function GoalProgress({
             <p className="text-sm text-text-tertiary">
               {goal.goalType === 'runway' 
                 ? t('goals:progress.runwayGoal', { months: goal.targetValue.toString() })
-                : t('goals:progress.savingsGoal', { amount: formatCurrency(goal.targetValue, locale) })}
+                : t('goals:progress.savingsGoal', { amount: formatCurrency(goal.targetValue, "USD" as any) })}
             </p>
           </div>
         </div>

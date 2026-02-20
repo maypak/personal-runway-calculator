@@ -97,7 +97,7 @@ export function ScenarioCard({
         <div className="flex items-center gap-2 text-sm">
           <TrendingDown className="w-4 h-4 text-gray-400" />
           <span className="text-gray-700 dark:text-gray-300">
-            {formatCurrency(burnRate, locale)}{t('scenarios:card.burnRate.perMonth')}
+            {formatCurrency(burnRate, "USD" as any)}{t('scenarios:card.burnRate.perMonth')}
           </span>
         </div>
 

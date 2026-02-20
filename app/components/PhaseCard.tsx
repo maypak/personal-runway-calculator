@@ -141,7 +141,7 @@ export function PhaseCard({
                 Monthly Expenses
               </div>
               <div className="text-base font-semibold text-gray-900 dark:text-white">
-                {formatCurrency(phase.monthlyExpenses, locale)}
+                {formatCurrency(phase.monthlyExpenses, "USD" as any)}
               </div>
             </div>
 
@@ -152,7 +152,7 @@ export function PhaseCard({
                   Monthly Income
                 </div>
                 <div className="text-base font-semibold text-green-600 dark:text-green-400">
-                  {formatCurrency(phase.monthlyIncome, locale)}
+                  {formatCurrency(phase.monthlyIncome, "USD" as any)}
                 </div>
               </div>
             )}
@@ -179,7 +179,7 @@ export function PhaseCard({
                 Total Burn
               </div>
               <div className="text-base font-semibold text-gray-900 dark:text-white">
-                {formatCurrency(totalBurn, locale)}
+                {formatCurrency(totalBurn, "USD" as any)}
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@ export function PhaseCard({
                   >
                     <span className="font-medium">{expense.name}</span>
                     <span className="text-gray-500">
-                      {formatCurrency(expense.amount, locale)}
+                      {formatCurrency(expense.amount, "USD" as any)}
                     </span>
                     <span className="text-gray-400">
                       (Mo {expense.month})
