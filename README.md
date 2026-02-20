@@ -40,6 +40,14 @@ Now I'm sharing this tool with you.
 - Monthly burn rate
 - Available funds tracker
 
+### 🎭 Scenario Comparison (NEW! ✨)
+- Create multiple financial scenarios
+- Side-by-side comparison view
+- What-if analysis (conservative vs. optimistic)
+- Duplicate and edit scenarios
+- See which scenario gives best runway
+- Compare burn rates and income strategies
+
 ### ☁️ Cloud Sync
 - Your data syncs across devices
 - Secure authentication with Supabase
@@ -178,6 +186,7 @@ That number gave me confidence to take the leap. Now it's your turn.
 - [x] **Launch materials ready** — Twitter, Product Hunt, Reddit guides (40KB)
 - [x] **SEO optimized** — Structured data, metadata, accessibility
 - [x] **WCAG 2.1 AA compliant** — ARIA labels, keyboard support, a11y audit
+- [x] **Scenario Comparison** ✅ — Create, compare, edit scenarios (Week 2 P0-2)
 - [ ] Private beta (10-20 testers) ⏳ **Next step**
 - [ ] Product Hunt launch (materials ready, waiting for beta feedback)
 - [ ] Reddit/HackerNews launch (posts ready, waiting for beta validation)
