@@ -89,11 +89,18 @@ export default function FIREDashboard() {
     }
   };
 
-  if (isLoading) {
+  // CRITICAL: Always show loading on first render to prevent hydration mismatch
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted || isLoading) {
     return (
       <div className="p-6 text-center">
         <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">{t('fire:loading')}</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">Loading FIRE Calculator...</p>
       </div>
     );
   }
