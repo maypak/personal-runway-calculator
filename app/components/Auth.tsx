@@ -116,12 +116,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4">
-      {/* Language Switcher - Fixed Position (avoids beta banner) */}
-      <div className="fixed top-24 right-4 md:top-20 md:right-6 z-40">
-        <LanguageSwitcher />
-      </div>
-      
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto relative">
         <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Hero Section */}
           <div className="text-center md:text-left px-6 md:px-4 order-2 md:order-1">
@@ -197,7 +192,12 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
 
           {/* Auth Card */}
           <div className="order-1 md:order-2">
-            <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300">
+            <div className="bg-surface-card rounded-2xl shadow-xl border border-border-subtle p-6 md:p-8 max-w-md mx-auto hover:shadow-2xl transition-all duration-300 relative">
+              {/* Language Switcher - Inside Card */}
+              <div className="absolute top-4 right-4 z-10">
+                <LanguageSwitcher />
+              </div>
+              
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-text-primary mb-2">
                   {mode === 'reset' ? 'Reset Password' : mode === 'signin' ? t('auth:card.welcomeBack') : t('auth:card.getStarted')}
