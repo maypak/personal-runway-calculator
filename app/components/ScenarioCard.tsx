@@ -1,162 +1,188 @@
-/**
- * ScenarioCard - Individual Scenario Display
- * 
- * Purpose: Display single scenario with key metrics
- * Features:
- * - Scenario name and description
- * - Runway display (months)
- * - Burn rate display
- * - Edit/Compare/Delete actions
- * - Base scenario badge
- * 
- * Created: 2026-02-17
- * Author: Senior Frontend Developer
- */
-
 'use client';
 
-import { Edit, BarChart2, Trash2, TrendingDown } from 'lucide-react';
-import { useI18n } from '../contexts/I18nContext';
+import { Scenario } from '../hooks/useScenarios';
+import { TrendingUp, TrendingDown, Edit, Trash2, Copy, BarChart3 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyFormatter';
-import type { Scenario } from '../types';
 
 interface ScenarioCardProps {
   scenario: Scenario;
-  onEdit: () => void;
-  onCompare: () => void;
-  onDelete?: () => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onDuplicate?: (id: string) => void;
+  onCompare?: (id: string) => void;
   selected?: boolean;
+  compact?: boolean;
 }
 
-export function ScenarioCard({
+export default function ScenarioCard({
   scenario,
   onEdit,
-  onCompare,
   onDelete,
+  onDuplicate,
+  onCompare,
   selected = false,
+  compact = false,
 }: ScenarioCardProps) {
-  const { t, locale } = useI18n();
-  const runway = scenario.calculatedRunway ?? 0;
-  const burnRate = scenario.calculatedBurnRate ?? 0;
-  const breakevenMonth = scenario.calculatedBreakevenMonth;
+  const runway = scenario.calculatedRunway || 0;
+  const burnRate = scenario.calculatedBurnRate || 0;
+  const isSurplus = burnRate < 0;
 
-  // Color based on runway length
-  const getRunwayColor = (months: number) => {
-    if (months >= 24) return 'text-green-600 dark:text-green-400';
-    if (months >= 12) return 'text-blue-600 dark:text-blue-400';
-    if (months >= 6) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
-  };
+  // Format runway display
+  const runwayYears = Math.floor(runway / 12);
+  const runwayMonths = Math.floor(runway % 12);
+  const runwayDisplay =
+    runwayYears > 0 ? `${runwayYears}y ${runwayMonths}m` : `${runwayMonths}m`;
+
+  // Color based on runway
+  const runwayColor =
+    runway > 24
+      ? 'text-success'
+      : runway > 12
+      ? 'text-info'
+      : runway > 6
+      ? 'text-warning'
+      : 'text-error';
 
   return (
-    <article
-      aria-label={`Scenario: ${scenario.name}`}
+    <div
       className={`
-        relative border rounded-lg p-6 transition-all duration-200
-        hover:shadow-lg cursor-pointer
-        ${selected 
-          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950 shadow-md' 
-          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700'
-        }
+        bg-surface-card rounded-xl border-2 transition-all duration-200
+        ${selected ? 'border-primary shadow-lg scale-105' : 'border-border-subtle hover:border-primary/50'}
+        ${compact ? 'p-4' : 'p-6'}
       `}
-      onClick={onCompare}
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
             {scenario.name}
+            {scenario.isBase && (
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                Base
+              </span>
+            )}
           </h3>
           {scenario.description && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              {scenario.description}
-            </p>
+            <p className="text-sm text-text-tertiary mt-1">{scenario.description}</p>
           )}
         </div>
-        
-        {scenario.isBase && (
-          <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded">
-            {t('scenarios:card.base')}
-          </span>
+
+        {/* Actions */}
+        {!compact && (
+          <div className="flex items-center gap-2">
+            {onCompare && (
+              <button
+                onClick={() => onCompare(scenario.id)}
+                className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors"
+                title="Compare"
+              >
+                <BarChart3 className="w-4 h-4 text-text-secondary" />
+              </button>
+            )}
+            {onDuplicate && (
+              <button
+                onClick={() => onDuplicate(scenario.id)}
+                className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors"
+                title="Duplicate"
+              >
+                <Copy className="w-4 h-4 text-text-secondary" />
+              </button>
+            )}
+            {onEdit && (
+              <button
+                onClick={() => onEdit(scenario.id)}
+                className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors"
+                title="Edit"
+              >
+                <Edit className="w-4 h-4 text-text-secondary" />
+              </button>
+            )}
+            {onDelete && !scenario.isBase && (
+              <button
+                onClick={() => onDelete(scenario.id)}
+                className="p-2 hover:bg-error/10 rounded-lg transition-colors"
+                title="Delete"
+              >
+                <Trash2 className="w-4 h-4 text-error" />
+              </button>
+            )}
+          </div>
         )}
       </div>
 
-      {/* Metrics */}
-      <div className="space-y-3">
-        {/* Runway */}
+      {/* Runway Display */}
+      <div className="mb-4">
+        <div className="flex items-baseline gap-2">
+          <span className={`text-3xl font-bold ${runwayColor}`}>{runwayDisplay}</span>
+          <span className="text-sm text-text-tertiary">runway</span>
+        </div>
+        {runway > 999 && (
+          <div className="text-sm text-success mt-1 flex items-center gap-1">
+            <TrendingUp className="w-4 h-4" />
+            <span>Infinite runway!</span>
+          </div>
+        )}
+      </div>
+
+      {/* Financial Stats */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <div className={`text-3xl font-bold ${getRunwayColor(runway)}`}>
-            {t('scenarios:card.months', { count: runway })}
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            {t('scenarios:card.runway.label')}
+          <div className="text-text-tertiary">Savings</div>
+          <div className="font-semibold text-text-primary">
+            {formatCurrency(scenario.totalSavings, 'USD')}
           </div>
         </div>
 
-        {/* Burn Rate */}
-        <div className="flex items-center gap-2 text-sm">
-          <TrendingDown className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-700 dark:text-gray-300">
-            {formatCurrency(burnRate, "USD" as any)}{t('scenarios:card.burnRate.perMonth')}
-          </span>
+        <div>
+          <div className="text-text-tertiary">Monthly Burn</div>
+          <div className={`font-semibold flex items-center gap-1 ${isSurplus ? 'text-success' : 'text-text-primary'}`}>
+            {isSurplus ? (
+              <TrendingUp className="w-3 h-3" />
+            ) : (
+              <TrendingDown className="w-3 h-3" />
+            )}
+            {formatCurrency(Math.abs(burnRate), 'USD')}
+          </div>
         </div>
 
-        {/* Breakeven */}
-        {breakevenMonth !== undefined && breakevenMonth !== null && (
-          <div className="text-sm">
-            <span className="text-green-600 dark:text-green-400 font-medium">
-              ✓ {t('scenarios:card.breakeven.label', { month: breakevenMonth })}
-            </span>
+        {scenario.monthlyIncome > 0 && (
+          <div>
+            <div className="text-text-tertiary">Income</div>
+            <div className="font-semibold text-success">
+              +{formatCurrency(scenario.monthlyIncome, 'USD')}
+            </div>
+          </div>
+        )}
+
+        {scenario.monthlyExpenses > 0 && (
+          <div>
+            <div className="text-text-tertiary">Expenses</div>
+            <div className="font-semibold text-error">
+              -{formatCurrency(scenario.monthlyExpenses, 'USD')}
+            </div>
           </div>
         )}
       </div>
 
-      {/* Actions */}
-      <div className="mt-6 flex gap-2">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit();
-          }}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        >
-          <Edit className="w-4 h-4" />
-          {t('scenarios:card.edit')}
-        </button>
-        
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onCompare();
-          }}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-md hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors"
-        >
-          <BarChart2 className="w-4 h-4" />
-          {t('scenarios:card.compare')}
-        </button>
-        
-        {!scenario.isBase && onDelete && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (confirm(t('scenarios:card.deleteConfirm', { name: scenario.name }))) {
-                onDelete();
-              }
-            }}
-            className="px-3 py-2 text-sm font-medium text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-md hover:bg-red-100 dark:hover:bg-red-800 transition-colors"
-            title={t('scenarios:card.delete')}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Selected indicator */}
-      {selected && (
-        <div className="absolute top-2 right-2">
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+      {/* Special Items */}
+      {!compact && (
+        <div className="mt-4 pt-4 border-t border-border-subtle">
+          <div className="flex items-center gap-4 text-xs text-text-tertiary">
+            {scenario.oneTimeExpenses.length > 0 && (
+              <div>
+                {scenario.oneTimeExpenses.length} one-time expense
+                {scenario.oneTimeExpenses.length > 1 ? 's' : ''}
+              </div>
+            )}
+            {scenario.recurringItems.length > 0 && (
+              <div>
+                {scenario.recurringItems.length} recurring item
+                {scenario.recurringItems.length > 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </article>
+    </div>
   );
 }

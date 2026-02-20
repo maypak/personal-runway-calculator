@@ -8,7 +8,7 @@
  * Author: Senior Frontend Developer
  */
 
-import { ScenarioManager } from '../components/ScenarioManager';
+import ScenarioManager from '../components/ScenarioManager';
 
 export const metadata = {
   title: 'Your Scenarios | Personal Runway Calculator',
