@@ -147,6 +147,7 @@ export function useSupabaseFinance() {
       start_date: newSettings.startDate,
       monthly_income: newSettings.monthlyIncome,
       income_months: newSettings.incomeMonths,
+      currency: newSettings.currency || 'USD',
     };
 
     // IMPORTANT: We use conditional INSERT/UPDATE instead of UPSERT
