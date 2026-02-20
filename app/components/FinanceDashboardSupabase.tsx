@@ -30,6 +30,7 @@ import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
 import LanguageSwitcher from './LanguageSwitcher';
+import OnboardingWizard from './OnboardingWizard';
 
 export default function FinanceDashboardSupabase() {
   const { signOut } = useAuth();
@@ -52,6 +53,7 @@ export default function FinanceDashboardSupabase() {
   const [showSimulator, setShowSimulator] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showGoalModal, setShowGoalModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [editingGoal, setEditingGoal] = useState<typeof goals[0] | null>(null);
   
   const [newExpense, setNewExpense] = useState({ 
@@ -70,6 +72,20 @@ export default function FinanceDashboardSupabase() {
     if (settings) {
       const expense = (settings.monthlyFixed || 0) + (settings.monthlyVariable || 0);
       setSimMonthlyExpense(expense || 3000); // Fallback to $3000 if 0
+    }
+  }, [settings]);
+
+  // Show onboarding for first-time users
+  useEffect(() => {
+    if (settings) {
+      const isFirstRun = (settings.currentSavings === 0 || !settings.currentSavings) && 
+                         (settings.monthlyFixed === 0 || !settings.monthlyFixed) &&
+                         (settings.monthlyVariable === 0 || !settings.monthlyVariable);
+      
+      if (isFirstRun) {
+        // Small delay to let the dashboard render first
+        setTimeout(() => setShowOnboarding(true), 500);
+      }
     }
   }, [settings]);
 
@@ -147,6 +163,21 @@ export default function FinanceDashboardSupabase() {
 
     setNewExpense({ amount: '', category: 'Food', memo: '' });
     setShowExpenseForm(false);
+  };
+
+  // Onboarding handler
+  const handleOnboardingComplete = async (data: { savings: number; monthlyExpense: number }) => {
+    await updateSettings({
+      ...settings,
+      currentSavings: data.savings,
+      monthlyFixed: data.monthlyExpense,
+    });
+    setShowOnboarding(false);
+  };
+
+  const handleSkipOnboarding = () => {
+    setShowOnboarding(false);
+    // Optionally show a hint or open settings
   };
 
   // Goal handlers
@@ -465,7 +496,7 @@ export default function FinanceDashboardSupabase() {
               {t('dashboard:onboarding.description') || 'Enter your savings and monthly expenses to see how long your money will last'}
             </p>
             <button
-              onClick={() => setShowSettings(true)}
+              onClick={() => setShowOnboarding(true)}
               className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active 
                 text-white rounded-xl font-semibold shadow-md hover:shadow-lg
                 transform hover:-translate-y-0.5 active:scale-98
@@ -840,6 +871,13 @@ export default function FinanceDashboardSupabase() {
         }}
         onSave={handleSaveGoal}
         existingGoal={editingGoal}
+      />
+
+      {/* Onboarding Wizard */}
+      <OnboardingWizard
+        isOpen={showOnboarding}
+        onComplete={handleOnboardingComplete}
+        onSkip={handleSkipOnboarding}
       />
     </div>
   );
