@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Clock, CheckCircle, XCircle, Shield, Cloud, Sparkles, Wallet } from 'lucide-react';
 import { useI18n } from '../contexts/I18nContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   const { t } = useI18n();
@@ -114,7 +115,12 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-bg-secondary via-bg-primary to-bg-tertiary flex items-center justify-center p-6 md:p-4 relative">
+      {/* Language Switcher - Top Right */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher />
+      </div>
+      
       <div className="w-full max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Hero Section */}
