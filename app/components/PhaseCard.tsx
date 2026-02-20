@@ -169,7 +169,7 @@ export function PhaseCard({
                     : 'text-red-600 dark:text-red-400'
                 }`}
               >
-                {netMonthly >= 0 ? '+' : ''}{formatCurrency(Math.abs(netMonthly), locale)}
+                {netMonthly >= 0 ? '+' : ''}{formatCurrency(Math.abs(netMonthly), "USD" as any)}
               </div>
             </div>
 
