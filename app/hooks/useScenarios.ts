@@ -1,362 +1,204 @@
-/**
- * useScenarios Hook - Scenario CRUD Operations
- * 
- * Purpose: Manage financial scenarios (Create, Read, Update, Delete)
- * Pattern: Mirrors useSupabaseFinance.ts structure
- * 
- * Features:
- * - Load user's scenarios
- * - Create scenario (clone from existing or base financial settings)
- * - Update scenario (with automatic recalculation)
- * - Delete scenario (except base)
- * - Free tier limit enforcement (max 1 non-base scenario)
- * 
- * Created: 2026-02-17
- * Author: Senior Frontend Developer
- */
-
-'use client';
-
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from './useAuth';
-import type { Scenario, OneTimeExpense, RecurringItem } from '../types';
-import { calculateRunway, validateScenario } from '../utils/runwayCalculator';
+import { calculateRunway } from '../utils/runwayCalculator';
+
+// Matches Supabase scenarios table structure
+export interface Scenario {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  is_base: boolean;
+  
+  // Financial data
+  total_savings: number;
+  monthly_expenses: number;
+  monthly_income: number;
+  
+  // JSONB arrays
+  one_time_expenses: OneTimeExpense[];
+  recurring_items: RecurringItem[];
+  
+  // Calculated (cached)
+  calculated_runway: number | null;
+  calculated_burn_rate: number | null;
+  calculated_breakeven_month: number | null;
+  calculated_end_savings: number | null;
+  
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OneTimeExpense {
+  name: string;
+  amount: number;
+  month: number; // Which month it occurs (0-indexed from start)
+}
+
+export interface RecurringItem {
+  name: string;
+  amount: number;
+  type: 'income' | 'expense';
+  startMonth: number;
+  endMonth: number | null; // null = continues indefinitely
+}
+
+export interface CreateScenarioInput {
+  name: string;
+  description?: string;
+  is_base?: boolean;
+  total_savings: number;
+  monthly_expenses?: number;
+  monthly_income?: number;
+  one_time_expenses?: OneTimeExpense[];
+  recurring_items?: RecurringItem[];
+}
 
 export function useScenarios() {
-  const { user, loading: authLoading } = useAuth();
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /**
-   * Load scenarios from database
-   */
-  const loadScenarios = async () => {
-    
-    if (!user) {
-      console.warn('⚠️ [useScenarios] No user authenticated');
-      setScenarios([]);
-      setLoading(false);
-      return;
-    }
-
+  // Load all scenarios for current user
+  const loadScenarios = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setScenarios([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error: fetchError } = await supabase
         .from('scenarios')
         .select('*')
-        .eq('user_id', user.id)
+        .order('is_base', { ascending: false }) // Base first
         .order('created_at', { ascending: true });
 
       if (fetchError) throw fetchError;
 
-
-      if (data) {
-        const parsedScenarios: Scenario[] = data.map((row) => ({
-          id: row.id,
-          userId: row.user_id,
-          name: row.name,
-          description: row.description || undefined,
-          isBase: row.is_base,
-          totalSavings: Number(row.total_savings),
-          monthlyExpenses: Number(row.monthly_expenses),
-          monthlyIncome: Number(row.monthly_income),
-          oneTimeExpenses: (row.one_time_expenses as OneTimeExpense[]) || [],
-          recurringItems: (row.recurring_items as RecurringItem[]) || [],
-          calculatedRunway: row.calculated_runway ? Number(row.calculated_runway) : undefined,
-          calculatedBurnRate: row.calculated_burn_rate ? Number(row.calculated_burn_rate) : undefined,
-          calculatedBreakevenMonth: row.calculated_breakeven_month ?? undefined,
-          calculatedFirstIncomeMonth: row.calculated_first_income_month ?? undefined,
-          calculatedEndSavings: row.calculated_end_savings ? Number(row.calculated_end_savings) : undefined,
-          createdAt: row.created_at,
-          updatedAt: row.updated_at,
-        }));
-
-        setScenarios(parsedScenarios);
-      } else {
-        setScenarios([]);
-      }
+      setScenarios(data || []);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('❌ [useScenarios] Failed to load scenarios:', errorMessage);
-      setError(errorMessage);
-      setScenarios([]);
+      console.error('Error loading scenarios:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load scenarios');
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  /**
-   * Create a new scenario
-   * 
-   * @param name - Scenario name
-   * @param basedOnId - Optional: Clone data from existing scenario or base financial settings
-   * @returns Created scenario or null if failed
-   */
-  const createScenario = async (
-    name: string,
-    basedOnId?: string
-  ): Promise<{ success: boolean; data?: Scenario; error?: string }> => {
-
-    if (!user) {
-      console.error('❌ [createScenario] No user authenticated');
-      return { success: false, error: 'Not authenticated' };
-    }
-
-    // Free tier limit: Only 1 non-base scenario
-    const nonBaseScenarios = scenarios.filter(s => !s.isBase);
-    if (nonBaseScenarios.length >= 1) {
-      console.warn('⚠️ [createScenario] Free tier limit: Only 1 non-base scenario allowed');
-      return { success: false, error: 'Free tier limit: Only 1 scenario allowed. Upgrade to create more.' };
-    }
-
+  // Create new scenario
+  const createScenario = useCallback(async (input: CreateScenarioInput): Promise<Scenario | null> => {
     try {
-      // Get base data (from existing scenario or financial settings)
-      let baseData: Partial<Scenario>;
-      
-      if (basedOnId) {
-        const baseScenario = scenarios.find(s => s.id === basedOnId);
-        if (baseScenario) {
-          baseData = {
-            totalSavings: baseScenario.totalSavings,
-            monthlyExpenses: baseScenario.monthlyExpenses,
-            monthlyIncome: baseScenario.monthlyIncome,
-            oneTimeExpenses: [...baseScenario.oneTimeExpenses],
-            recurringItems: [...baseScenario.recurringItems],
-          };
-        } else {
-          console.warn('⚠️ [createScenario] Base scenario not found, using defaults');
-          baseData = {
-            totalSavings: 0,
-            monthlyExpenses: 0,
-            monthlyIncome: 0,
-            oneTimeExpenses: [],
-            recurringItems: [],
-          };
-        }
-      } else {
-        // Load from finance_settings
-        const { data: settingsData } = await supabase
-          .from('finance_settings')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
+      setError(null);
 
-        if (settingsData) {
-          baseData = {
-            totalSavings: Number(settingsData.current_savings) + Number(settingsData.lump_sum),
-            monthlyExpenses: Number(settingsData.monthly_fixed) + Number(settingsData.monthly_variable),
-            monthlyIncome: Number(settingsData.monthly_income),
-            oneTimeExpenses: [],
-            recurringItems: [],
-          };
-        } else {
-          baseData = {
-            totalSavings: 0,
-            monthlyExpenses: 0,
-            monthlyIncome: 0,
-            oneTimeExpenses: [],
-            recurringItems: [],
-          };
-        }
-      }
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
-      // Create scenario object for calculation
-      const newScenario: Scenario = {
-        id: 'temp', // Will be replaced by DB
-        userId: user.id,
-        name,
-        isBase: false,
-        totalSavings: baseData.totalSavings || 0,
-        monthlyExpenses: baseData.monthlyExpenses || 0,
-        monthlyIncome: baseData.monthlyIncome || 0,
-        oneTimeExpenses: baseData.oneTimeExpenses || [],
-        recurringItems: baseData.recurringItems || [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+      // Calculate runway before saving
+      const runway = calculateRunway(
+        input.total_savings,
+        input.monthly_expenses || 0,
+        input.monthly_income || 0
+      );
+
+      const burnRate = (input.monthly_expenses || 0) - (input.monthly_income || 0);
+
+      const scenarioData = {
+        user_id: user.id,
+        name: input.name,
+        description: input.description,
+        is_base: input.is_base || false,
+        total_savings: input.total_savings,
+        monthly_expenses: input.monthly_expenses || 0,
+        monthly_income: input.monthly_income || 0,
+        one_time_expenses: input.one_time_expenses || [],
+        recurring_items: input.recurring_items || [],
+        calculated_runway: runway,
+        calculated_burn_rate: burnRate,
+        calculated_breakeven_month: null, // TODO: Calculate with income
+        calculated_end_savings: 0, // TODO: Calculate final balance
       };
 
-      // Validate before calculation
-      const validation = validateScenario(newScenario);
-      if (!validation.valid) {
-        console.error('❌ [createScenario] Validation failed:', validation.error);
-        return { success: false, error: validation.error };
-      }
-
-      // Calculate runway
-      const result = calculateRunway(newScenario);
-
-      // Insert into database
       const { data, error: insertError } = await supabase
         .from('scenarios')
-        .insert({
-          user_id: user.id,
-          name,
-          is_base: false,
-          total_savings: baseData.totalSavings,
-          monthly_expenses: baseData.monthlyExpenses,
-          monthly_income: baseData.monthlyIncome,
-          one_time_expenses: baseData.oneTimeExpenses,
-          recurring_items: baseData.recurringItems,
-          calculated_runway: result.runway,
-          calculated_burn_rate: result.burnRate,
-          calculated_breakeven_month: result.breakevenMonth,
-          calculated_first_income_month: result.firstIncomeMonth,
-          calculated_end_savings: result.endSavings,
-        })
+        .insert(scenarioData)
         .select()
         .single();
 
       if (insertError) throw insertError;
 
+      // Refresh scenarios list
+      await loadScenarios();
 
-      // Parse and add to state
-      const createdScenario: Scenario = {
-        id: data.id,
-        userId: data.user_id,
-        name: data.name,
-        description: data.description || undefined,
-        isBase: data.is_base,
-        totalSavings: Number(data.total_savings),
-        monthlyExpenses: Number(data.monthly_expenses),
-        monthlyIncome: Number(data.monthly_income),
-        oneTimeExpenses: (data.one_time_expenses as OneTimeExpense[]) || [],
-        recurringItems: (data.recurring_items as RecurringItem[]) || [],
-        calculatedRunway: Number(data.calculated_runway),
-        calculatedBurnRate: Number(data.calculated_burn_rate),
-        calculatedBreakevenMonth: data.calculated_breakeven_month ?? undefined,
-        calculatedFirstIncomeMonth: data.calculated_first_income_month ?? undefined,
-        calculatedEndSavings: Number(data.calculated_end_savings),
-        createdAt: data.created_at,
-        updatedAt: data.updated_at,
-      };
-
-      setScenarios(prev => [...prev, createdScenario]);
-
-      return { success: true, data: createdScenario };
+      return data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('❌ [createScenario] Failed:', errorMessage);
-      return { success: false, error: errorMessage };
+      console.error('Error creating scenario:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create scenario');
+      return null;
     }
-  };
+  }, [loadScenarios]);
 
-  /**
-   * Update an existing scenario
-   * 
-   * @param id - Scenario ID
-   * @param updates - Partial scenario data to update
-   * @returns Success status
-   */
-  const updateScenario = async (
+  // Update existing scenario
+  const updateScenario = useCallback(async (
     id: string,
-    updates: Partial<Omit<Scenario, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>
-  ): Promise<{ success: boolean; error?: string }> => {
-
-    if (!user) {
-      console.error('❌ [updateScenario] No user authenticated');
-      return { success: false, error: 'Not authenticated' };
-    }
-
+    updates: Partial<CreateScenarioInput>
+  ): Promise<boolean> => {
     try {
-      // Get current scenario for recalculation
-      const currentScenario = scenarios.find(s => s.id === id);
-      if (!currentScenario) {
-        console.error('❌ [updateScenario] Scenario not found:', id);
-        return { success: false, error: 'Scenario not found' };
+      setError(null);
+
+      // Recalculate if financial data changed
+      const scenario = scenarios.find(s => s.id === id);
+      if (!scenario) throw new Error('Scenario not found');
+
+      const newData: any = { ...updates };
+
+      // If any financial data changed, recalculate
+      if (
+        updates.total_savings !== undefined ||
+        updates.monthly_expenses !== undefined ||
+        updates.monthly_income !== undefined
+      ) {
+        const savings = updates.total_savings ?? scenario.total_savings;
+        const expenses = updates.monthly_expenses ?? scenario.monthly_expenses;
+        const income = updates.monthly_income ?? scenario.monthly_income;
+
+        const runway = calculateRunway(savings, expenses, income);
+
+        newData.calculated_runway = runway;
+        newData.calculated_burn_rate = expenses - income;
       }
-
-      // Merge updates
-      const updatedScenario: Scenario = {
-        ...currentScenario,
-        ...updates,
-      };
-
-      // Validate
-      const validation = validateScenario(updatedScenario);
-      if (!validation.valid) {
-        console.error('❌ [updateScenario] Validation failed:', validation.error);
-        return { success: false, error: validation.error };
-      }
-
-      // Recalculate runway
-      const result = calculateRunway(updatedScenario);
-
-      // Prepare database payload
-      const dbPayload: Record<string, unknown> = {};
-      if (updates.name !== undefined) dbPayload.name = updates.name;
-      if (updates.description !== undefined) dbPayload.description = updates.description;
-      if (updates.totalSavings !== undefined) dbPayload.total_savings = updates.totalSavings;
-      if (updates.monthlyExpenses !== undefined) dbPayload.monthly_expenses = updates.monthlyExpenses;
-      if (updates.monthlyIncome !== undefined) dbPayload.monthly_income = updates.monthlyIncome;
-      if (updates.oneTimeExpenses !== undefined) dbPayload.one_time_expenses = updates.oneTimeExpenses;
-      if (updates.recurringItems !== undefined) dbPayload.recurring_items = updates.recurringItems;
-
-      // Always update calculated values
-      dbPayload.calculated_runway = result.runway;
-      dbPayload.calculated_burn_rate = result.burnRate;
-      dbPayload.calculated_breakeven_month = result.breakevenMonth;
-      dbPayload.calculated_first_income_month = result.firstIncomeMonth;
-      dbPayload.calculated_end_savings = result.endSavings;
-
 
       const { error: updateError } = await supabase
         .from('scenarios')
-        .update(dbPayload)
+        .update(newData)
         .eq('id', id);
 
       if (updateError) throw updateError;
 
+      // Refresh scenarios list
+      await loadScenarios();
 
-      // Update state
-      setScenarios(prev =>
-        prev.map(s =>
-          s.id === id
-            ? {
-                ...s,
-                ...updates,
-                calculatedRunway: result.runway,
-                calculatedBurnRate: result.burnRate,
-                calculatedBreakevenMonth: result.breakevenMonth ?? undefined,
-                calculatedFirstIncomeMonth: result.firstIncomeMonth ?? undefined,
-                calculatedEndSavings: result.endSavings,
-              }
-            : s
-        )
-      );
-
-      return { success: true };
+      return true;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('❌ [updateScenario] Failed:', errorMessage);
-      return { success: false, error: errorMessage };
+      console.error('Error updating scenario:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update scenario');
+      return false;
     }
-  };
+  }, [scenarios, loadScenarios]);
 
-  /**
-   * Delete a scenario
-   * 
-   * @param id - Scenario ID
-   * @returns Success status
-   */
-  const deleteScenario = async (id: string): Promise<{ success: boolean; error?: string }> => {
-
-    if (!user) {
-      console.error('❌ [deleteScenario] No user authenticated');
-      return { success: false, error: 'Not authenticated' };
-    }
-
-    // Don't allow deleting base scenario
-    const scenario = scenarios.find(s => s.id === id);
-    if (scenario?.isBase) {
-      console.error('❌ [deleteScenario] Cannot delete base scenario');
-      return { success: false, error: 'Cannot delete base scenario' };
-    }
-
+  // Delete scenario
+  const deleteScenario = useCallback(async (id: string): Promise<boolean> => {
     try {
+      setError(null);
+
+      const scenario = scenarios.find(s => s.id === id);
+      if (scenario?.is_base) {
+        throw new Error('Cannot delete base scenario');
+      }
+
       const { error: deleteError } = await supabase
         .from('scenarios')
         .delete()
@@ -364,34 +206,95 @@ export function useScenarios() {
 
       if (deleteError) throw deleteError;
 
+      // Refresh scenarios list
+      await loadScenarios();
 
-      setScenarios(prev => prev.filter(s => s.id !== id));
-
-      return { success: true };
+      return true;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('❌ [deleteScenario] Failed:', errorMessage);
-      return { success: false, error: errorMessage };
+      console.error('Error deleting scenario:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete scenario');
+      return false;
     }
-  };
+  }, [scenarios, loadScenarios]);
 
-  // Auto-load scenarios when user changes
-  useEffect(() => {
-    if (user && !authLoading) {
-      loadScenarios();
-    } else {
-      setScenarios([]);
-      setLoading(false);
+  // Create scenario from current financial settings
+  const createFromCurrentSettings = useCallback(async (
+    name: string,
+    description?: string
+  ): Promise<Scenario | null> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Fetch current financial settings
+      const { data: settings } = await supabase
+        .from('financial_settings')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!settings) throw new Error('No financial settings found');
+
+      // Convert financial_settings to scenario format
+      const totalSavings = (settings.current_savings || 0) + (settings.lump_sum || 0);
+      const monthlyExpenses = (settings.monthly_fixed || 0) + (settings.monthly_variable || 0);
+      const monthlyIncome = settings.monthly_income || 0;
+
+      return await createScenario({
+        name,
+        description,
+        is_base: false,
+        total_savings: totalSavings,
+        monthly_expenses: monthlyExpenses,
+        monthly_income: monthlyIncome,
+      });
+    } catch (err) {
+      console.error('Error creating from settings:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create scenario');
+      return null;
     }
-  }, [user, authLoading]);
+  }, [createScenario]);
+
+  // Duplicate an existing scenario
+  const duplicateScenario = useCallback(async (
+    id: string,
+    newName: string
+  ): Promise<Scenario | null> => {
+    try {
+      const scenario = scenarios.find(s => s.id === id);
+      if (!scenario) throw new Error('Scenario not found');
+
+      return await createScenario({
+        name: newName,
+        description: scenario.description,
+        is_base: false,
+        total_savings: scenario.total_savings,
+        monthly_expenses: scenario.monthly_expenses,
+        monthly_income: scenario.monthly_income,
+        one_time_expenses: [...scenario.one_time_expenses],
+        recurring_items: [...scenario.recurring_items],
+      });
+    } catch (err) {
+      console.error('Error duplicating scenario:', err);
+      setError(err instanceof Error ? err.message : 'Failed to duplicate scenario');
+      return null;
+    }
+  }, [scenarios, createScenario]);
+
+  // Load scenarios on mount
+  useEffect(() => {
+    loadScenarios();
+  }, [loadScenarios]);
 
   return {
     scenarios,
-    loading: authLoading || loading,
+    loading,
     error,
     loadScenarios,
     createScenario,
     updateScenario,
     deleteScenario,
+    createFromCurrentSettings,
+    duplicateScenario,
   };
 }
