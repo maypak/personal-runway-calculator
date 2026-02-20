@@ -440,7 +440,7 @@ export function PhaseEditor({
                   Avg Monthly Burn
                 </div>
                 <div className="text-lg font-semibold text-blue-900 dark:text-blue-200">
-                  {duration > 0 ? formatCurrency(Math.round(totalBurn / duration), locale) : formatCurrency(0, "USD" as any)}
+                  {duration > 0 ? formatCurrency(Math.round(totalBurn / duration), "USD" as any) : formatCurrency(0, "USD" as any)}
                 </div>
               </div>
             </div>
