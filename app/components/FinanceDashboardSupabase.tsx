@@ -579,41 +579,46 @@ export default function FinanceDashboardSupabase() {
         )}
       </div>
 
-      {/* Goal Progress Section */}
-      {activeGoal ? (
-        <GoalProgress
-          goal={activeGoal}
-          currentRunway={runway}
-          remainingFunds={remainingFunds}
-          onEdit={() => handleEditGoal(activeGoal)}
-          onDelete={() => handleDeleteGoal(activeGoal.id)}
-        />
-      ) : (
-        <div className="bg-primary-light rounded-xl shadow-md p-6 border-2 border-dashed border-primary/30 text-center">
-          <Target className="w-12 h-12 text-primary mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-text-primary mb-2">
-            {t('dashboard:goals.setGoal')}
-          </h3>
-          <p className="text-text-secondary mb-4 max-w-md mx-auto">
-            {t('dashboard:goals.noGoals')}
-          </p>
-          <button
-            onClick={() => {
-              setEditingGoal(null);
-              setShowGoalModal(true);
-            }}
-            className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
-              text-white rounded-xl font-semibold shadow-md hover:shadow-lg
-              transform hover:-translate-y-0.5 active:scale-98
-              transition-all duration-200"
-          >
-            {t('dashboard:goals.setGoal')}
-          </button>
-        </div>
+      {/* Goal Progress Section - Only show after first runway calculation */}
+      {!isFirstRun && (
+        <>
+          {activeGoal ? (
+            <GoalProgress
+              goal={activeGoal}
+              currentRunway={runway}
+              remainingFunds={remainingFunds}
+              onEdit={() => handleEditGoal(activeGoal)}
+              onDelete={() => handleDeleteGoal(activeGoal.id)}
+            />
+          ) : (
+            <div className="bg-primary-light rounded-xl shadow-md p-6 border-2 border-dashed border-primary/30 text-center">
+              <Target className="w-12 h-12 text-primary mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-text-primary mb-2">
+                {t('dashboard:goals.setGoal')}
+              </h3>
+              <p className="text-text-secondary mb-4 max-w-md mx-auto">
+                {t('dashboard:goals.noGoals')}
+              </p>
+              <button
+                onClick={() => {
+                  setEditingGoal(null);
+                  setShowGoalModal(true);
+                }}
+                className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
+                  text-white rounded-xl font-semibold shadow-md hover:shadow-lg
+                  transform hover:-translate-y-0.5 active:scale-98
+                  transition-all duration-200"
+              >
+                {t('dashboard:goals.setGoal')}
+              </button>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Quick Stats - Progressive disclosure */}
+      {!isFirstRun && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5 hover:shadow-lg transition-shadow duration-200">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:stats.totalIncome')}</div>
@@ -642,9 +647,11 @@ export default function FinanceDashboardSupabase() {
           </div>
         </div>
       </div>
+      )}
 
-      {/* Budget Progress */}
-      <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5">
+      {/* Budget Progress - Progressive disclosure */}
+      {!isFirstRun && (
+        <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 md:p-5">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm md:text-base font-semibold text-text-secondary">
             {t('dashboard:budget.title')}
@@ -678,9 +685,11 @@ export default function FinanceDashboardSupabase() {
           </span>
         </div>
       </div>
+      )}
 
-      {/* Expenses */}
-      <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-5">
+      {/* Expenses - Progressive disclosure */}
+      {!isFirstRun && (
+        <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-5">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-base md:text-lg font-semibold text-text-primary">
             {t('dashboard:expenses.title')}
@@ -783,9 +792,11 @@ export default function FinanceDashboardSupabase() {
           )}
         </div>
       </div>
+      )}
 
-      {/* Runway Simulator */}
-      <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4">
+      {/* Runway Simulator - Progressive disclosure */}
+      {!isFirstRun && (
+        <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4">
         <button
           onClick={() => setShowSimulator(!showSimulator)}
           className="w-full flex justify-between items-center text-lg font-semibold mb-4 text-text-primary"
@@ -861,6 +872,7 @@ export default function FinanceDashboardSupabase() {
           </div>
         )}
       </div>
+      )}
 
       {/* Goal Setting Modal */}
       <GoalSetting
