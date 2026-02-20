@@ -92,6 +92,7 @@ export function useFIRESettings(): UseFIRESettingsResult {
         else if (fetchError.code === '42P01' || fetchError.message?.includes('relation') || fetchError.message?.includes('does not exist')) {
           console.warn('fire_settings table not found, using defaults');
           // Create default settings object (not persisted)
+          // FIXED: Use empty string to avoid hydration mismatch
           const defaultSettings: FIRESettings = {
             id: 'temp-default',
             user_id: user.id,
@@ -103,8 +104,8 @@ export function useFIRESettings(): UseFIRESettingsResult {
             coast_fire_date: null,
             lean_fi_number: null,
             fat_fi_number: null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            created_at: '',
+            updated_at: '',
           };
           setSettings(defaultSettings);
         } else {
@@ -119,6 +120,7 @@ export function useFIRESettings(): UseFIRESettingsResult {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       if (errorMessage.includes('relation') || errorMessage.includes('does not exist')) {
         console.warn('Graceful fallback: using default FIRE settings');
+        // FIXED: Use empty string to avoid hydration mismatch
         const defaultSettings: FIRESettings = {
           id: 'temp-default',
           user_id: user.id,
@@ -130,8 +132,8 @@ export function useFIRESettings(): UseFIRESettingsResult {
           coast_fire_date: null,
           lean_fi_number: null,
           fat_fi_number: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          created_at: '',
+          updated_at: '',
         };
         setSettings(defaultSettings);
         setError(null); // Clear error, we're handling it gracefully
