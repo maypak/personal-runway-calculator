@@ -21,6 +21,7 @@ import {
   Layers
 } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useAuth } from '../hooks/useAuth';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useTheme } from '../hooks/useTheme';
@@ -31,7 +32,11 @@ import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
 import LanguageSwitcher from './LanguageSwitcher';
-import OnboardingWizard from './OnboardingWizard';
+
+// Dynamic import to avoid hydration mismatch
+const OnboardingWizard = dynamic(() => import('./OnboardingWizard'), {
+  ssr: false,
+});
 
 export default function FinanceDashboardSupabase() {
   const { signOut } = useAuth();
