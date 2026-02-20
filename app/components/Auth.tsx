@@ -103,7 +103,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
             </div>
             
             {/* Hero Message */}
-            <h2 className="text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
               {t('auth:hero.title')}
             </h2>
             
@@ -247,7 +247,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="w-full px-4 py-3 border-2 border-border-default rounded-lg
-                      bg-surface-card text-text-primary placeholder:text-text-tertiary
+                      bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                       transition-all duration-200 hover:border-border-strong"
                     placeholder={t('auth:form.emailPlaceholder')}
@@ -265,7 +265,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                     required
                     minLength={12}
                     className="w-full px-4 py-3 border-2 border-border-default rounded-lg
-                      bg-surface-card text-text-primary placeholder:text-text-tertiary
+                      bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                       transition-all duration-200 hover:border-border-strong"
                     placeholder={t('auth:form.passwordPlaceholder')}

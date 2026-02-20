@@ -221,7 +221,7 @@ export default function OnboardingWizard({
                     onChange={(e) => setSavings(e.target.value)}
                     placeholder="45000"
                     autoFocus
-                    className="w-full pl-12 pr-6 py-4 text-3xl font-bold text-center
+                    className="w-full pl-10 sm:pl-12 pr-6 py-3 sm:py-4 text-2xl sm:text-3xl font-bold text-center
                       bg-surface-card border-2 border-primary rounded-xl
                       text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary
@@ -263,7 +263,7 @@ export default function OnboardingWizard({
                     onChange={(e) => setMonthlyExpense(e.target.value)}
                     placeholder="3500"
                     autoFocus
-                    className="w-full pl-12 pr-6 py-4 text-3xl font-bold text-center
+                    className="w-full pl-10 sm:pl-12 pr-6 py-3 sm:py-4 text-2xl sm:text-3xl font-bold text-center
                       bg-surface-card border-2 border-primary rounded-xl
                       text-text-primary placeholder:text-text-tertiary
                       focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary

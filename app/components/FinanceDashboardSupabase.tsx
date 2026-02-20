@@ -340,7 +340,7 @@ export default function FinanceDashboardSupabase() {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="bg-surface-card rounded-xl shadow-lg border border-border-subtle p-6 space-y-4">
+        <div className="bg-surface-card rounded-xl shadow-lg border border-border-subtle p-4 sm:p-6 space-y-4 max-h-[85vh] overflow-y-auto">
           <h2 className="text-lg md:text-xl font-semibold mb-4 text-text-primary">
             {t('dashboard:settings.title')}
           </h2>
@@ -359,7 +359,7 @@ export default function FinanceDashboardSupabase() {
                 placeholder="45000"
                 className="w-full px-4 py-3
                   bg-surface-card border-2 border-primary/30 rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
                   transition-all duration-200"
               />
@@ -378,7 +378,7 @@ export default function FinanceDashboardSupabase() {
                 onChange={(e) => updateSettings({ ...settings, lumpSum: parseFloat(e.target.value) || 0 })}
                 className="w-full px-4 py-3
                   bg-surface-card border border-border-default rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
@@ -397,7 +397,7 @@ export default function FinanceDashboardSupabase() {
                 onChange={(e) => updateSettings({ ...settings, monthlyIncome: parseFloat(e.target.value) || 0 })}
                 className="w-full px-4 py-3
                   bg-surface-card border border-border-default rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
@@ -416,7 +416,7 @@ export default function FinanceDashboardSupabase() {
                 onChange={(e) => updateSettings({ ...settings, incomeMonths: parseInt(e.target.value) || 0 })}
                 className="w-full px-4 py-3
                   bg-surface-card border border-border-default rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
@@ -436,7 +436,7 @@ export default function FinanceDashboardSupabase() {
                 placeholder="3500"
                 className="w-full px-4 py-3
                   bg-surface-card border-2 border-primary/30 rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
                   transition-all duration-200"
               />
@@ -455,7 +455,7 @@ export default function FinanceDashboardSupabase() {
                 onChange={(e) => updateSettings({ ...settings, monthlyVariable: parseFloat(e.target.value) || 0 })}
                 className="w-full px-4 py-3
                   bg-surface-card border border-border-default rounded-lg
-                  text-text-primary placeholder:text-text-tertiary
+                  text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
@@ -535,7 +535,7 @@ export default function FinanceDashboardSupabase() {
               </p>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="w-full px-4 py-2 border-2 border-error text-error rounded-lg
+                className="w-full px-4 py-3 border-2 border-error text-error rounded-lg
                   hover:bg-error hover:text-white font-medium text-sm
                   transition-all duration-200"
               >
@@ -555,7 +555,7 @@ export default function FinanceDashboardSupabase() {
       )}
 
       {/* Runway Display - Enhanced */}
-      <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-6 md:p-8">
+      <div className="bg-surface-card rounded-xl shadow-md border border-border-subtle p-4 sm:p-6 md:p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg md:text-xl font-semibold text-text-secondary flex items-center gap-2">
@@ -604,7 +604,7 @@ export default function FinanceDashboardSupabase() {
         ) : (
           <>
             <div className="text-center mb-6">
-              <div className="text-4xl md:text-6xl font-bold text-text-primary mb-3 tabular-nums">
+              <div className="text-5xl md:text-6xl font-bold text-text-primary mb-3 tabular-nums">
                 {runwayYears > 0 && (
                   <span>
                     {runwayYears}
@@ -814,7 +814,7 @@ export default function FinanceDashboardSupabase() {
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
                 className="px-4 py-3 border border-border-default rounded-lg
-                  bg-surface-card text-text-primary placeholder:text-text-tertiary
+                  bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                   transition-all duration-200"
               />
@@ -837,7 +837,7 @@ export default function FinanceDashboardSupabase() {
               value={newExpense.memo}
               onChange={(e) => setNewExpense({ ...newExpense, memo: e.target.value })}
               className="w-full px-4 py-3 border border-border-default rounded-lg
-                bg-surface-card text-text-primary placeholder:text-text-tertiary
+                bg-surface-card text-base text-text-primary placeholder:text-text-tertiary
                 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                 transition-all duration-200"
             />
