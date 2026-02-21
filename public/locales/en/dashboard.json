@@ -1,11 +1,11 @@
 {
   "header": {
-    "title": "Financial Dashboard",
+    "title": "Runway Dashboard",
     "signOut": "Sign Out"
   },
   "runway": {
     "title": "Time Your Money Will Last",
-    "label": "Financial Timeline",
+    "label": "Runway Timeline",
     "months": "months",
     "month": "month",
     "yr": "yr",
@@ -84,8 +84,8 @@
     }
   },
   "simulator": {
-    "title": "Financial Timeline Calculator",
-    "description": "Experiment with different scenarios",
+    "title": "Runway Scenario Planner",
+    "description": "Model different income & expense scenarios",
     "monthlyExpense": "Monthly Expense",
     "monthlyExpenseLabel": "Monthly Expense: $",
     "additionalIncome": "Additional Income",

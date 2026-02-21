@@ -1,10 +1,8 @@
-# Personal Runway Calculator ⏱️
+# Personal Runway Calculator
+### The #1 financial timeline calculator for variable income
 
-**Your money isn't just money. It's TIME.**
-
-Calculate how much time you have to chase your dream, build your startup, or find yourself.
-
-Track expenses. See your runway in real-time. Make confident decisions.
+Track how long your money will last when income is unpredictable.  
+Built for freelancers, founders, and anyone planning 1-2 years without steady income.
 
 🌐 **Live App:** [https://personal-runway-calculator.vercel.app](https://personal-runway-calculator.vercel.app)
 
@@ -12,7 +10,7 @@ Track expenses. See your runway in real-time. Make confident decisions.
 
 ## 🎯 What is this?
 
-A free web app that helps you calculate your **personal runway** (also called "financial runway" - the time your money will last) — how long your savings will last without a job.
+A free web app that helps you calculate your **runway** — how long your money will last with variable income and expenses.
 
 Built by a software engineer who quit after 10 years. I calculated my runway (31 months) and it gave me the confidence to take the leap.
 
@@ -22,36 +20,33 @@ Now I'm sharing this tool with you.
 
 ## ✨ Features
 
-### 💰 Runway Calculator
+### 🏆 Variable Income & Expenses
+The killer feature other calculators don't have:
+- Enter different income/expenses each month
+- Model "good month ($8K) vs dry spell ($2K)"
+- One-time expenses at specific dates
+- Recurring bills with start/end dates
+
+### 📊 Scenario Comparison (NEW!)
+Compare 3 scenarios side-by-side:
+- "6-month sabbatical vs 12-month"
+- "Bootstrap vs take funding"
+- "Conservative vs optimistic"
+- Multi-line runway projection chart
+- Auto-generated insights (best runway, lowest burn rate)
+
+### 📅 Phase-Based Planning
+Plan life stages with different budgets:
+- Phase 1: Travel (low expenses)
+- Phase 2: Home (normal expenses)
+- Phase 3: Back to work (income resumes)
+
+### 🔥 Real-time Burn Rate
+See your runway shrink/grow as you adjust numbers:
 - Track your savings, expenses, and income
 - See exactly how many months/years you can last
 - Real-time updates with every change
 - Color-coded status (green/yellow/red)
-
-### 📊 Expense Tracking
-- Add daily expenses with categories
-- Track recurring monthly bills
-- Monthly budget monitoring
-- Overspending alerts
-
-### 📈 Financial Dashboard
-- Current runway visualization
-- Spending breakdown
-- Monthly spending (burn rate)
-- Available funds tracker
-
-### 🎯 Scenario Comparison (NEW!)
-Compare multiple financial scenarios side-by-side:
-- Create up to 3 scenarios with different assumptions
-- Side-by-side comparison table
-- Multi-line runway projection chart
-- Auto-generated insights (best runway, lowest burn rate)
-- Mobile-responsive design
-
-**Use Cases:**
-- "Should I bootstrap or fundraise?"
-- "Conservative vs Optimistic planning"
-- "Impact of part-time income on runway"
 
 ### ☁️ Cloud Sync
 - Your data syncs across devices
@@ -64,6 +59,55 @@ Compare multiple financial scenarios side-by-side:
 - Works offline (coming soon)
 - Fast, responsive, mobile-first design
 - Home screen icon ready
+
+---
+
+## 📖 Real-World Use Cases
+
+### Freelancer: Sarah ($2K-$10K monthly swings)
+**Problem:** "My income is crazy unpredictable. Can I survive a 3-month dry spell?"
+
+**Solution:**
+- Created 3 scenarios: "Good months ($8K)", "Average ($5K)", "Dry spell ($2K)"
+- Discovered she has 9 months runway even at $2K/month
+- Now confidently turns down low-paying gigs
+
+### Founder: James (18-month startup runway)
+**Problem:** "Burning $5K/month. When do I need revenue or go back to work?"
+
+**Solution:**
+- Tracked personal ($3K) + business ($2K) burn separately
+- Set milestone: "12 months = must hit $5K MRR"
+- Extended runway by cutting AWS spend
+
+### Sabbatical: Lisa (6-month travel plan)
+**Problem:** "Can I afford 6 months off? What if I extend to 12?"
+
+**Solution:**
+- Modeled travel phase ($2K/month) vs home phase ($3.5K)
+- Scenario comparison: 6mo vs 12mo
+- Decided to quit with confidence (18-month cushion)
+
+---
+
+## 🚫 What This Tool Is NOT
+
+We're honest about limitations:
+
+❌ **Not a 30-year retirement calculator**  
+Missing: inflation adjustment, Monte Carlo simulation, tax modeling.  
+For FIRE planning, use [FIRECalc](https://firecalc.com).
+
+❌ **Not multi-currency (yet)**  
+Currently single-currency only. Phase 3 roadmap item.
+
+❌ **Not multi-user**  
+Built for individuals, not couples/households.
+
+❌ **Not a budgeting app**  
+We show runway, not "spend $X on groceries."
+
+**What we ARE:** The best 1-2 year runway calculator for variable income.
 
 ---
 
@@ -114,12 +158,19 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## 🎯 Who is this for?
 
-- 🧑‍💼 Planning to quit your 9-5
-- 🎨 Freelancers tracking finances
-- 🚀 Building a side project while employed
-- 🌍 Digital nomads managing runway
-- 💸 Anyone pursuing FIRE (Financial Independence / Retire Early)
-- 🛠️ Indie hackers & solopreneurs
+### Perfect for (our sweet spot):
+- **Freelancers** with $2K-$10K monthly income swings
+- **Startup founders** tracking 18-month runway
+- **Sabbatical planners** asking "Can I take 6 months off?"
+- **Job seekers** with 3-month severance packages
+- **Career breakers** quitting to travel/study
+
+### NOT for (use other tools):
+- **30-year retirement planning** → Use [FIRECalc](https://firecalc.com) or [cFIREsim](https://cfiresim.com)
+- **Investment portfolio tracking** → Use Personal Capital
+- **Budgeting & debt payoff** → Use YNAB or Actual Budget
+
+**Why we're different:** We're the ONLY calculator that handles variable income month-by-month. Most tools assume steady paychecks — useless for freelancers and founders.
 
 ---
 

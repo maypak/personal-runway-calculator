@@ -1,11 +1,11 @@
 {
   "header": {
-    "title": "재정 대시보드",
+    "title": "런웨이 대시보드",
     "signOut": "로그아웃"
   },
   "runway": {
     "title": "돈이 지속되는 시간",
-    "label": "재정 타임라인",
+    "label": "런웨이 타임라인",
     "months": "개월",
     "month": "개월",
     "yr": "년",
@@ -84,8 +84,8 @@
     }
   },
   "simulator": {
-    "title": "런웨이 시뮬레이터",
-    "description": "다양한 시나리오 실험하기",
+    "title": "런웨이 시나리오 플래너",
+    "description": "다양한 수입 & 지출 시나리오 모델링",
     "monthlyExpense": "월간 지출",
     "monthlyExpenseLabel": "월간 지출: $",
     "additionalIncome": "추가 수입",
