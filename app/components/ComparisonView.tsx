@@ -3,6 +3,7 @@
 import { Scenario } from '../types';
 import { TrendingUp, TrendingDown, X } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyFormatter';
+import { RunwayChart } from './RunwayChart';
 
 interface ComparisonViewProps {
   scenarios: Scenario[];
@@ -52,6 +53,11 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
           >
             <X className="w-6 h-6 text-text-secondary" />
           </button>
+        </div>
+
+        {/* Runway Chart */}
+        <div className="p-6 border-b border-border-subtle">
+          <RunwayChart scenarios={scenarios} height={400} />
         </div>
 
         {/* Comparison Table */}
@@ -291,43 +297,133 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
             </table>
           </div>
 
-          {/* Summary */}
-          <div className="mt-8 p-6 bg-bg-tertiary rounded-xl">
-            <h3 className="text-lg font-semibold text-text-primary mb-4">
-              Comparison Insights
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <div className="text-text-tertiary mb-1">Best Runway</div>
-                <div className="font-semibold text-success">
-                  {
-                    [...scenarios].sort(
+          {/* Enhanced Insights */}
+          <div className="mt-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-xl border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">💡</span>
+              <h3 className="text-lg font-semibold text-text-primary">
+                Comparison Insights
+              </h3>
+            </div>
+            
+            {/* Key Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-white/60 dark:bg-gray-900/40 p-4 rounded-lg">
+                <div className="text-text-tertiary text-sm mb-1">🏆 Best Runway</div>
+                <div className="font-bold text-success text-lg">
+                  {(() => {
+                    const best = [...scenarios].sort(
                       (a, b) => (b.calculatedRunway || 0) - (a.calculatedRunway || 0)
-                    )[0].name
-                  }
+                    )[0];
+                    const months = best.calculatedRunway || 0;
+                    const years = Math.floor(months / 12);
+                    return years > 0 ? `${best.name} (${years}y ${Math.floor(months % 12)}m)` : `${best.name} (${months}m)`;
+                  })()}
                 </div>
               </div>
-              <div>
-                <div className="text-text-tertiary mb-1">Lowest Burn Rate</div>
-                <div className="font-semibold text-success">
-                  {
-                    [...scenarios].sort(
+              
+              <div className="bg-white/60 dark:bg-gray-900/40 p-4 rounded-lg">
+                <div className="text-text-tertiary text-sm mb-1">💰 Lowest Burn Rate</div>
+                <div className="font-bold text-success text-lg">
+                  {(() => {
+                    const efficient = [...scenarios].sort(
                       (a, b) =>
                         Math.abs(a.calculatedBurnRate || 0) -
                         Math.abs(b.calculatedBurnRate || 0)
-                    )[0].name
-                  }
+                    )[0];
+                    const burn = Math.abs(efficient.calculatedBurnRate || 0);
+                    return `${efficient.name} (${formatCurrency(burn, 'USD')}/mo)`;
+                  })()}
                 </div>
               </div>
-              <div>
-                <div className="text-text-tertiary mb-1">Highest Income</div>
-                <div className="font-semibold text-success">
-                  {
-                    [...scenarios].sort((a, b) => b.monthlyIncome - a.monthlyIncome)[0]
-                      .name
-                  }
+              
+              <div className="bg-white/60 dark:bg-gray-900/40 p-4 rounded-lg">
+                <div className="text-text-tertiary text-sm mb-1">📈 Highest Income</div>
+                <div className="font-bold text-success text-lg">
+                  {(() => {
+                    const highestIncome = [...scenarios].sort(
+                      (a, b) => b.monthlyIncome - a.monthlyIncome
+                    )[0];
+                    return highestIncome.monthlyIncome > 0
+                      ? `${highestIncome.name} (${formatCurrency(highestIncome.monthlyIncome, 'USD')}/mo)`
+                      : 'None';
+                  })()}
                 </div>
               </div>
+            </div>
+
+            {/* Detailed Analysis */}
+            <div className="space-y-2 text-sm">
+              {(() => {
+                const sortedByRunway = [...scenarios].sort(
+                  (a, b) => (b.calculatedRunway || 0) - (a.calculatedRunway || 0)
+                );
+                const best = sortedByRunway[0];
+                const worst = sortedByRunway[sortedByRunway.length - 1];
+                const runwayDiff = (best.calculatedRunway || 0) - (worst.calculatedRunway || 0);
+
+                const hasIncome = scenarios.some(s => s.monthlyIncome > 0);
+                const hasBreakeven = scenarios.some(s => s.calculatedBreakevenMonth !== null);
+
+                const insights: string[] = [];
+
+                // Runway comparison
+                if (scenarios.length > 1 && runwayDiff > 0) {
+                  const years = Math.floor(runwayDiff / 12);
+                  const months = Math.floor(runwayDiff % 12);
+                  const timeDiff = years > 0 ? `${years}y ${months}m` : `${months}m`;
+                  insights.push(
+                    `📊 ${best.name} extends your runway by ${timeDiff} compared to ${worst.name}`
+                  );
+                }
+
+                // Breakeven analysis
+                if (hasBreakeven) {
+                  const breakevenScenarios = scenarios
+                    .filter(s => s.calculatedBreakevenMonth !== null)
+                    .sort((a, b) => (a.calculatedBreakevenMonth || 0) - (b.calculatedBreakevenMonth || 0));
+                  
+                  if (breakevenScenarios.length > 0) {
+                    const fastest = breakevenScenarios[0];
+                    insights.push(
+                      `⚡ ${fastest.name} reaches break-even fastest (Month ${fastest.calculatedBreakevenMonth})`
+                    );
+                  }
+                }
+
+                // Income analysis
+                if (hasIncome) {
+                  const incomeScenarios = scenarios.filter(s => s.monthlyIncome > 0);
+                  if (incomeScenarios.length === 1) {
+                    insights.push(
+                      `💼 Only ${incomeScenarios[0].name} has income - reduces burn rate significantly`
+                    );
+                  } else if (incomeScenarios.length > 1) {
+                    const maxIncome = Math.max(...incomeScenarios.map(s => s.monthlyIncome));
+                    const withMaxIncome = incomeScenarios.find(s => s.monthlyIncome === maxIncome);
+                    insights.push(
+                      `💼 ${withMaxIncome?.name} has the highest income at ${formatCurrency(maxIncome, 'USD')}/mo`
+                    );
+                  }
+                }
+
+                // Savings comparison
+                const maxSavings = Math.max(...scenarios.map(s => s.totalSavings));
+                const minSavings = Math.min(...scenarios.map(s => s.totalSavings));
+                if (maxSavings !== minSavings) {
+                  const savingsDiff = maxSavings - minSavings;
+                  insights.push(
+                    `💵 Starting savings vary by ${formatCurrency(savingsDiff, 'USD')} across scenarios`
+                  );
+                }
+
+                return insights.map((insight, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-text-primary">
+                    <span className="text-blue-600 dark:text-blue-400 mt-0.5">•</span>
+                    <span>{insight}</span>
+                  </div>
+                ));
+              })()}
             </div>
           </div>
         </div>
