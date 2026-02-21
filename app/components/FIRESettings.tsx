@@ -84,6 +84,7 @@ export default function FIRESettings({
 
   // Sync with props
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: syncing local state with props
     setLocalInvestmentRate(investmentReturnRate);
     setLocalSWR(safeWithdrawalRate);
     setLocalMonthlySavings(monthlySavings);

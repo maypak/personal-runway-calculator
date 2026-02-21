@@ -45,6 +45,48 @@ interface ChartDataPoint {
   fiTarget: number;
 }
 
+interface TooltipPayloadEntry {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: readonly TooltipPayloadEntry[];
+  label?: string | number;
+  t: (key: string, params?: Record<string, string | number>) => string;
+  formatCurrency: (value: number) => string;
+  // Allow Recharts to pass additional props
+  [key: string]: unknown;
+}
+
+// Custom tooltip component (defined outside to avoid re-creation on each render)
+const CustomTooltip = (props: CustomTooltipProps) => {
+  const { active, payload, label, t, formatCurrency } = props;
+  if (!active || !payload || payload.length === 0 || label === undefined) return null;
+
+  return (
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 shadow-lg">
+      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+        {t('fire:projection.tooltip.year', { year: label })}
+      </p>
+      {payload.map((entry, index) => (
+        <div key={index} className="flex items-center gap-2 text-xs">
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-gray-600 dark:text-gray-400">{entry.name}:</span>
+          <span className="font-semibold text-gray-900 dark:text-white">
+            {formatCurrency(entry.value)}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export default function FIProjectionChart({
   currentSavings,
   monthlyContribution,
@@ -143,31 +185,6 @@ export default function FIProjectionChart({
     return `$${value.toFixed(0)}`;
   };
 
-  // Custom tooltip
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || payload.length === 0) return null;
-
-    return (
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 shadow-lg">
-        <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-          {t('fire:projection.tooltip.year', { year: label })}
-        </p>
-        {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-xs">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span className="text-gray-600 dark:text-gray-400">{entry.name}:</span>
-            <span className="font-semibold text-gray-900 dark:text-white">
-              {formatCurrency(entry.value)}
-            </span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   // Determine if Coast FIRE already achieved
   const isCoastFireAchieved = chartData[chartData.length - 1]?.coastFire >= fiNumber;
   
@@ -211,7 +228,7 @@ export default function FIProjectionChart({
             stroke="#9CA3AF"
             width={60}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={(props) => <CustomTooltip {...props} t={t} formatCurrency={formatCurrency} />} />
           <Legend
             wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
             iconType="line"

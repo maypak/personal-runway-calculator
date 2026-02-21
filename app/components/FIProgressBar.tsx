@@ -80,8 +80,8 @@ export default function FIProgressBar({
           </span>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {t('fire:progress.currentAmount', { 
-              current: formatCurrency(safeSavings, "USD" as any),
-              target: formatCurrency(safeFINumber, "USD" as any)
+              current: formatCurrency(safeSavings, "USD"),
+              target: formatCurrency(safeFINumber, "USD")
             })}
           </p>
         </div>
@@ -97,7 +97,7 @@ export default function FIProgressBar({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(cappedProgress)}
-          aria-valuetext={`${currentProgress.toFixed(1)}% towards financial independence. ${formatCurrency(safeSavings, "USD" as any)} out of ${formatCurrency(safeFINumber, "USD" as any)}.`}
+          aria-valuetext={`${currentProgress.toFixed(1)}% towards financial independence. ${formatCurrency(safeSavings, "USD")} out of ${formatCurrency(safeFINumber, "USD")}.`}
         >
           {/* Progress fill */}
           <div
@@ -129,7 +129,7 @@ export default function FIProgressBar({
                   <div className="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-10">
                     <div className="font-semibold">{t(`fire:progress.milestones.${milestone.labelKey}`)} FI</div>
                     <div className="text-gray-300">
-                      {formatCurrency(milestoneAmount, "USD" as any)}
+                      {formatCurrency(milestoneAmount, "USD")}
                     </div>
                     {isAchieved && (
                       <div className="text-green-400 text-xs mt-1">{t('fire:progress.milestones.achieved')}</div>

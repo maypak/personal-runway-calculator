@@ -18,6 +18,7 @@
 'use client';
 
 import { useState, useEffect, lazy, Suspense } from 'react';
+import Link from 'next/link';
 import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
@@ -99,6 +100,7 @@ export default function FIREDashboard() {
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional pattern to prevent hydration mismatch
     setIsMounted(true);
   }, []);
 
@@ -161,12 +163,12 @@ export default function FIREDashboard() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               To calculate your FIRE number, we need to know your monthly expenses.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
             >
               Go to Dashboard →
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -244,7 +246,7 @@ export default function FIREDashboard() {
           </h3>
         </div>
         <p className="text-4xl font-bold text-gray-900 dark:text-white">
-          {formatCurrency(fiNumber, "USD" as any)}
+          {formatCurrency(fiNumber, "USD")}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
           {t('fire:fiNumber.description')}

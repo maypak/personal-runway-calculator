@@ -158,7 +158,7 @@ export default function FIMilestones({
                     <span className="text-xs">{display.statusIcon}</span>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    {formatCurrency(milestone.targetAmount, "USD" as any)}
+                    {formatCurrency(milestone.targetAmount, "USD")}
                   </p>
                 </div>
               </div>
