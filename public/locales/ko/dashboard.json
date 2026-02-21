@@ -1,11 +1,11 @@
 {
   "header": {
-    "title": "재정 런웨이",
+    "title": "재정 대시보드",
     "signOut": "로그아웃"
   },
   "runway": {
-    "title": "당신의 런웨이",
-    "label": "재정 런웨이",
+    "title": "돈이 지속되는 시간",
+    "label": "재정 타임라인",
     "months": "개월",
     "month": "개월",
     "yr": "년",

@@ -14,13 +14,6 @@ export default function StructuredData() {
       price: '0',
       priceCurrency: 'USD',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '20',
-      bestRating: '5',
-      worstRating: '1',
-    },
     author: {
       '@type': 'Person',
       name: 'May',

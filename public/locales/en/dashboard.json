@@ -1,16 +1,16 @@
 {
   "header": {
-    "title": "Financial Runway",
+    "title": "Financial Dashboard",
     "signOut": "Sign Out"
   },
   "runway": {
-    "title": "Your Runway",
-    "label": "Financial Runway",
+    "title": "Time Your Money Will Last",
+    "label": "Financial Timeline",
     "months": "months",
     "month": "month",
     "yr": "yr",
     "mo": "mo",
-    "description": "Time until funds run out at current burn rate",
+    "description": "Time until funds run out at current spending rate",
     "infinite": "Infinite! You're growing.",
     "status": {
       "critical": "Critical! Review your expenses immediately.",
@@ -26,7 +26,7 @@
     "details": {
       "available": "Available",
       "monthly": "Monthly",
-      "dailyBurn": "Daily burn"
+      "dailyBurn": "Daily spending"
     },
     "goalProgress": "36mo (3yr goal)"
   },
@@ -35,7 +35,7 @@
     "totalSpent": "Total Spent",
     "totalExpenses": "Total Expenses",
     "remainingFunds": "Remaining Funds",
-    "monthlyBurn": "Monthly Burn",
+    "monthlyBurn": "Monthly Spending",
     "daysSince": "Days Since Start",
     "averageDaily": "Average Daily Spend"
   },
@@ -84,7 +84,7 @@
     }
   },
   "simulator": {
-    "title": "Runway Simulator",
+    "title": "Financial Timeline Calculator",
     "description": "Experiment with different scenarios",
     "monthlyExpense": "Monthly Expense",
     "monthlyExpenseLabel": "Monthly Expense: $",

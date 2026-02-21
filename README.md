@@ -12,7 +12,7 @@ Track expenses. See your runway in real-time. Make confident decisions.
 
 ## 🎯 What is this?
 
-A free web app that helps you calculate your **personal runway** — how long your savings will last without a job.
+A free web app that helps you calculate your **personal runway** (also called "financial runway" - the time your money will last) — how long your savings will last without a job.
 
 Built by a software engineer who quit after 10 years. I calculated my runway (31 months) and it gave me the confidence to take the leap.
 
@@ -37,7 +37,7 @@ Now I'm sharing this tool with you.
 ### 📈 Financial Dashboard
 - Current runway visualization
 - Spending breakdown
-- Monthly burn rate
+- Monthly spending (burn rate)
 - Available funds tracker
 
 ### 🎯 Scenario Comparison (NEW!)
@@ -118,7 +118,7 @@ Open [http://localhost:3000](http://localhost:3000)
 - 🎨 Freelancers tracking finances
 - 🚀 Building a side project while employed
 - 🌍 Digital nomads managing runway
-- 💸 Anyone pursuing financial independence (FIRE)
+- 💸 Anyone pursuing FIRE (Financial Independence / Retire Early)
 - 🛠️ Indie hackers & solopreneurs
 
 ---
@@ -167,7 +167,8 @@ That number gave me confidence to take the leap. Now it's your turn.
 - ✅ **Row Level Security (RLS)** — only you can access your data
 - ✅ Data encrypted at rest and in transit (Supabase)
 - ✅ **Reliable persistence** — settings saved correctly (tested daily)
-- ✅ No ads, no tracking, no selling data
+- ✅ No ads, no selling data
+- ✅ Privacy-friendly analytics (Vercel Analytics: no cookies, 24h retention)
 - ✅ **Open source** — audit the code yourself
 - ✅ Your financial data never leaves Supabase's secure infrastructure
 
