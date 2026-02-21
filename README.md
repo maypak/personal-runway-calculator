@@ -40,13 +40,18 @@ Now I'm sharing this tool with you.
 - Monthly burn rate
 - Available funds tracker
 
-### 🎭 Scenario Comparison (NEW! ✨)
-- Create multiple financial scenarios
-- Side-by-side comparison view
-- What-if analysis (conservative vs. optimistic)
-- Duplicate and edit scenarios
-- See which scenario gives best runway
-- Compare burn rates and income strategies
+### 🎯 Scenario Comparison (NEW!)
+Compare multiple financial scenarios side-by-side:
+- Create up to 3 scenarios with different assumptions
+- Side-by-side comparison table
+- Multi-line runway projection chart
+- Auto-generated insights (best runway, lowest burn rate)
+- Mobile-responsive design
+
+**Use Cases:**
+- "Should I bootstrap or fundraise?"
+- "Conservative vs Optimistic planning"
+- "Impact of part-time income on runway"
 
 ### ☁️ Cloud Sync
 - Your data syncs across devices

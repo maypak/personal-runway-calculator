@@ -7,43 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Week 2 (Feb 17-21, 2026) - P0-2: Scenario Comparison
+## [Week 2] - 2026-02-21
 
-#### Added - 2026-02-21
-- **Scenario Comparison Feature** (P0-2)
-  - Create multiple financial scenarios from current settings
-  - Side-by-side comparison view with detailed metrics
-  - Duplicate existing scenarios
-  - Edit scenario financial values (savings, expenses, income)
-  - Delete scenarios (protection for base scenario)
-  - Comparison insights (best runway, lowest burn rate, highest income)
-  
-- **New Components:**
-  - `useScenarios` hook - CRUD operations with Context integration
-  - `ScenarioCard` - Individual scenario display with actions
-  - `ScenarioManager` - Main scenarios page with create/compare modes
-  - `ComparisonView` - Full-screen modal for side-by-side comparison
-  - `EditScenarioModal` - Edit form with real-time calculation preview
+### Added
+- 🎯 Scenario Comparison feature (P0-2)
+  - Multiple scenario management (CRUD)
+  - Side-by-side comparison table with baseline
+  - Multi-line runway chart integration
+  - Auto-generated insights
+  - UX fix: Minimum 2 scenarios required for comparison
 
-- **Features:**
-  - Auto-calculation of runway when creating/editing
-  - Color-coded comparison (green=better, red=worse)
-  - Baseline comparison (first scenario as reference)
-  - Difference calculations displayed below each metric
-  - Empty state for new users
-  - Compare mode toggle (max 3 scenarios)
+### Fixed
+- Scenario comparison UX: Modal now requires 2+ scenarios
+- Edit scenario data persistence
+- Create scenario redirect issue
+- Compare mode feedback (alert message)
 
-#### Changed
-- Scenarios table already existed from earlier work
-- Integrated with existing `ScenarioContext`
-- Updated `/scenarios/compare` route to redirect to main page (modal-based)
+### Technical
+- Supabase scenarios table migration
+- useScenarios hook with Context integration
+- ScenarioCard, ScenarioManager, ComparisonView components
+- RunwayChart multi-scenario support
+- ComparisonTable with color coding
 
-#### Technical
-- TypeScript type safety: 100%
-- Context-compatible hook API
-- snake_case ↔ camelCase automatic conversion
-- Build passing with 0 errors
-- Unit tests: 83/83 passing
+### Performance
+- ESLint build errors resolved (next.config.js)
+- Vercel auto-deploy pipeline restored
+- TypeScript 0 errors maintained
 
 ---
 
