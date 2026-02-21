@@ -96,7 +96,7 @@ We're honest about limitations:
 
 ❌ **Not a 30-year retirement calculator**  
 Missing: inflation adjustment, Monte Carlo simulation, tax modeling.  
-For FIRE planning, use [FIRECalc](https://firecalc.com).
+For comprehensive retirement planning, use [FIRECalc](https://firecalc.com) or [cFIREsim](https://cfiresim.com).
 
 ❌ **Not multi-currency (yet)**  
 Currently single-currency only. Phase 3 roadmap item.
@@ -111,6 +111,24 @@ We show runway, not "spend $X on groceries."
 
 ---
 
+## 🔥 FIRE Calculator - Quick Checks & Coast FIRE
+
+Perfect for:
+- ✅ Quick FI number calculations (4% rule)
+- ✅ Coast FIRE math
+- ✅ "Am I on track?" sanity checks
+
+NOT for:
+- ❌ 30-year Monte Carlo simulations
+- ❌ Tax-advantaged withdrawal strategies
+- ❌ Comprehensive retirement planning
+
+**For serious FIRE planning:** Use [FIRECalc](https://firecalc.com) or [cFIREsim](https://cfiresim.com) for advanced features.
+
+**Our focus:** 1-2 year runway calculations for variable income.
+
+---
+
 ## 🚀 Quick Start
 
 ### 🎉 Join Private Beta (New!)
@@ -120,7 +138,7 @@ We're accepting a limited number of beta testers! Get early access and help shap
 **Beta Tester Perks:**
 - ✅ Lifetime 50% discount (when we launch pricing)
 - ✅ Priority feature requests
-- ✅ Early access to all new features (FIRE calculator, scenario planning, phase-based planning)
+- ✅ Early access to all new features (FIRE Quick Checks, scenario comparison, phase-based planning)
 - ✅ Direct line to the founding team
 
 **👉 [Apply for Private Beta](#)** _(Google Form - link coming soon!)_

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://personal-runway-calculator.vercel.app'),
   title: "Personal Runway Calculator - Your Money is TIME",
   description: "How much TIME do you have? Calculate your financial runway in 30 seconds. Know exactly how long you can chase your dreams. Free tool built by an engineer who quit after 10 years.",
-  keywords: ["runway calculator", "financial independence", "FIRE calculator", "burn rate", "time is money", "quit job", "financial freedom", "savings tracker", "personal finance", "how long can I survive", "money runway"],
+  keywords: ["runway calculator", "financial independence", "FIRE quick checks", "Coast FIRE", "burn rate", "time is money", "quit job", "financial freedom", "savings tracker", "personal finance", "how long can I survive", "money runway"],
   authors: [{ name: "Personal Runway Calculator" }],
   creator: "Personal Runway Calculator",
   publisher: "Personal Runway Calculator",
