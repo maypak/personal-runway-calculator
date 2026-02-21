@@ -176,7 +176,7 @@ export default function ScenarioManager() {
       )}
 
       {/* Comparison View */}
-      {compareMode && selectedForComparison.length > 0 && (
+      {compareMode && selectedForComparison.length >= 2 && (
         <ComparisonView
           scenarios={selectedForComparison
             .map((id) => scenarios.find((s) => s.id === id))
