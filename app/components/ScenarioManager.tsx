@@ -47,12 +47,21 @@ export default function ScenarioManager() {
   // Handle duplicate
   const handleDuplicate = async (id: string) => {
     const scenario = scenarios.find(s => s.id === id);
-    if (!scenario) return;
+    if (!scenario) {
+      alert('시나리오를 찾을 수 없습니다.');
+      return;
+    }
 
     const name = prompt('Name for duplicate?', `${scenario.name} (Copy)`);
     if (!name) return;
 
-    await createScenario(name, id);
+    const result = await createScenario(name, id);
+    
+    if (result.success) {
+      alert('✅ 시나리오가 성공적으로 복제되었습니다!');
+    } else {
+      alert(`❌ 복제 실패: ${result.error || '알 수 없는 오류'}`);
+    }
   };
 
   // Handle delete
