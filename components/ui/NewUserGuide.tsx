@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { X, Lightbulb } from 'lucide-react';
+import { useI18n } from '@/app/contexts/I18nContext';
 
 export function NewUserGuide() {
+  const { t } = useI18n();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -28,30 +30,30 @@ export function NewUserGuide() {
           <Lightbulb className="w-6 h-6 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
-              Welcome! Here's how to calculate your runway:
+              {t('dashboard:newUserGuide.title')}
             </h3>
             <ol className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start">
                 <span className="font-semibold text-blue-600 dark:text-blue-400 mr-2">1.</span>
                 <span>
-                  <strong>Enter your savings</strong> - How much money do you have now?
+                  <strong>{t('dashboard:newUserGuide.step1.title')}</strong> - {t('dashboard:newUserGuide.step1.description')}
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="font-semibold text-blue-600 dark:text-blue-400 mr-2">2.</span>
                 <span>
-                  <strong>Add your expenses</strong> - How much do you spend per month?
+                  <strong>{t('dashboard:newUserGuide.step2.title')}</strong> - {t('dashboard:newUserGuide.step2.description')}
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="font-semibold text-blue-600 dark:text-blue-400 mr-2">3.</span>
                 <span>
-                  <strong>See your runway</strong> - We'll show exactly how long your money lasts!
+                  <strong>{t('dashboard:newUserGuide.step3.title')}</strong> - {t('dashboard:newUserGuide.step3.description')}
                 </span>
               </li>
             </ol>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">
-              💡 <strong>Tip:</strong> Hover over any term with an info icon (ⓘ) for explanations.
+              💡 <strong>{t('dashboard:newUserGuide.tip.label')}</strong> {t('dashboard:newUserGuide.tip.text')}
             </p>
           </div>
         </div>

@@ -128,5 +128,24 @@
     "save": "Save Changes",
     "cancel": "Cancel",
     "updated": "Settings updated successfully!"
+  },
+  "newUserGuide": {
+    "title": "Welcome! Here's how to calculate your runway:",
+    "step1": {
+      "title": "Enter your savings",
+      "description": "How much money do you have now?"
+    },
+    "step2": {
+      "title": "Add your expenses",
+      "description": "How much do you spend per month?"
+    },
+    "step3": {
+      "title": "See your runway",
+      "description": "We'll show exactly how long your money lasts!"
+    },
+    "tip": {
+      "label": "Tip:",
+      "text": "Hover over any term with an info icon (ⓘ) for explanations."
+    }
   }
 }
