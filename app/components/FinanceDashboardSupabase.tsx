@@ -33,6 +33,7 @@ import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
 import LanguageSwitcher from './LanguageSwitcher';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
+import { NewUserGuide } from '@/components/ui/NewUserGuide';
 
 // Dynamic import to avoid hydration mismatch
 const OnboardingWizard = dynamic(() => import('./OnboardingWizard'), {
@@ -338,6 +339,9 @@ export default function FinanceDashboardSupabase() {
           </button>
         </div>
       </div>
+
+      {/* New User Guide - First-time onboarding */}
+      <NewUserGuide />
 
       {/* Settings Panel */}
       {showSettings && (
