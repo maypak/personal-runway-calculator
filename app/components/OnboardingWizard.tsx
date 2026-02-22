@@ -19,11 +19,13 @@ export default function OnboardingWizard({
   onSkip,
   currency = 'USD'
 }: OnboardingWizardProps) {
+  // ✅ HOOKS MUST BE CALLED FIRST (before any conditional returns)
   const { t } = useI18n();
   const [step, setStep] = useState(1);
   const [savings, setSavings] = useState<string>('');
   const [monthlyExpense, setMonthlyExpense] = useState<string>('');
 
+  // ✅ Conditional return AFTER all hooks
   if (!isOpen) return null;
 
   const handleNext = () => {
