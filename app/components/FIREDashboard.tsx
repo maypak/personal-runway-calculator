@@ -28,6 +28,7 @@ import FIProgressBar from './FIProgressBar';
 import FIMilestones from './FIMilestones';
 import FIScenarioCards from './FIScenarioCards';
 import FIRESettings from './FIRESettings';
+import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 // Lazy load heavy chart component for better initial page load
 const FIProjectionChart = lazy(() => import('./FIProjectionChart'));
@@ -267,8 +268,9 @@ export default function FIREDashboard() {
                     rounded-lg p-6 border border-blue-200 dark:border-blue-800">
         <div className="flex items-center gap-2 mb-2">
           <DollarSign className="h-5 w-5 text-blue-600" />
-          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 flex items-center">
             {t('fire:fiNumber.label')}
+            <InfoTooltip content="FI Number = Amount needed to retire (4% rule)\n\nBased on the 4% Safe Withdrawal Rule: Multiply your annual expenses by 25.\n\nExample: $40K annual expenses × 25 = $1M FI Number\n\nOnce you reach $1M, you can withdraw 4% ($40K) per year indefinitely without running out of money (historically safe withdrawal rate)." />
           </h3>
         </div>
         <p className="text-4xl font-bold text-gray-900 dark:text-white">

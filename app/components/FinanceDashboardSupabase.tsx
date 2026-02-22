@@ -32,6 +32,7 @@ import GoalSetting from './GoalSetting';
 import GoalProgress from './GoalProgress';
 import SkeletonLoader from './SkeletonLoader';
 import LanguageSwitcher from './LanguageSwitcher';
+import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 // Dynamic import to avoid hydration mismatch
 const OnboardingWizard = dynamic(() => import('./OnboardingWizard'), {
@@ -593,17 +594,7 @@ export default function FinanceDashboardSupabase() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg md:text-xl font-semibold text-text-secondary flex items-center gap-2">
             {t('dashboard:runway.title')}
-            <button 
-              className="group relative"
-              aria-label="What is runway?"
-            >
-              <span className="text-sm text-text-tertiary hover:text-text-primary transition-colors">ⓘ</span>
-              <div className="hidden group-hover:block absolute z-10 left-0 top-8 w-64 p-3 bg-surface-card border border-border-subtle rounded-lg shadow-lg">
-                <p className="text-sm text-text-secondary">
-                  Your <strong>runway</strong> is how many months you can survive on your current savings before running out of money.
-                </p>
-              </div>
-            </button>
+            <InfoTooltip content="Runway = How long your money will last\n\nLike an airplane runway: the distance you can go before you run out.\n\nYour runway = Savings ÷ Monthly burn rate\n\nExample: $30K savings ÷ $3K/mo expenses = 10 months runway\n\nThis tells you exactly how long you can survive without income." />
           </h2>
           {!isFirstRun && (runway > 24 ? (
             <Shield className="w-10 h-10 text-success" />
@@ -692,7 +683,10 @@ export default function FinanceDashboardSupabase() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-xs md:text-sm text-text-tertiary">{t('dashboard:runway.details.monthly')}</div>
+                <div className="text-xs md:text-sm text-text-tertiary flex items-center justify-center">
+                  {t('dashboard:runway.details.monthly')}
+                  <InfoTooltip content="Burn Rate = How fast you're spending money\n\nYour average monthly expenses. Called 'burn rate' because it's how quickly you're 'burning through' your savings.\n\nLower burn rate = your money lasts longer = longer runway" />
+                </div>
                 <div className="text-base md:text-lg font-semibold text-error">
                   {formatCurrency(monthlyExpense, settings?.currency as any || "USD")}
                 </div>

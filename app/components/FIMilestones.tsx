@@ -19,6 +19,7 @@ import { Calendar, CheckCircle2, Clock, Loader2 } from 'lucide-react';
 import { calculateFIMilestones } from '../utils/fireCalculator';
 import { useI18n } from '../contexts/I18nContext';
 import { formatCurrency } from '../utils/currencyFormatter';
+import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 interface FIMilestonesProps {
   currentSavings: number;
@@ -154,6 +155,9 @@ export default function FIMilestones({
                   <div className="flex items-center gap-2">
                     <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
                       {milestone.name}
+                      {milestone.name.includes('Coast FIRE') && (
+                        <InfoTooltip content="Coast FIRE = Financial Independence, Retire Early with 'coasting'\n\nYou stop actively saving for retirement and let your current investments grow to reach your FI number by your target retirement age.\n\nExample: If you have $200K at age 30 and need $1M at 65, you can 'coast' if that $200K will grow to $1M by 65 (assuming ~7% annual returns)." />
+                      )}
                     </h4>
                     <span className="text-xs">{display.statusIcon}</span>
                   </div>

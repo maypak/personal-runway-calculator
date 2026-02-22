@@ -22,6 +22,7 @@ import { PhaseEditor } from './PhaseEditor'
 import { PhaseTimelineChart } from './PhaseTimelineChart'
 import { PHASE_TEMPLATES } from '@/app/data/phaseTemplates'
 import { Plus, AlertCircle, Loader2, Sparkles } from 'lucide-react'
+import { InfoTooltip } from '@/components/ui/InfoTooltip'
 
 // Lazy load heavy chart component (Recharts bundle)
 const PhaseBurnChart = lazy(() => import('./PhaseBurnChart'))
@@ -145,8 +146,9 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
             Phase Timeline
+            <InfoTooltip content="Phase = Time period with different expenses\n\nExample sabbatical:\n- Phase 1: 'Traveling Europe' (€2.5K/mo, 3 months)\n- Phase 2: 'Staying in Barcelona' (€1.8K/mo, 2 months)\n- Phase 3: 'Job hunting' (€3K/mo, 4 months)\n\nSee exactly how long your money lasts across all phases." />
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Divide your journey into phases with different financial patterns

@@ -6,6 +6,7 @@ import ScenarioCard from './ScenarioCard';
 import ComparisonView from './ComparisonView';
 import EditScenarioModal from './EditScenarioModal';
 import { Plus, BarChart3 } from 'lucide-react';
+import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 export default function ScenarioManager() {
   const {
@@ -108,7 +109,10 @@ export default function ScenarioManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-text-primary">Your Scenarios</h2>
+          <h2 className="text-2xl font-bold text-text-primary flex items-center">
+            Your Scenarios
+            <InfoTooltip content="Scenario = 'What if?' financial simulation\n\nTest different situations: 'What if I get a $5K/mo freelance gig?' or 'What if rent increases to $2.5K?'\n\nCompare scenarios side-by-side to make better financial decisions." />
+          </h2>
           <p className="text-text-tertiary mt-1">
             Compare different financial scenarios side-by-side
           </p>
