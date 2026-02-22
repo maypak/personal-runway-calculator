@@ -15,6 +15,7 @@
 'use client';
 
 import { useAuth } from '../hooks/useAuth';
+import { useI18n } from '../contexts/I18nContext';
 import Auth from '../components/Auth';
 import ClientOnly from '../components/ClientOnly';
 import FIREDashboard from '../components/FIREDashboard';
@@ -24,6 +25,7 @@ import { ArrowLeft } from 'lucide-react';
 
 export default function FIREPage() {
   const { user, loading } = useAuth();
+  const { t } = useI18n();
 
   if (loading) {
     return (
@@ -56,7 +58,7 @@ export default function FIREPage() {
                        hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
+              {t('phases:page.backToDashboard')}
             </Link>
           </div>
 
