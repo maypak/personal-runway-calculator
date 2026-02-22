@@ -90,13 +90,28 @@ See your runway shrink/grow as you adjust numbers:
 
 ---
 
-## 🚫 What This Tool Is NOT
+## 🔥 FIRE Calculator - Quick Checks & Coast FIRE
 
-We're honest about limitations:
+**Perfect for:**
+- ✅ Quick FI number calculations (4% rule: "How much do I need to retire?")
+- ✅ Coast FIRE math ("Can I stop saving now and let it grow?")
+- ✅ 1-2 year FIRE runway modeling ("Am I on track for early retirement?")
 
-❌ **Not a 30-year retirement calculator**  
-Missing: inflation adjustment, Monte Carlo simulation, tax modeling.  
-For comprehensive retirement planning, use [FIRECalc](https://firecalc.com) or [cFIREsim](https://cfiresim.com).
+**NOT for:**
+- ❌ 30-year Monte Carlo simulations with market volatility
+- ❌ Inflation adjustment across decades
+- ❌ Tax-optimized withdrawal strategies
+- ❌ Comprehensive retirement planning
+
+**For serious FIRE planning:** Use [FIRECalc](https://firecalc.com) or [cFIREsim](https://cfiresim.com) for advanced features like Monte Carlo, inflation modeling, and tax optimization.
+
+**Think of us as your "FIRE quick check" tool.** We help you answer "Am I roughly on track?" FIRECalc is your "FIRE comprehensive planner" for detailed 30-year projections.
+
+**Our focus:** 1-2 year runway calculations for variable income earners.
+
+---
+
+## 🚫 Other Limitations
 
 ❌ **Not multi-currency (yet)**  
 Currently single-currency only. Phase 3 roadmap item.

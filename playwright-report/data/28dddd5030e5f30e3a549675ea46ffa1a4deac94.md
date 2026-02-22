@@ -1,0 +1,63 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e13]:
+          - heading "Personal Runway" [level=1] [ref=e14]
+          - paragraph [ref=e15]: Built for freelancers, founders, and career-breakers
+      - heading "How Long Will Your Money Last?" [level=2] [ref=e16]
+      - paragraph [ref=e17]: The only calculator built for irregular income and short-term planning (1-2 years).
+      - paragraph [ref=e18]:
+        - img [ref=e19]
+        - text: Calculate your runway in 60 seconds
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - img [ref=e25]
+          - generic [ref=e27]: Secure & Private
+        - generic [ref=e28]:
+          - img [ref=e30]
+          - generic [ref=e32]: Cloud Sync
+        - generic [ref=e33]:
+          - img [ref=e35]
+          - generic [ref=e38]: 100% Free
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - heading "Welcome back" [level=3] [ref=e42]
+        - paragraph [ref=e43]: Sign in to check your TIME
+      - generic [ref=e44]:
+        - button "Sign In" [ref=e45]
+        - button "Sign Up" [ref=e46]
+      - generic [ref=e47]:
+        - button "Continue with Google" [ref=e48]:
+          - img [ref=e49]
+          - text: Continue with Google
+        - button "Continue with GitHub" [ref=e54]:
+          - img [ref=e55]
+          - text: Continue with GitHub
+      - generic [ref=e61]: Or continue with email
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]: Email
+          - textbox "your@email.com" [ref=e65]
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: Password
+            - button "Forgot password?" [ref=e69]
+          - textbox "••••••••" [ref=e70]
+        - button "Sign In →" [ref=e71]
+      - generic [ref=e72]:
+        - paragraph [ref=e73]: Don't have an account? Click Sign Up above
+        - paragraph [ref=e74]:
+          - link "Privacy Policy" [ref=e75] [cursor=pointer]:
+            - /url: /privacy
+      - generic [ref=e77]:
+        - img [ref=e78]
+        - combobox [ref=e81]:
+          - option "🇺🇸 English" [selected]
+          - option "🇰🇷 한국어"
+```

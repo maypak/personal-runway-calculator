@@ -19,7 +19,7 @@
 
 import { useState, useEffect, lazy, Suspense } from 'react';
 import Link from 'next/link';
-import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
+import { Target, TrendingUp, Calendar, Settings as SettingsIcon, DollarSign, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { useFIRESettings } from '../hooks/useFIRESettings';
 import { useSupabaseFinance } from '../hooks/useSupabaseFinance';
 import { useI18n } from '../contexts/I18nContext';
@@ -220,6 +220,32 @@ export default function FIREDashboard() {
         >
           <SettingsIcon className="h-5 w-5" />
         </button>
+      </div>
+
+      {/* Quick FIRE Checks Info Card */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              Quick FIRE Checks & Coast FIRE
+            </h3>
+            <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+              Perfect for quick FI number estimates (4% rule) and Coast FIRE calculations.
+            </p>
+            <p className="text-xs text-blue-700 dark:text-blue-300">
+              For comprehensive 30-year planning with Monte Carlo simulations, we recommend{' '}
+              <a 
+                href="https://firecalc.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="underline hover:text-blue-900 dark:hover:text-blue-100"
+              >
+                FIRECalc
+              </a>.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Settings Panel (Collapsible) */}

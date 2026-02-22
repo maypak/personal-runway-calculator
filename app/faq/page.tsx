@@ -51,7 +51,7 @@ const faqs: FAQItem[] = [
   },
   {
     question: 'What is FIRE and how does it work?',
-    answer: 'FIRE (Financial Independence, Retire Early) is a movement focused on saving aggressively to retire early. Our FIRE calculator shows you how much you need to save based on the 4% withdrawal rule and your annual expenses.',
+    answer: 'FIRE (Financial Independence, Retire Early) is a movement focused on saving aggressively to retire early. Our FIRE calculator provides quick FI number estimates (4% rule) and Coast FIRE calculations. For comprehensive 30-year retirement planning, we recommend specialized tools like FIRECalc.',
     category: 'features'
   },
   {
