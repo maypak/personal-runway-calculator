@@ -296,7 +296,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                           onClick={() => setMode('reset')}
                           className="text-xs text-primary hover:text-primary-hover transition-colors"
                         >
-                          Forgot password?
+                          {t('auth:form.forgotPassword')}
                         </button>
                       )}
                     </div>
@@ -382,7 +382,7 @@ export default function Auth({ onSuccess }: { onSuccess: () => void }) {
                 {mode !== 'reset' && (
                   <p>
                     <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
-                      Privacy Policy
+                      {t('auth:footer.privacyPolicy')}
                     </a>
                   </p>
                 )}
