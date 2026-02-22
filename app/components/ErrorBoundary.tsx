@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { logReactError } from '@/lib/error-handler';
 
 interface Props {
   children: ReactNode;
@@ -23,7 +24,8 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[ErrorBoundary] Caught error:', error, errorInfo);
+    // Log error with locale context for Korean market debugging
+    logReactError(error, errorInfo);
   }
 
   render() {
