@@ -16,6 +16,7 @@ import { useState, lazy, Suspense } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 import { Phase } from '@/app/types'
 import { usePhases } from '@/app/hooks/usePhases'
+import { useI18n } from '@/app/contexts/I18nContext'
 import { calculateRunwayWithPhases } from '@/app/utils/phaseCalculator'
 import { PhaseCard } from './PhaseCard'
 import { PhaseEditor } from './PhaseEditor'
@@ -33,6 +34,7 @@ export interface PhaseTimelineProps {
 }
 
 export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) {
+  const { t } = useI18n()
   const {
     phases,
     loading,
@@ -80,7 +82,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
   }
 
   const handleDeletePhase = async (id: string) => {
-    if (confirm('Are you sure you want to delete this phase?')) {
+    if (confirm(t('phases:validation.deleteConfirm'))) {
       await deletePhase(id)
     }
   }
@@ -147,11 +149,11 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
-            Phase Timeline
+            {t('phases:header.phaseTimeline')}
             <InfoTooltip content="Phase = Time period with different expenses\n\nExample sabbatical:\n- Phase 1: 'Traveling Europe' (€2.5K/mo, 3 months)\n- Phase 2: 'Staying in Barcelona' (€1.8K/mo, 2 months)\n- Phase 3: 'Job hunting' (€3K/mo, 4 months)\n\nSee exactly how long your money lasts across all phases." />
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Divide your journey into phases with different financial patterns
+            {t('phases:page.description')}
           </p>
         </div>
         <div className="flex gap-2">
@@ -160,7 +162,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
             className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
           >
             <Sparkles className="w-4 h-4" />
-            Templates
+            {t('phases:header.templates')}
           </button>
           <button
             onClick={() => setIsCreating(true)}
@@ -168,7 +170,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
             className="flex items-center gap-2 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="w-4 h-4" />
-            Add Phase
+            {t('phases:header.addPhase')}
           </button>
         </div>
       </div>
@@ -179,7 +181,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
           <div>
             <div className="font-medium text-red-800 dark:text-red-400">
-              Error
+              {t('common:error')}
             </div>
             <div className="text-sm text-red-700 dark:text-red-400 mt-1">
               {error}
@@ -194,7 +196,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
           <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
             <div className="font-medium text-amber-800 dark:text-amber-400">
-              Validation Issues
+              {t('phases:editor.errorTitle')}
             </div>
             <ul className="list-disc list-inside text-sm text-amber-700 dark:text-amber-400 mt-1 space-y-1">
               {validation.errors.map((err, idx) => (
@@ -214,24 +216,23 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
           <div className="max-w-md mx-auto">
             <div className="text-6xl mb-4">📅</div>
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              No phases yet
+              {t('phases:empty.title')}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Create your first phase or use a template to get started with
-              phase-based planning
+              {t('phases:empty.description')}
             </p>
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => setShowTemplates(true)}
                 className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition"
               >
-                Browse Templates
+                {t('phases:empty.browseTemplates')}
               </button>
               <button
                 onClick={() => setIsCreating(true)}
                 className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition font-medium"
               >
-                Create Phase
+                {t('phases:empty.createPhase')}
               </button>
             </div>
           </div>
@@ -242,7 +243,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
       {phases.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Your Phases ({phases.length}/10)
+            {t('phases:header.yourPhases', { count: phases.length })}
           </h2>
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="phases">
@@ -293,20 +294,20 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
         <div className="space-y-6">
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Phase-based Runway Summary
+              {t('phases:summary.title')}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Runway
+                  {t('phases:summary.totalRunway')}
                 </div>
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                  {runwayResult.runway} mo
+                  {runwayResult.runway} {t('phases:card.months')}
                 </div>
               </div>
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Burn
+                  {t('phases:summary.totalBurn')}
                 </div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">
                   ${runwayResult.totalBurn.toLocaleString()}
@@ -314,17 +315,17 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
               </div>
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Breakeven Month
+                  {t('phases:summary.breakevenMonth')}
                 </div>
                 <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                   {runwayResult.breakevenMonth !== null
-                    ? `${runwayResult.breakevenMonth} mo`
-                    : 'Never'}
+                    ? `${runwayResult.breakevenMonth} ${t('phases:card.months')}`
+                    : t('phases:summary.never')}
                 </div>
               </div>
               <div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Phases
+                  {t('phases:summary.phases')}
                 </div>
                 <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                   {runwayResult.phaseBreakdown.length}
@@ -336,7 +337,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
           {/* Phase Burn Chart */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Monthly Burn Rate by Phase
+              {t('phases:summary.chartTitle')}
             </h3>
             <Suspense fallback={
               <div className="h-64 flex items-center justify-center">
@@ -369,7 +370,7 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Phase Templates
+                {t('phases:templates.title')}
               </h2>
               <button
                 onClick={() => setShowTemplates(false)}
@@ -393,12 +394,12 @@ export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) 
                     {template.description}
                   </p>
                   <div className="text-xs text-gray-500 dark:text-gray-500">
-                    {template.phases.length} phases •{' '}
+                    {template.phases.length} {t('phases:templates.phases')} •{' '}
                     {template.phases.reduce(
                       (sum, p) => sum + (p.endMonth - p.startMonth),
                       0
                     )}{' '}
-                    months
+                    {t('phases:card.months')}
                   </div>
                 </div>
               ))}

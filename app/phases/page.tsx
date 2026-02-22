@@ -10,10 +10,12 @@
 import { useState, useEffect } from 'react'
 import { PhaseTimeline } from '@/app/components/PhaseTimeline'
 import { supabase } from '@/app/lib/supabase'
+import { useI18n } from '@/app/contexts/I18nContext'
 import Link from 'next/link'
 import { ArrowLeft, Wallet } from 'lucide-react'
 
 export default function PhasesPage() {
+  const { t } = useI18n()
   const [totalSavings, setTotalSavings] = useState(50000)
   const [loading, setLoading] = useState(true)
 
@@ -54,7 +56,7 @@ export default function PhasesPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">{t('common:loading')}</div>
       </div>
     )
   }
@@ -68,7 +70,7 @@ export default function PhasesPage() {
           className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
+          <span>{t('phases:page.backToDashboard')}</span>
         </Link>
       </div>
 
@@ -76,7 +78,7 @@ export default function PhasesPage() {
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Total Savings (for runway calculation)
+            {t('phases:page.totalSavingsLabel')}
           </label>
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-xs">
@@ -90,7 +92,7 @@ export default function PhasesPage() {
               />
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              This will be used to calculate your runway across all phases
+              {t('phases:page.totalSavingsHint')}
             </div>
           </div>
         </div>
