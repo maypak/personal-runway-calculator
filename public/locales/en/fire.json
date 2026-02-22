@@ -9,6 +9,15 @@
     "updateFailed": "Failed to update settings",
     "resetFailed": "Failed to reset settings"
   },
+  "emptyState": {
+    "title": "Add Your Expenses First",
+    "description": "To calculate your FIRE number, we need to know your monthly expenses.",
+    "cta": "Go to Dashboard →"
+  },
+  "info": {
+    "title": "What is FIRE?",
+    "description": "Financial Independence, Retire Early. The FIRE calculator shows you how much money you need to never work again (4% Rule)."
+  },
   "fiNumber": {
     "label": "Your FI Number",
     "description": "Portfolio target for financial independence",

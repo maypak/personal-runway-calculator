@@ -9,6 +9,15 @@
     "updateFailed": "설정 업데이트에 실패했습니다",
     "resetFailed": "설정 초기화에 실패했습니다"
   },
+  "emptyState": {
+    "title": "먼저 지출을 추가하세요",
+    "description": "FIRE 목표액을 계산하려면 월간 지출을 알아야 합니다.",
+    "cta": "대시보드로 가기 →"
+  },
+  "info": {
+    "title": "FIRE란 무엇인가요?",
+    "description": "경제적 자유, 조기 은퇴. FIRE 계산기는 다시는 일하지 않아도 되는 금액을 보여줍니다 (4% 규칙)."
+  },
   "fiNumber": {
     "label": "나의 FI 목표액",
     "description": "경제적 자유를 위한 자산 목표",

@@ -147,10 +147,10 @@ export default function FIREDashboard() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Target className="h-6 w-6 text-blue-600" />
-            FIRE Calculator
+            {t('fire:title')}
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Financial Independence, Retire Early
+            {t('fire:subtitle')}
           </p>
         </div>
 
@@ -159,16 +159,16 @@ export default function FIREDashboard() {
           <div className="max-w-md mx-auto">
             <Target className="h-16 w-16 text-blue-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Add Your Expenses First
+              {t('fire:emptyState.title')}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              To calculate your FIRE number, we need to know your monthly expenses.
+              {t('fire:emptyState.description')}
             </p>
             <Link
               href="/"
               className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
             >
-              Go to Dashboard →
+              {t('fire:emptyState.cta')}
             </Link>
           </div>
         </div>
@@ -176,8 +176,7 @@ export default function FIREDashboard() {
         {/* Info */}
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            <strong>What is FIRE?</strong> Financial Independence, Retire Early. 
-            The FIRE calculator shows you how much money you need to never work again (4% Rule).
+            <strong>{t('fire:info.title')}</strong> {t('fire:info.description')}
           </p>
         </div>
       </div>
