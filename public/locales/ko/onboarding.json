@@ -1,0 +1,27 @@
+{
+  "welcome": {
+    "title": "런웨이를 계산하세요",
+    "description": "저축으로 얼마나 오래 생존할 수 있는지 확인하세요. 60초면 충분합니다!",
+    "cta": "시작하기! →",
+    "steps": {
+      "savings": "저축 입력",
+      "expenses": "지출 입력",
+      "runway": "런웨이 확인!"
+    }
+  },
+  "savings": {
+    "title": "현재 저축은 얼마인가요?",
+    "description": "현재 사용 가능한 총 금액"
+  },
+  "expenses": {
+    "title": "한 달에 얼마나 쓰시나요?",
+    "description": "대략적인 추정치면 충분합니다! 임대료, 식비, 청구서 등을 포함하세요."
+  },
+  "result": {
+    "title": "당신의 런웨이는..."
+  },
+  "progress": {
+    "step": "{{current}}/{{total}} 단계",
+    "skip": "나중에 하기"
+  }
+}

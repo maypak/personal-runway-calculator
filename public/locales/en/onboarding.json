@@ -1,0 +1,27 @@
+{
+  "welcome": {
+    "title": "Calculate Your Runway",
+    "description": "Find out how long you can survive on your savings. Takes just 60 seconds!",
+    "cta": "Let's Go! →",
+    "steps": {
+      "savings": "Enter savings",
+      "expenses": "Enter expenses",
+      "runway": "See runway!"
+    }
+  },
+  "savings": {
+    "title": "What's your current savings?",
+    "description": "Total amount you have available right now"
+  },
+  "expenses": {
+    "title": "What do you spend per month?",
+    "description": "Rough estimate is fine! Include rent, food, bills, etc."
+  },
+  "result": {
+    "title": "Your runway is..."
+  },
+  "progress": {
+    "step": "Step {{current}} of {{total}}",
+    "skip": "Skip for now"
+  }
+}
