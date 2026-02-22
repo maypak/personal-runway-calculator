@@ -34,6 +34,7 @@ import SkeletonLoader from './SkeletonLoader';
 import LanguageSwitcher from './LanguageSwitcher';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
 import { NewUserGuide } from '@/components/ui/NewUserGuide';
+import { trackOnboardingStep } from '@/lib/analytics';
 
 // Dynamic import to avoid hydration mismatch
 const OnboardingWizard = dynamic(() => import('./OnboardingWizard'), {
@@ -83,6 +84,25 @@ export default function FinanceDashboardSupabase() {
       setSimMonthlyExpense(expense || 3000); // Fallback to $3000 if 0
     }
   }, [settings]);
+
+  // Track dashboard arrival for onboarding funnel
+  useEffect(() => {
+    if (settings) {
+      trackOnboardingStep('dashboard_arrived');
+    }
+  }, [settings]);
+
+  // Track runway calculation for onboarding funnel
+  useEffect(() => {
+    const monthlyExpense = (settings?.monthlyFixed || 0) + (settings?.monthlyVariable || 0);
+    const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const remainingFunds = ((settings?.currentSavings || 0) + (settings?.lumpSum || 0) + ((settings?.monthlyIncome || 0) * (settings?.incomeMonths || 0))) - totalExpenses;
+    
+    // Track when runway is successfully calculated (user has both savings and expenses set)
+    if (monthlyExpense > 0 && remainingFunds > 0) {
+      trackOnboardingStep('runway_calculated');
+    }
+  }, [settings, expenses]);
 
   // Show onboarding for first-time users
   useEffect(() => {
@@ -170,6 +190,9 @@ export default function FinanceDashboardSupabase() {
       memo: newExpense.memo || undefined,
     });
 
+    // Track expense added for onboarding funnel
+    trackOnboardingStep('expense_added');
+
     setNewExpense({ amount: '', category: 'Food', memo: '' });
     setShowExpenseForm(false);
   };
@@ -181,6 +204,10 @@ export default function FinanceDashboardSupabase() {
       currentSavings: data.savings,
       monthlyFixed: data.monthlyExpense,
     });
+    
+    // Track savings entered for onboarding funnel
+    trackOnboardingStep('savings_entered');
+    
     setShowOnboarding(false);
   };
 

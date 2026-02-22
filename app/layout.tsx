@@ -7,6 +7,7 @@ import { I18nProvider } from './contexts/I18nContext';
 import { ScenarioProvider } from './contexts/ScenarioContext';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { LocaleTracker } from './components/LocaleTracker';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,6 +91,7 @@ export default function RootLayout({
         <ServiceWorkerRegister />
         <ErrorBoundary>
           <I18nProvider>
+            <LocaleTracker />
             <ScenarioProvider>
               {children}
             </ScenarioProvider>
