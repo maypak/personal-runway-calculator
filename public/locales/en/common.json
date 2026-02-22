@@ -35,6 +35,11 @@
   },
   "errors": {
     "generic": "An error occurred",
+    "somethingWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred",
+    "tryAgain": "Try Again",
+    "pageNotFound": "This page could not be found.",
+    "404": "404",
     "invalidNumber": "Please enter a valid number",
     "invalidEmail": "Please enter a valid email",
     "passwordTooShort": "Password must be at least 6 characters",
