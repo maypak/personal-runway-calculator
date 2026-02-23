@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useScenarioContext } from '@/contexts/ScenarioContext';
+import { useScenarioContext } from '../contexts/ScenarioContext';
 import type { Scenario } from '../types';
 import ScenarioCard from './ScenarioCard';
 import ComparisonView from './ComparisonView';

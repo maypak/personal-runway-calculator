@@ -15,7 +15,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Scenario } from '@/types';
+import type { Scenario } from '../../app/types';
 
 /**
  * Main data structure stored in LocalStorage

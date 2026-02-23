@@ -16,7 +16,7 @@
  * This file provides basic structure for now
  */
 
-import type { Scenario } from '@/types';
+import type { Scenario } from '../../app/types';
 
 /**
  * Export data structure (matches RunwayData from store)
