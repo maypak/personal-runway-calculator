@@ -53,33 +53,30 @@ export default function RunwayDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">💸</span>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+        <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink">
+            <span className="text-2xl sm:text-3xl flex-shrink-0">💸</span>
+            <h1 className="text-base sm:text-xl md:text-2xl font-bold text-gray-900 truncate">
               Personal Runway Calculator
             </h1>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
-              onClick={() => router.push('/export')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+              onClick={() => router.push('/onboarding')}
+              className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"
+              title="다시 시작"
+              aria-label="다시 시작"
             >
-              Export
-            </button>
-            <button
-              onClick={() => router.push('/settings')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
-            >
-              Settings
+              <span className="hidden xs:inline">다시 시작</span>
+              <span className="xs:hidden">🔄</span>
             </button>
           </div>
         </div>
       </header>
       
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-4 py-8 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Main Runway Display */}
           <div className="lg:col-span-2">
@@ -89,24 +86,15 @@ export default function RunwayDashboard() {
               monthlyIncome={basicData.monthlyIncome}
             />
             
-            {/* CTA Section */}
-            <div className="mt-8 bg-white rounded-xl p-6 shadow-md border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                다음 단계
+            {/* Coming Soon Notice */}
+            <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 shadow-md border border-blue-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <span>🚀</span>
+                <span>곧 출시 예정</span>
               </h3>
-              <p className="text-gray-600 mb-4">
-                시나리오 분석을 통해 다양한 상황을 시뮬레이션해보세요.
+              <p className="text-gray-700 text-sm">
+                시나리오 분석, 데이터 내보내기, 목표 설정 등 더 많은 기능이 곧 추가됩니다.
               </p>
-              <button
-                onClick={() => router.push('/scenarios')}
-                className="
-                  w-full px-6 py-3 bg-orange-500 hover:bg-orange-600
-                  text-white font-semibold rounded-lg
-                  shadow-md hover:shadow-lg transition-all
-                "
-              >
-                시나리오 분석하기 →
-              </button>
             </div>
           </div>
           

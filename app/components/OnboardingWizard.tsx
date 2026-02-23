@@ -347,7 +347,7 @@ export default function OnboardingWizard({
             {step > 1 && step < 4 && (
               <button
                 onClick={handleBack}
-                className="px-6 py-3 border border-border-default rounded-lg
+                className="min-h-[44px] px-6 py-3 border border-border-default rounded-lg
                   text-text-secondary hover:text-text-primary hover:border-border-subtle
                   transition-all duration-200"
               >
@@ -361,7 +361,7 @@ export default function OnboardingWizard({
               <button
                 onClick={handleNext}
                 disabled={!savings || parseFloat(savings) <= 0}
-                className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
+                className="min-h-[44px] px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
                   text-white font-semibold rounded-lg shadow-md
                   disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary
                   transition-all duration-200"
@@ -374,7 +374,7 @@ export default function OnboardingWizard({
               <button
                 onClick={handleNext}
                 disabled={!monthlyExpense || parseFloat(monthlyExpense) <= 0}
-                className="px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
+                className="min-h-[44px] px-6 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active
                   text-white font-semibold rounded-lg shadow-md
                   disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary
                   transition-all duration-200"
@@ -386,7 +386,7 @@ export default function OnboardingWizard({
             {step === 4 && (
               <button
                 onClick={handleComplete}
-                className="px-8 py-3 bg-success hover:bg-success/90 active:bg-success/80
+                className="min-h-[44px] px-8 py-3 bg-success hover:bg-success/90 active:bg-success/80
                   text-white text-lg font-semibold rounded-lg shadow-lg
                   transform hover:-translate-y-1 hover:shadow-xl active:scale-98
                   transition-all duration-200"
