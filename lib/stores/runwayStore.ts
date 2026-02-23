@@ -204,7 +204,7 @@ export const useRunwayStore = create<RunwayStore>()(
     }),
     {
       name: 'personal-runway-data-v1', // LocalStorage key
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => typeof window !== 'undefined' ? localStorage : undefined as any),
       
       // Hydration callback
       onRehydrateStorage: () => (state) => {
