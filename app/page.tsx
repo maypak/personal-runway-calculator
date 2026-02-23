@@ -2,6 +2,7 @@
 
 import ClientOnly from './components/ClientOnly';
 import ScenarioManager from './components/ScenarioManager';
+import DataExport from './components/DataExport';
 import { useScenarioContext } from './contexts/ScenarioContext';
 
 export default function Home() {
@@ -20,6 +21,11 @@ export default function Home() {
 
           {/* Scenario Manager */}
           <ScenarioManager />
+
+          {/* Data Export - Phase 3 */}
+          <div className="mt-8">
+            <DataExport />
+          </div>
         </main>
       </div>
     </ClientOnly>

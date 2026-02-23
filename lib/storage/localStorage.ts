@@ -206,3 +206,74 @@ export function estimateRemainingSpace(): number {
     return 0;
   }
 }
+
+/**
+ * Escape CSV value (handle commas, quotes, newlines)
+ * 
+ * @param value - Value to escape
+ * @returns Escaped CSV string
+ */
+function escapeCSV(value: any): string {
+  const str = String(value);
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+/**
+ * Export data to CSV format
+ * 
+ * @param data - Data to export
+ * @returns CSV string with UTF-8 BOM for Excel compatibility
+ */
+export function exportToCSV(data: Omit<ExportData, 'exportedAt' | 'exportVersion'>): string {
+  const rows = [
+    // Header
+    ['Type', 'Date', 'Amount', 'Description'],
+    
+    // Balance
+    ['Balance', data.createdAt, data.balance, 'Current Balance'],
+    
+    // Monthly Expenses
+    ['Expense', 'Monthly', data.monthlyExpenses, 'Monthly Expenses'],
+    
+    // Income
+    ['Income', 'Monthly', data.income.monthly, `Variable: ${data.income.isVariable}`],
+    
+    // Scenarios
+    ...data.scenarios.map(s => [
+      'Scenario',
+      s.createdAt || '',
+      s.calculatedRunway || 0,
+      `${s.name} (Income: ${s.monthlyIncome || 0}, Expenses: ${s.monthlyExpenses || 0})`
+    ])
+  ];
+  
+  return rows.map(r => r.map(escapeCSV).join(',')).join('\n');
+}
+
+/**
+ * Download CSV file
+ * 
+ * @param data - Data to export
+ * @param filename - Optional filename
+ */
+export function downloadCSV(
+  data: Omit<ExportData, 'exportedAt' | 'exportVersion'>,
+  filename?: string
+): void {
+  const BOM = '\uFEFF'; // UTF-8 BOM for Excel compatibility
+  const csv = exportToCSV(data);
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename || `runway-data-${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  URL.revokeObjectURL(url);
+}
