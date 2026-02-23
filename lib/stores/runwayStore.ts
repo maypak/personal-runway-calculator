@@ -227,10 +227,16 @@ export const useStoreHydration = () => {
 };
 
 /**
+ * Constants for stable references
+ */
+const EMPTY_SCENARIOS: Scenario[] = [];
+const DEFAULT_INCOME = { monthly: 0, isVariable: false };
+
+/**
  * Selector hooks for common queries
  */
 export const useScenarios = () => {
-  return useRunwayStore((state) => state.data?.scenarios || []);
+  return useRunwayStore((state) => state.data?.scenarios ?? EMPTY_SCENARIOS);
 };
 
 export const useActiveScenario = () => {
@@ -240,13 +246,13 @@ export const useActiveScenario = () => {
 };
 
 export const useBalance = () => {
-  return useRunwayStore((state) => state.data?.balance || 0);
+  return useRunwayStore((state) => state.data?.balance ?? 0);
 };
 
 export const useMonthlyExpenses = () => {
-  return useRunwayStore((state) => state.data?.monthlyExpenses || 0);
+  return useRunwayStore((state) => state.data?.monthlyExpenses ?? 0);
 };
 
 export const useIncome = () => {
-  return useRunwayStore((state) => state.data?.income || { monthly: 0, isVariable: false });
+  return useRunwayStore((state) => state.data?.income ?? DEFAULT_INCOME);
 };
