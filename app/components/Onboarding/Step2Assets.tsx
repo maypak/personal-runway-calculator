@@ -106,7 +106,7 @@ export default function Step2Assets({
         <button
           onClick={onPrev}
           className="
-            px-6 py-3 rounded-lg font-semibold text-gray-700
+            min-h-[44px] px-6 py-3 rounded-lg font-semibold text-gray-700
             bg-gray-200 hover:bg-gray-300
             transition-all
           "
@@ -118,7 +118,7 @@ export default function Step2Assets({
           onClick={onNext}
           disabled={balance <= 0}
           className={`
-            px-8 py-3 rounded-lg font-semibold text-white transition-all
+            min-h-[44px] px-8 py-3 rounded-lg font-semibold text-white transition-all
             ${
               balance > 0
                 ? 'bg-orange-500 hover:bg-orange-600 shadow-md hover:shadow-lg'

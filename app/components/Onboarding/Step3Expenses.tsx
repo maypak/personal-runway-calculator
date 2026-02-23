@@ -217,7 +217,7 @@ export default function Step3Expenses({
         <button
           onClick={onPrev}
           className="
-            px-6 py-3 rounded-lg font-semibold text-gray-700
+            min-h-[44px] px-6 py-3 rounded-lg font-semibold text-gray-700
             bg-gray-200 hover:bg-gray-300
             transition-all
           "
@@ -229,7 +229,7 @@ export default function Step3Expenses({
           onClick={onComplete}
           disabled={!canComplete}
           className={`
-            px-8 py-3 rounded-lg font-semibold text-white transition-all
+            min-h-[44px] px-8 py-3 rounded-lg font-semibold text-white transition-all
             ${
               canComplete
                 ? 'bg-orange-500 hover:bg-orange-600 shadow-md hover:shadow-lg'

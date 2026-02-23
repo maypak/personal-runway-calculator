@@ -57,7 +57,7 @@ export default function Step1Situation({ selected, onSelect, onNext }: Step1Prop
             key={situation.id}
             onClick={() => onSelect(situation.id)}
             className={`
-              w-full p-6 rounded-xl text-left transition-all duration-200
+              min-h-[44px] w-full p-6 rounded-xl text-left transition-all duration-200
               ${
                 selected === situation.id
                   ? 'border-2 border-orange-500 bg-orange-50 shadow-lg'
@@ -89,7 +89,7 @@ export default function Step1Situation({ selected, onSelect, onNext }: Step1Prop
           onClick={onNext}
           disabled={!selected}
           className={`
-            px-8 py-3 rounded-lg font-semibold text-white transition-all
+            min-h-[44px] px-8 py-3 rounded-lg font-semibold text-white transition-all
             ${
               selected
                 ? 'bg-orange-500 hover:bg-orange-600 shadow-md hover:shadow-lg'
