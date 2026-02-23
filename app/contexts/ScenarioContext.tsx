@@ -12,12 +12,14 @@
  * 
  * Created: 2026-02-17
  * Author: Senior Frontend Developer
+ * 
+ * NOTE: Temporarily stubbed during Supabase removal (Phase 1)
  */
 
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useScenarios } from '../hooks/useScenarios';
+// import { useScenarios } from '../hooks/useScenarios'; // Removed during Supabase migration
 import type { Scenario, RunwayResult } from '../types';
 import { calculateRunway } from '../utils/runwayCalculator';
 
@@ -49,16 +51,30 @@ interface ScenarioContextType {
 const ScenarioContext = createContext<ScenarioContextType | undefined>(undefined);
 
 export function ScenarioProvider({ children }: { children: ReactNode }) {
-  // Use scenarios hook for CRUD operations
-  const {
-    scenarios,
-    loading,
-    error,
-    loadScenarios,
-    createScenario,
-    updateScenario,
-    deleteScenario,
-  } = useScenarios();
+  // STUB: Replace useScenarios hook with empty data during Supabase removal
+  const scenarios: Scenario[] = [];
+  const loading = false;
+  const error = null;
+  
+  const loadScenarios = async () => {
+    // Stub implementation
+    return Promise.resolve();
+  };
+  
+  const createScenario = async (name: string, basedOnId?: string) => {
+    // Stub implementation
+    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
+  };
+  
+  const updateScenario = async (id: string, updates: Partial<Scenario>) => {
+    // Stub implementation
+    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
+  };
+  
+  const deleteScenario = async (id: string) => {
+    // Stub implementation
+    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
+  };
   
   // Local state for UI
   const [activeScenario, setActiveScenarioState] = useState<Scenario | null>(null);

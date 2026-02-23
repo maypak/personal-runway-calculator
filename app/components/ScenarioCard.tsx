@@ -1,6 +1,6 @@
 'use client';
 
-import { Scenario } from '../hooks/useScenarios';
+import type { Scenario } from '../types';
 import { TrendingUp, TrendingDown, Edit, Trash2, Copy, BarChart3 } from 'lucide-react';
 import { formatCurrency } from '../utils/currencyFormatter';
 

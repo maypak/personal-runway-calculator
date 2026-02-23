@@ -8,25 +8,11 @@
  * - Create/edit/delete/duplicate phases
  * - Phase templates
  * - Total runway calculation with phases
+ * 
+ * NOTE: Temporarily disabled during Supabase removal (Phase 1)
  */
 
 'use client'
-
-import { useState, lazy, Suspense } from 'react'
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
-import { Phase } from '@/app/types'
-import { usePhases } from '@/app/hooks/usePhases'
-import { useI18n } from '@/app/contexts/I18nContext'
-import { calculateRunwayWithPhases } from '@/app/utils/phaseCalculator'
-import { PhaseCard } from './PhaseCard'
-import { PhaseEditor } from './PhaseEditor'
-import { PhaseTimelineChart } from './PhaseTimelineChart'
-import { PHASE_TEMPLATES } from '@/app/data/phaseTemplates'
-import { Plus, AlertCircle, Loader2, Sparkles } from 'lucide-react'
-import { InfoTooltip } from '@/components/ui/InfoTooltip'
-
-// Lazy load heavy chart component (Recharts bundle)
-const PhaseBurnChart = lazy(() => import('./PhaseBurnChart'))
 
 export interface PhaseTimelineProps {
   scenarioId?: string | null
@@ -34,379 +20,42 @@ export interface PhaseTimelineProps {
 }
 
 export function PhaseTimeline({ scenarioId, totalSavings }: PhaseTimelineProps) {
-  const { t } = useI18n()
-  const {
-    phases,
-    loading,
-    error,
-    createPhase,
-    updatePhase,
-    deletePhase,
-    reorderPhases,
-    duplicatePhase,
-    validate,
-  } = usePhases({ scenarioId })
-
-  const [editingPhase, setEditingPhase] = useState<Phase | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
-  const [showTemplates, setShowTemplates] = useState(false)
-
-  // Calculate runway with phases
-  const runwayResult = phases.length > 0
-    ? calculateRunwayWithPhases({ totalSavings, phases })
-    : null
-
-  const validation = validate()
-
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return
-
-    const items = Array.from(phases)
-    const [reordered] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reordered)
-
-    // Reorder phases
-    reorderPhases(items.map((p) => p.id))
-  }
-
-  const handleSavePhase = async (
-    phaseData: Omit<Phase, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
-  ) => {
-    if (editingPhase) {
-      await updatePhase(editingPhase.id, phaseData)
-      setEditingPhase(null)
-    } else {
-      await createPhase(phaseData)
-      setIsCreating(false)
-    }
-  }
-
-  const handleDeletePhase = async (id: string) => {
-    if (confirm(t('phases:validation.deleteConfirm'))) {
-      await deletePhase(id)
-    }
-  }
-
-  const handleDuplicatePhase = async (id: string) => {
-    await duplicatePhase(id)
-  }
-
-  const handleMovePhase = (index: number, direction: 'up' | 'down') => {
-    if (direction === 'up' && index === 0) return
-    if (direction === 'down' && index === phases.length - 1) return
-
-    const items = Array.from(phases)
-    const targetIndex = direction === 'up' ? index - 1 : index + 1
-    const [moved] = items.splice(index, 1)
-    items.splice(targetIndex, 0, moved)
-
-    reorderPhases(items.map((p) => p.id))
-  }
-
-  const handleApplyTemplate = async (templateName: string) => {
-    const template = PHASE_TEMPLATES.find((t) => t.name === templateName)
-    if (!template) return
-
-    // Create all phases from template
-    for (const phaseData of template.phases) {
-      await createPhase({
-        ...phaseData,
-        scenarioId,
-      })
-    }
-
-    setShowTemplates(false)
-  }
-
-  if (loading) {
-    return (
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Skeleton Header */}
-        <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg w-64 mb-2"></div>
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg w-96"></div>
-        </div>
-        
-        {/* Skeleton Cards */}
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 animate-pulse">
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4"></div>
-            <div className="grid grid-cols-4 gap-4">
-              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
-            {t('phases:header.phaseTimeline')}
-            <InfoTooltip content="Phase = Time period with different expenses\n\nExample sabbatical:\n- Phase 1: 'Traveling Europe' (€2.5K/mo, 3 months)\n- Phase 2: 'Staying in Barcelona' (€1.8K/mo, 2 months)\n- Phase 3: 'Job hunting' (€3K/mo, 4 months)\n\nSee exactly how long your money lasts across all phases." />
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            {t('phases:page.description')}
+    <div className="space-y-6">
+      {/* Migration Notice */}
+      <div className="p-8 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg text-center">
+        <div className="text-5xl mb-4">⏱️</div>
+        <h3 className="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-3">
+          Phase Timeline - Migration in Progress
+        </h3>
+        <p className="text-yellow-700 dark:text-yellow-300 max-w-2xl mx-auto">
+          Phase-based planning is temporarily disabled during LocalStorage migration (Phase 1).
+          This feature will be fully restored in Phase 2.
+        </p>
+        <div className="mt-6 text-sm text-yellow-600 dark:text-yellow-400">
+          <p>Phase 1: Supabase removal ✅</p>
+          <p>Phase 2: LocalStorage integration (Coming soon)</p>
+        </div>
+      </div>
+
+      {/* Feature Preview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-6 bg-bg-secondary rounded-lg border border-border">
+          <div className="text-3xl mb-2">📅</div>
+          <h4 className="font-semibold text-text-primary mb-1">Timeline Planning</h4>
+          <p className="text-sm text-text-secondary">
+            Break down your runway into distinct phases with different spending patterns
           </p>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowTemplates(true)}
-            className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-          >
-            <Sparkles className="w-4 h-4" />
-            {t('phases:header.templates')}
-          </button>
-          <button
-            onClick={() => setIsCreating(true)}
-            disabled={phases.length >= 10}
-            className="flex items-center gap-2 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus className="w-4 h-4" />
-            {t('phases:header.addPhase')}
-          </button>
+        
+        <div className="p-6 bg-bg-secondary rounded-lg border border-border">
+          <div className="text-3xl mb-2">🎯</div>
+          <h4 className="font-semibold text-text-primary mb-1">Phase Templates</h4>
+          <p className="text-sm text-text-secondary">
+            Use pre-built templates for common scenarios like job search or sabbatical
+          </p>
         </div>
       </div>
-
-      {/* Error Alert */}
-      {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <div className="font-medium text-red-800 dark:text-red-400">
-              {t('common:error')}
-            </div>
-            <div className="text-sm text-red-700 dark:text-red-400 mt-1">
-              {error}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Validation Errors */}
-      {!validation.valid && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <div className="font-medium text-amber-800 dark:text-amber-400">
-              {t('phases:editor.errorTitle')}
-            </div>
-            <ul className="list-disc list-inside text-sm text-amber-700 dark:text-amber-400 mt-1 space-y-1">
-              {validation.errors.map((err, idx) => (
-                <li key={idx}>{err}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {/* Timeline Chart */}
-      {phases.length > 0 && <PhaseTimelineChart phases={phases} />}
-
-      {/* Empty State */}
-      {phases.length === 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
-          <div className="max-w-md mx-auto">
-            <div className="text-6xl mb-4">📅</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {t('phases:empty.title')}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              {t('phases:empty.description')}
-            </p>
-            <div className="flex justify-center gap-3">
-              <button
-                onClick={() => setShowTemplates(true)}
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-              >
-                {t('phases:empty.browseTemplates')}
-              </button>
-              <button
-                onClick={() => setIsCreating(true)}
-                className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition font-medium"
-              >
-                {t('phases:empty.createPhase')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Phase List (Draggable) */}
-      {phases.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            {t('phases:header.yourPhases', { count: phases.length })}
-          </h2>
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="phases">
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="space-y-3"
-                >
-                  {phases.map((phase, index) => (
-                    <Draggable
-                      key={phase.id}
-                      draggableId={phase.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={snapshot.isDragging ? 'opacity-50' : ''}
-                        >
-                          <PhaseCard
-                            phase={phase}
-                            onEdit={() => setEditingPhase(phase)}
-                            onDelete={() => handleDeletePhase(phase.id)}
-                            onDuplicate={() => handleDuplicatePhase(phase.id)}
-                            onMoveUp={() => handleMovePhase(index, 'up')}
-                            onMoveDown={() => handleMovePhase(index, 'down')}
-                            isFirst={index === 0}
-                            isLast={index === phases.length - 1}
-                            draggable
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </div>
-      )}
-
-      {/* Runway Summary */}
-      {runwayResult && validation.valid && (
-        <div className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              {t('phases:summary.title')}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('phases:summary.totalRunway')}
-                </div>
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                  {runwayResult.runway} {t('phases:card.months')}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('phases:summary.totalBurn')}
-                </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                  ${runwayResult.totalBurn.toLocaleString()}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('phases:summary.breakevenMonth')}
-                </div>
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                  {runwayResult.breakevenMonth !== null
-                    ? `${runwayResult.breakevenMonth} ${t('phases:card.months')}`
-                    : t('phases:summary.never')}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {t('phases:summary.phases')}
-                </div>
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                  {runwayResult.phaseBreakdown.length}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Phase Burn Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              {t('phases:summary.chartTitle')}
-            </h3>
-            <Suspense fallback={
-              <div className="h-64 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-              </div>
-            }>
-              <PhaseBurnChart result={runwayResult} />
-            </Suspense>
-          </div>
-        </div>
-      )}
-
-      {/* Phase Editor Modal */}
-      {(isCreating || editingPhase) && (
-        <PhaseEditor
-          phase={editingPhase}
-          existingPhases={phases}
-          onSave={handleSavePhase}
-          onCancel={() => {
-            setIsCreating(false)
-            setEditingPhase(null)
-          }}
-          scenarioId={scenarioId}
-        />
-      )}
-
-      {/* Templates Modal */}
-      {showTemplates && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {t('phases:templates.title')}
-              </h2>
-              <button
-                onClick={() => setShowTemplates(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded transition"
-              >
-                <Plus className="w-5 h-5 rotate-45" />
-              </button>
-            </div>
-
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {PHASE_TEMPLATES.map((template) => (
-                <div
-                  key={template.name}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-500 dark:hover:border-blue-400 transition cursor-pointer"
-                  onClick={() => handleApplyTemplate(template.name)}
-                >
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    {template.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                    {template.description}
-                  </p>
-                  <div className="text-xs text-gray-500 dark:text-gray-500">
-                    {template.phases.length} {t('phases:templates.phases')} •{' '}
-                    {template.phases.reduce(
-                      (sum, p) => sum + (p.endMonth - p.startMonth),
-                      0
-                    )}{' '}
-                    {t('phases:card.months')}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

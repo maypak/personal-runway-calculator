@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useScenarios, Scenario } from '../hooks/useScenarios';
+// import { useScenarios, Scenario } from '../hooks/useScenarios'; // Removed during Supabase migration
+import type { Scenario } from '../types';
 import ScenarioCard from './ScenarioCard';
 import ComparisonView from './ComparisonView';
 import EditScenarioModal from './EditScenarioModal';
@@ -9,14 +10,10 @@ import { Plus, BarChart3 } from 'lucide-react';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 export default function ScenarioManager() {
-  const {
-    scenarios,
-    loading,
-    error,
-    createScenario,
-    updateScenario,
-    deleteScenario,
-  } = useScenarios();
+  // STUB: Temporarily disabled during Supabase removal
+  const scenarios: Scenario[] = [];
+  const loading = false;
+  const error = null;
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingScenario, setEditingScenario] = useState<Scenario | null>(null);
@@ -26,80 +23,51 @@ export default function ScenarioManager() {
   // Handle create new scenario
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-
-    const name = formData.get('name') as string;
-
-    const result = await createScenario(name);
-
-    if (result.success) {
-      setShowCreateModal(false);
-    }
+    alert('Scenario creation will be enabled after LocalStorage migration');
   };
 
   // Handle create from current settings
   const handleCreateFromCurrent = async () => {
-    const name = prompt('Name for this scenario?', 'New Scenario');
-    if (!name) return;
-
-    await createScenario(name);
+    alert('Scenario creation will be enabled after LocalStorage migration');
   };
 
   // Handle duplicate
   const handleDuplicate = async (id: string) => {
-    const scenario = scenarios.find(s => s.id === id);
-    if (!scenario) {
-      alert('시나리오를 찾을 수 없습니다.');
-      return;
-    }
-
-    const name = prompt('Name for duplicate?', `${scenario.name} (Copy)`);
-    if (!name) return;
-
-    const result = await createScenario(name, id);
-    
-    if (result.success) {
-      alert('✅ 시나리오가 성공적으로 복제되었습니다!');
-    } else {
-      alert(`❌ 복제 실패: ${result.error || '알 수 없는 오류'}`);
-    }
+    alert('Scenario duplication will be enabled after LocalStorage migration');
   };
 
   // Handle delete
   const handleDelete = async (id: string) => {
-    const scenario = scenarios.find(s => s.id === id);
-    if (!scenario) return;
-
-    if (!confirm(`Delete scenario "${scenario.name}"?`)) return;
-
-    await deleteScenario(id);
+    alert('Scenario deletion will be enabled after LocalStorage migration');
   };
 
   // Handle edit save
   const handleEditSave = async (id: string, updates: Partial<Scenario>): Promise<boolean> => {
-    const result = await updateScenario(id, updates);
-    return result.success;
+    alert('Scenario editing will be enabled after LocalStorage migration');
+    return false;
   };
 
-  // Toggle scenario for comparison
-  const toggleCompare = (id: string) => {
-    setSelectedForComparison((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id].slice(-3)
+  // Toggle comparison selection
+  const toggleComparisonSelection = (id: string) => {
+    setSelectedForComparison(prev =>
+      prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
     );
   };
 
+  // Loading
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
+  // Error
   if (error) {
     return (
-      <div className="bg-error/10 border border-error rounded-lg p-4 text-error">
-        Error: {error}
+      <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <p className="text-red-800 dark:text-red-200">Error: {error}</p>
       </div>
     );
   }
@@ -109,39 +77,33 @@ export default function ScenarioManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-text-primary flex items-center">
-            Your Scenarios
-            <InfoTooltip content="Scenario = 'What if?' financial simulation\n\nTest different situations: 'What if I get a $5K/mo freelance gig?' or 'What if rent increases to $2.5K?'\n\nCompare scenarios side-by-side to make better financial decisions." />
+          <h2 className="text-2xl font-bold text-text-primary flex items-center gap-2">
+            Scenario Comparison
+            <InfoTooltip content="Create multiple scenarios to compare different financial situations" />
           </h2>
-          <p className="text-text-tertiary mt-1">
-            Compare different financial scenarios side-by-side
+          <p className="text-text-secondary mt-1">
+            Plan different financial scenarios and compare outcomes
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {scenarios.length > 0 && (
+        <div className="flex gap-2">
+          {scenarios.length >= 2 && (
             <button
-              onClick={() => {
-                // Validate minimum scenarios for comparison
-                if (!compareMode && scenarios.length < 2) {
-                  alert('비교하려면 최소 2개의 시나리오가 필요합니다.');
-                  return;
-                }
-                setCompareMode(!compareMode);
-              }}
-              className={`
-                px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2
-                ${compareMode ? 'bg-primary text-white' : 'bg-surface-card text-text-secondary border border-border-subtle'}
-              `}
+              onClick={() => setCompareMode(!compareMode)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                compareMode
+                  ? 'bg-primary text-white'
+                  : 'bg-bg-secondary hover:bg-bg-tertiary text-text-primary'
+              }`}
             >
               <BarChart3 className="w-4 h-4" />
-              {compareMode ? 'Exit Compare' : 'Compare'}
+              {compareMode ? 'Exit Compare' : 'Compare Scenarios'}
             </button>
           )}
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             New Scenario
@@ -149,114 +111,113 @@ export default function ScenarioManager() {
         </div>
       </div>
 
-      {/* Scenarios Grid */}
-      {scenarios.length === 0 ? (
-        <div className="text-center py-12 bg-surface-card rounded-xl border border-border-subtle">
-          <div className="text-5xl mb-4">📊</div>
-          <h3 className="text-xl font-semibold text-text-primary mb-2">No scenarios yet</h3>
-          <p className="text-text-tertiary mb-6">
-            Create scenarios to compare different financial outcomes
+      {/* Migration Notice */}
+      <div className="p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg text-center">
+        <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+          ⚠️ Scenario Manager - Migration in Progress
+        </h3>
+        <p className="text-yellow-700 dark:text-yellow-300">
+          Scenario functionality is temporarily disabled during LocalStorage migration (Phase 1).
+          <br />
+          This feature will be re-enabled in Phase 2.
+        </p>
+      </div>
+
+      {/* Empty State */}
+      {scenarios.length === 0 && !compareMode && (
+        <div className="text-center py-12 bg-bg-secondary rounded-lg border-2 border-dashed border-border">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-lg font-medium text-text-primary mb-2">No scenarios yet</h3>
+          <p className="text-text-secondary mb-4">
+            Create your first scenario to start planning
           </p>
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-all"
-            >
-              Create First Scenario
-            </button>
-            <button
-              onClick={handleCreateFromCurrent}
-              className="px-6 py-3 bg-surface-card border border-border-subtle hover:border-primary text-text-primary rounded-lg font-medium transition-all"
-            >
-              Use Current Settings
-            </button>
-          </div>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2"
+          >
+            <Plus className="w-5 h-5" />
+            Create First Scenario
+          </button>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {scenarios.map((scenario) => (
+      )}
+
+      {/* Comparison View */}
+      {compareMode && scenarios.length >= 2 && (
+        <ComparisonView
+          scenarios={scenarios.filter(s => selectedForComparison.includes(s.id))}
+          onClose={() => setCompareMode(false)}
+        />
+      )}
+
+      {/* Scenario Grid */}
+      {!compareMode && scenarios.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {scenarios.map(scenario => (
             <ScenarioCard
               key={scenario.id}
               scenario={scenario}
               onEdit={() => setEditingScenario(scenario)}
-              onDelete={handleDelete}
-              onDuplicate={handleDuplicate}
-              onCompare={compareMode ? toggleCompare : undefined}
-              selected={compareMode && selectedForComparison.includes(scenario.id)}
+              onDuplicate={() => handleDuplicate(scenario.id)}
+              onDelete={() => handleDelete(scenario.id)}
+              onCompare={() => toggleComparisonSelection(scenario.id)}
+              selected={selectedForComparison.includes(scenario.id)}
             />
           ))}
         </div>
       )}
 
-      {/* Comparison View */}
-      {compareMode && selectedForComparison.length >= 2 && (
-        <ComparisonView
-          scenarios={selectedForComparison
-            .map((id) => scenarios.find((s) => s.id === id))
-            .filter((s): s is Scenario => s !== undefined)}
-          onClose={() => {
-            setCompareMode(false);
-            setSelectedForComparison([]);
-          }}
-        />
+      {/* Create Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-bg-primary rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-text-primary mb-4">Create New Scenario</h3>
+            <form onSubmit={handleCreate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">
+                  Scenario Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder="e.g. Optimistic, Conservative"
+                  className="w-full px-3 py-2 bg-bg-secondary border border-border rounded-lg text-text-primary"
+                />
+              </div>
+
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="px-4 py-2 bg-bg-secondary hover:bg-bg-tertiary text-text-primary rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors"
+                >
+                  Create
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* Edit Modal */}
       {editingScenario && (
         <EditScenarioModal
           scenario={editingScenario}
-          onSave={handleEditSave}
+          onSave={async (id: string, updates: Partial<Scenario>) => {
+            const success = await handleEditSave(id, updates);
+            if (success) {
+              setEditingScenario(null);
+            }
+            return success;
+          }}
           onClose={() => setEditingScenario(null)}
         />
-      )}
-
-      {/* Create Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-surface-card rounded-2xl shadow-2xl w-full max-w-md">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-text-primary mb-4">Create New Scenario</h3>
-
-              <form onSubmit={handleCreate} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-2">
-                    Scenario Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="e.g., Conservative, Optimistic"
-                    className="w-full px-4 py-2 bg-bg-primary border border-border-subtle rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <div className="bg-bg-tertiary rounded-lg p-4">
-                  <p className="text-sm text-text-secondary">
-                    💡 This will create a copy of your current financial settings.
-                    You can edit the values after creation.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3 pt-4">
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-all"
-                  >
-                    Create Scenario
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowCreateModal(false)}
-                    className="flex-1 px-4 py-3 bg-surface-card border border-border-subtle hover:border-primary text-text-primary rounded-lg font-medium transition-all"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
