@@ -1,32 +1,35 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ClientOnly from './components/ClientOnly';
-import ScenarioManager from './components/ScenarioManager';
-import DataExport from './components/DataExport';
-import { useScenarioContext } from './contexts/ScenarioContext';
+import { useRunwayStore } from '../lib/stores/runwayStore';
 
 export default function Home() {
+  const router = useRouter();
+  const { getBasicData, hydrated } = useRunwayStore();
+  
+  useEffect(() => {
+    if (hydrated) {
+      const basicData = getBasicData();
+      
+      // Redirect based on data presence
+      if (basicData) {
+        router.push('/dashboard');
+      } else {
+        router.push('/onboarding');
+      }
+    }
+  }, [hydrated, getBasicData, router]);
+  
+  // Loading screen while checking
   return (
     <ClientOnly>
-      <div className="min-h-screen bg-bg-primary transition-colors duration-200" suppressHydrationWarning>
-        {/* Content Area */}
-        <main className="max-w-6xl mx-auto px-4 py-8 pb-12" suppressHydrationWarning>
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">Personal Runway Calculator</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Plan your financial runway with scenario-based projections
-            </p>
-          </div>
-
-          {/* Scenario Manager */}
-          <ScenarioManager />
-
-          {/* Data Export - Phase 3 */}
-          <div className="mt-8">
-            <DataExport />
-          </div>
-        </main>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-500 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">로딩 중...</p>
+        </div>
       </div>
     </ClientOnly>
   );

@@ -18,10 +18,26 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Scenario } from '../../app/types';
 
 /**
+ * Basic calculator data (for simple onboarding flow)
+ */
+interface BasicData {
+  balance: number;
+  monthlyExpenses: number;
+  hasVariableIncome: boolean;
+  situationType: 'freelancer' | 'job-seeker' | 'startup' | 'quick';
+  monthlyIncome?: number; // Optional: for variable income
+  recentIncomes?: number[]; // Optional: last 3 months income
+  createdAt: string;
+}
+
+/**
  * Main data structure stored in LocalStorage
  */
 interface RunwayData {
-  // Financial data
+  // Basic calculator data (Phase 1)
+  basicData?: BasicData;
+  
+  // Financial data (Phase 2+)
   balance: number;
   monthlyExpenses: number;
   income: {
@@ -55,6 +71,10 @@ interface RunwayStore {
   saveData: (data: Partial<RunwayData>) => void;
   loadData: () => RunwayData | null;
   clearData: () => void;
+  
+  // Basic Data CRUD
+  saveBasicData: (data: BasicData) => void;
+  getBasicData: () => BasicData | null;
   
   // Scenario CRUD
   addScenario: (scenario: Scenario) => void;
@@ -200,6 +220,30 @@ export const useRunwayStore = create<RunwayStore>()(
        */
       setHydrated: (state) => {
         set({ hydrated: state });
+      },
+      
+      /**
+       * Save basic calculator data
+       */
+      saveBasicData: (basicData) => {
+        const current = get().data || getDefaultData();
+        set({
+          data: {
+            ...current,
+            basicData: {
+              ...basicData,
+              createdAt: basicData.createdAt || new Date().toISOString(),
+            },
+            updatedAt: new Date().toISOString(),
+          },
+        });
+      },
+      
+      /**
+       * Get basic calculator data
+       */
+      getBasicData: () => {
+        return get().data?.basicData || null;
       },
     }),
     {
