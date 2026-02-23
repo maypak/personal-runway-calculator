@@ -13,13 +13,14 @@
  * Created: 2026-02-17
  * Author: Senior Frontend Developer
  * 
- * NOTE: Temporarily stubbed during Supabase removal (Phase 1)
+ * Updated: 2026-02-23 (Phase 2: LocalStorage Migration)
+ * Now uses Zustand store for LocalStorage persistence
  */
 
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-// import { useScenarios } from '../hooks/useScenarios'; // Removed during Supabase migration
+import { useRunwayStore, useScenarios as useZustandScenarios, useActiveScenario as useZustandActiveScenario } from '@/lib/stores/runwayStore';
 import type { Scenario, RunwayResult } from '../types';
 import { calculateRunway } from '../utils/runwayCalculator';
 
@@ -37,7 +38,7 @@ interface ScenarioContextType {
   toggleComparisonMode: () => void;
   selectForComparison: (ids: string[]) => void;
   
-  // CRUD operations (from hook)
+  // CRUD operations
   loadScenarios: () => Promise<void>;
   createScenario: (name: string, basedOnId?: string) => Promise<{ success: boolean; data?: Scenario; error?: string }>;
   updateScenario: (id: string, updates: Partial<Scenario>) => Promise<{ success: boolean; error?: string }>;
@@ -51,33 +52,16 @@ interface ScenarioContextType {
 const ScenarioContext = createContext<ScenarioContextType | undefined>(undefined);
 
 export function ScenarioProvider({ children }: { children: ReactNode }) {
-  // STUB: Replace useScenarios hook with empty data during Supabase removal
-  const scenarios: Scenario[] = [];
+  // Get scenarios from Zustand store
+  const scenarios = useZustandScenarios();
+  const activeScenarioFromStore = useZustandActiveScenario();
+  const { addScenario, updateScenario: updateInStore, deleteScenario: deleteFromStore, setActiveScenario: setActiveInStore } = useRunwayStore();
+  
+  // LocalStorage is always available on client, no loading state needed
   const loading = false;
   const error = null;
   
-  const loadScenarios = async () => {
-    // Stub implementation
-    return Promise.resolve();
-  };
-  
-  const createScenario = async (name: string, basedOnId?: string) => {
-    // Stub implementation
-    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
-  };
-  
-  const updateScenario = async (id: string, updates: Partial<Scenario>) => {
-    // Stub implementation
-    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
-  };
-  
-  const deleteScenario = async (id: string) => {
-    // Stub implementation
-    return Promise.resolve({ success: false, error: 'Not implemented (LocalStorage migration pending)' });
-  };
-  
-  // Local state for UI
-  const [activeScenario, setActiveScenarioState] = useState<Scenario | null>(null);
+  // Local state for UI (comparison mode)
   const [comparisonMode, setComparisonMode] = useState(false);
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
   
@@ -85,18 +69,91 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
   const [calculationCache, setCalculationCache] = useState<Map<string, RunwayResult>>(new Map());
   
   /**
+   * Load scenarios (no-op for LocalStorage, but kept for API compatibility)
+   */
+  const loadScenarios = async () => {
+    // LocalStorage is auto-loaded by Zustand persist middleware
+    return Promise.resolve();
+  };
+  
+  /**
+   * Create a new scenario
+   */
+  const createScenario = async (name: string, basedOnId?: string): Promise<{ success: boolean; data?: Scenario; error?: string }> => {
+    try {
+      // Find base scenario if provided
+      const baseScenario = basedOnId ? scenarios.find(s => s.id === basedOnId) : null;
+      
+      // Generate new scenario
+      const newScenario: Scenario = {
+        id: `scenario-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        userId: 'local-user', // LocalStorage doesn't need real user ID
+        name,
+        description: baseScenario ? `Based on ${baseScenario.name}` : '',
+        isBase: scenarios.length === 0, // First scenario is base
+        
+        // Financial data (copy from base or use defaults)
+        totalSavings: baseScenario?.totalSavings || 0,
+        monthlyExpenses: baseScenario?.monthlyExpenses || 0,
+        monthlyIncome: baseScenario?.monthlyIncome || 0,
+        oneTimeExpenses: baseScenario?.oneTimeExpenses || [],
+        recurringItems: baseScenario?.recurringItems || [],
+        
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      
+      // Add to store
+      addScenario(newScenario);
+      
+      return { success: true, data: newScenario };
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Unknown error';
+      console.error('❌ Failed to create scenario:', error);
+      return { success: false, error };
+    }
+  };
+  
+  /**
+   * Update an existing scenario
+   */
+  const updateScenario = async (id: string, updates: Partial<Scenario>): Promise<{ success: boolean; error?: string }> => {
+    try {
+      updateInStore(id, updates);
+      return { success: true };
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Unknown error';
+      console.error('❌ Failed to update scenario:', error);
+      return { success: false, error };
+    }
+  };
+  
+  /**
+   * Delete a scenario
+   */
+  const deleteScenario = async (id: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      deleteFromStore(id);
+      return { success: true };
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Unknown error';
+      console.error('❌ Failed to delete scenario:', error);
+      return { success: false, error };
+    }
+  };
+  
+  /**
    * Set active scenario by ID
    */
   const setActiveScenario = (id: string | null) => {
-    
     if (id === null) {
-      setActiveScenarioState(null);
+      setActiveInStore(null);
       return;
     }
     
     const scenario = scenarios.find(s => s.id === id);
     if (scenario) {
-      setActiveScenarioState(scenario);
+      setActiveInStore(id);
     } else {
       console.warn('⚠️ [ScenarioContext] Scenario not found:', id);
     }
@@ -124,7 +181,6 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
    * Select scenarios for comparison
    */
   const selectForComparison = (ids: string[]) => {
-    
     // Limit to max 3 scenarios for comparison
     if (ids.length > 3) {
       console.warn('⚠️ [ScenarioContext] Max 3 scenarios for comparison');
@@ -171,40 +227,15 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
   };
   
   /**
-   * Auto-select first scenario as active when scenarios load
-   */
-  useEffect(() => {
-    if (scenarios.length > 0 && !activeScenario) {
-      // Prefer base scenario, otherwise first scenario
-      const baseScenario = scenarios.find(s => s.isBase);
-      const defaultScenario = baseScenario || scenarios[0];
-      
-      setActiveScenarioState(defaultScenario);
-    }
-  }, [scenarios]);
-  
-  /**
    * Clear cache when scenarios change
    */
   useEffect(() => {
     setCalculationCache(new Map());
   }, [scenarios]);
   
-  /**
-   * Update active scenario when underlying data changes
-   */
-  useEffect(() => {
-    if (activeScenario) {
-      const updated = scenarios.find(s => s.id === activeScenario.id);
-      if (updated) {
-        setActiveScenarioState(updated);
-      }
-    }
-  }, [scenarios]);
-  
   const value: ScenarioContextType = {
     scenarios,
-    activeScenario,
+    activeScenario: activeScenarioFromStore,
     comparisonMode,
     selectedScenarios,
     loading,

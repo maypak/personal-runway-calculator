@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-// import { useScenarios, Scenario } from '../hooks/useScenarios'; // Removed during Supabase migration
+import { useScenarioContext } from '@/contexts/ScenarioContext';
 import type { Scenario } from '../types';
 import ScenarioCard from './ScenarioCard';
 import ComparisonView from './ComparisonView';
@@ -10,48 +10,88 @@ import { Plus, BarChart3 } from 'lucide-react';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
 
 export default function ScenarioManager() {
-  // STUB: Temporarily disabled during Supabase removal
-  const scenarios: Scenario[] = [];
-  const loading = false;
-  const error = null;
+  // Use ScenarioContext (now powered by Zustand + LocalStorage)
+  const {
+    scenarios,
+    loading,
+    error,
+    comparisonMode: compareMode,
+    selectedScenarios: selectedForComparison,
+    toggleComparisonMode,
+    selectForComparison,
+    createScenario,
+    updateScenario,
+    deleteScenario,
+    setActiveScenario,
+  } = useScenarioContext();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingScenario, setEditingScenario] = useState<Scenario | null>(null);
-  const [compareMode, setCompareMode] = useState(false);
-  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
 
   // Handle create new scenario
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Scenario creation will be enabled after LocalStorage migration');
+    const name = prompt('Scenario name:');
+    if (!name) return;
+    
+    const result = await createScenario(name);
+    if (result.success) {
+      setShowCreateModal(false);
+    } else {
+      alert(`Failed to create scenario: ${result.error}`);
+    }
   };
 
   // Handle create from current settings
   const handleCreateFromCurrent = async () => {
-    alert('Scenario creation will be enabled after LocalStorage migration');
+    const name = prompt('Scenario name:');
+    if (!name) return;
+    
+    const result = await createScenario(name);
+    if (!result.success) {
+      alert(`Failed to create scenario: ${result.error}`);
+    }
   };
 
   // Handle duplicate
   const handleDuplicate = async (id: string) => {
-    alert('Scenario duplication will be enabled after LocalStorage migration');
+    const original = scenarios.find(s => s.id === id);
+    if (!original) return;
+    
+    const result = await createScenario(`${original.name} (Copy)`, id);
+    if (!result.success) {
+      alert(`Failed to duplicate scenario: ${result.error}`);
+    }
   };
 
   // Handle delete
   const handleDelete = async (id: string) => {
-    alert('Scenario deletion will be enabled after LocalStorage migration');
+    if (!confirm('Are you sure you want to delete this scenario?')) return;
+    
+    const result = await deleteScenario(id);
+    if (!result.success) {
+      alert(`Failed to delete scenario: ${result.error}`);
+    }
   };
 
   // Handle edit save
   const handleEditSave = async (id: string, updates: Partial<Scenario>): Promise<boolean> => {
-    alert('Scenario editing will be enabled after LocalStorage migration');
-    return false;
+    const result = await updateScenario(id, updates);
+    if (result.success) {
+      setEditingScenario(null);
+      return true;
+    } else {
+      alert(`Failed to update scenario: ${result.error}`);
+      return false;
+    }
   };
 
   // Toggle comparison selection
   const toggleComparisonSelection = (id: string) => {
-    setSelectedForComparison(prev =>
-      prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
-    );
+    const newSelection = selectedForComparison.includes(id)
+      ? selectedForComparison.filter(sid => sid !== id)
+      : [...selectedForComparison, id];
+    selectForComparison(newSelection);
   };
 
   // Loading
@@ -89,7 +129,7 @@ export default function ScenarioManager() {
         <div className="flex gap-2">
           {scenarios.length >= 2 && (
             <button
-              onClick={() => setCompareMode(!compareMode)}
+              onClick={() => toggleComparisonMode()}
               className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 compareMode
                   ? 'bg-primary text-white'
@@ -145,7 +185,7 @@ export default function ScenarioManager() {
       {compareMode && scenarios.length >= 2 && (
         <ComparisonView
           scenarios={scenarios.filter(s => selectedForComparison.includes(s.id))}
-          onClose={() => setCompareMode(false)}
+          onClose={() => toggleComparisonMode()}
         />
       )}
 
