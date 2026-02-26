@@ -32,7 +32,7 @@ interface Metric {
 export function ComparisonTable({ scenarios }: ComparisonTableProps) {
   const { t, locale } = useI18n();
 
-  if (scenarios.length === 0) {
+  if (!scenarios || scenarios.length === 0) {
     return (
       <div className="p-8 text-center text-gray-500 dark:text-gray-400">
         {t('scenarios:comparison.table.noScenarios')}
@@ -96,7 +96,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       .map(s => s[metric.key as keyof Scenario] as number | null | undefined)
       .filter(v => v !== undefined && v !== null) as number[];
     
-    if (values.length === 0) return null;
+    if (!values || values.length === 0) return null;
     
     if (metric.higherIsBetter) {
       return Math.max(...values);
@@ -104,7 +104,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       // For breakeven, treat null/undefined as worst (never breaks even)
       if (metric.key === 'calculatedBreakevenMonth') {
         const validValues = values.filter(v => v !== null);
-        return validValues.length > 0 ? Math.min(...validValues) : null;
+        return validValues?.length > 0 ? Math.min(...validValues) : null;
       }
       return Math.min(...values);
     }
@@ -115,7 +115,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       .map(s => s[metric.key as keyof Scenario] as number | null | undefined)
       .filter(v => v !== undefined && v !== null) as number[];
     
-    if (values.length === 0 || scenarios.length === 1) return null;
+    if (!values || values.length === 0 || scenarios?.length === 1) return null;
     
     if (metric.higherIsBetter) {
       return Math.min(...values);
@@ -126,7 +126,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
 
   const getCellStyle = (metric: Metric, value: number | null | undefined): string => {
     if (value === undefined || value === null) return '';
-    if (scenarios.length === 1) return ''; // No comparison needed for single scenario
+    if (scenarios?.length === 1) return ''; // No comparison needed for single scenario
     
     const best = getBestValue(metric);
     const worst = getWorstValue(metric);
@@ -142,7 +142,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       return 'text-green-600 dark:text-green-400 font-semibold';
     }
     
-    if (value === worst && scenarios.length > 1) {
+    if (value === worst && scenarios?.length > 1) {
       return 'text-red-600 dark:text-red-400';
     }
     
@@ -151,7 +151,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
 
   const getIndicator = (metric: Metric, value: number | null | undefined): string => {
     if (value === undefined || value === null) return '';
-    if (scenarios.length === 1) return '';
+    if (scenarios?.length === 1) return '';
     
     const best = getBestValue(metric);
     const worst = getWorstValue(metric);
@@ -164,7 +164,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
     }
     
     if (value === best) return ' ⬆';
-    if (value === worst && scenarios.length > 1) return ' ⬇';
+    if (value === worst && scenarios?.length > 1) return ' ⬇';
     
     return '';
   };
@@ -224,7 +224,7 @@ export function ComparisonTable({ scenarios }: ComparisonTableProps) {
       </table>
       
       {/* Legend */}
-      {scenarios.length > 1 && (
+      {scenarios?.length > 1 && (
         <div className="px-6 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-600 dark:text-gray-400">
           <span className="text-green-600 dark:text-green-400 font-semibold">{t('scenarios:comparison.table.legend.best')}</span>
           <span className="mx-2">•</span>

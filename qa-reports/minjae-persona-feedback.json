@@ -1,0 +1,245 @@
+{
+  "testInfo": {
+    "personaName": "이민재",
+    "age": 36,
+    "gender": "남성",
+    "maritalStatus": "기혼",
+    "occupation": "프로덕트 매니저 (구직중)",
+    "familySize": 4,
+    "children": 2,
+    "testDate": "2026-02-23T20:30:00+09:00",
+    "testDuration": "25분",
+    "tester": "QA Subagent"
+  },
+  "inputData": {
+    "assets": 30000000,
+    "monthlyExpenses": 5000000,
+    "income": 0,
+    "currency": "KRW"
+  },
+  "results": {
+    "runwayMonths": 6.0,
+    "calculation": "30000000 / 5000000 = 6.0"
+  },
+  "scores": {
+    "usability": {
+      "score": 8,
+      "maxScore": 10,
+      "comment": "간단한 온보딩, 직관적 UI"
+    },
+    "helpfulness": {
+      "score": 6,
+      "maxScore": 10,
+      "comment": "숫자는 나오지만 충분한가?"
+    },
+    "trustworthiness": {
+      "score": 5,
+      "maxScore": 10,
+      "comment": "보수적 계산인지 불확실"
+    },
+    "overall": {
+      "score": 6.3,
+      "maxScore": 10,
+      "comment": "기혼자/부양자 관점에서 개선 필요"
+    }
+  },
+  "positives": [
+    {
+      "category": "onboarding",
+      "description": "간단한 온보딩 (3단계로 빠르게 입력)",
+      "impact": "high"
+    },
+    {
+      "category": "clarity",
+      "description": "명확한 숫자 제시 (6.0개월)",
+      "impact": "high"
+    },
+    {
+      "category": "ui",
+      "description": "직관적인 UI",
+      "impact": "medium"
+    }
+  ],
+  "criticalIssues": [
+    {
+      "priority": "P0",
+      "category": "calculation",
+      "issue": "예비비/안전 마진이 고려되는지 불명확",
+      "impact": "신뢰성 부족",
+      "userQuote": "이 계산이 보수적인가? 예비비가 포함된 건가?",
+      "suggestion": "예비비 20% 옵션 추가 (토글)"
+    },
+    {
+      "priority": "P0",
+      "category": "messaging",
+      "issue": "6개월이 '안전'한지 '위험'한지 판단 기준 불명확",
+      "impact": "의사결정 불가",
+      "userQuote": "6개월이 충분한가, 부족한가?",
+      "suggestion": "위험 기준 명시 (색깔 구분: 🟢🟡🔴)"
+    },
+    {
+      "priority": "P1",
+      "category": "personalization",
+      "issue": "가족 4인 부양 시 특수성 반영 안됨",
+      "impact": "현실성 부족",
+      "userQuote": "자녀 교육비, 의료비 등 변동비는 고려됐나?",
+      "suggestion": "가족 구성원 수 입력 → 권장 안전 마진 조정"
+    }
+  ],
+  "featureRequests": [
+    {
+      "priority": "P0",
+      "feature": "보수적 계산 옵션",
+      "description": "예비비 20% 자동 차감",
+      "example": "예비비 제외 시 4.8개월 (vs 현재 6.0개월)",
+      "impact": "신뢰성 ↑↑"
+    },
+    {
+      "priority": "P0",
+      "feature": "지출 세부 항목",
+      "description": "고정비 vs 변동비 구분 입력",
+      "example": "주거₩1M, 식비₩1.5M, 교육비₩1M, 기타₩1.5M",
+      "impact": "현실성 ↑↑, 삭감 계획 가능"
+    },
+    {
+      "priority": "P0",
+      "feature": "위험 알림 기준",
+      "description": "색깔 + 수치로 위험 수준 명시",
+      "example": "🟢 안전(9개월+) 🟡 주의(6-9) 🔴 경고(3-6) 🚨 위험(3-)",
+      "impact": "판단력 ↑↑"
+    },
+    {
+      "priority": "P1",
+      "feature": "가족 구성원 입력",
+      "description": "배우자, 자녀 수 입력 → 맞춤형 안전 마진",
+      "example": "자녀 2명: 최소 9개월 권장",
+      "impact": "맞춤형 ↑"
+    },
+    {
+      "priority": "P1",
+      "feature": "'만약' 시나리오 계산",
+      "description": "지출 증가/감소 시뮬레이션",
+      "example": "학원 1개 줄이면 +1.2개월",
+      "impact": "계획력 ↑"
+    },
+    {
+      "priority": "P2",
+      "feature": "배우자 공유 기능",
+      "description": "링크 공유, 실시간 동기화",
+      "example": "부부가 함께 볼 수 있는 대시보드",
+      "impact": "협업 ↑"
+    }
+  ],
+  "psychologicalImpact": {
+    "overallEffect": "negative",
+    "anxietyLevel": {
+      "before": "막연한 불안",
+      "after": "구체적 불안 (더 강함)",
+      "reason": "숫자는 명확하지만 해결책 없음"
+    },
+    "concerns": [
+      "6개월이 충분한가?",
+      "예비비는 고려됐나?",
+      "자녀 교육비 증가하면?",
+      "갑작스러운 의료비는?",
+      "이 계산을 신뢰해도 되나?"
+    ],
+    "jobSearchPressure": {
+      "level": "increased",
+      "comment": "6개월이라는 데드라인이 시한폭탄처럼 느껴짐"
+    },
+    "planningClarity": {
+      "level": "improved",
+      "comment": "최소한 '언제까지'는 알게 됨"
+    },
+    "familySharing": {
+      "willingness": "hesitant",
+      "reason": "배우자에게 보여주기엔 신뢰성 부족",
+      "condition": "보수적 계산 + 위험 기준 명시 후에 가능"
+    },
+    "quote": "숫자를 보니 오히려 더 불안해졌다. 6개월이라는 게 정확한지, 충분한지, 예비비가 포함된 건지 알 수 없어서 이 앱을 믿고 계획을 세워도 되는지 의문이다."
+  },
+  "stressScenarios": {
+    "expenseIncrease": {
+      "scenario": "자녀 학원비 ₩500,000 증가",
+      "currentRunway": 6.0,
+      "newRunway": 5.45,
+      "impact": "-0.55개월",
+      "emotionalReaction": "😱 0.5개월 감소는 큰 충격",
+      "appSupport": false,
+      "comment": "앱에서 시뮬레이션 불가"
+    },
+    "timeExceeded": {
+      "scenario": "6개월 안에 못 구하면?",
+      "concerns": [
+        "그 후엔 어떻게 되나?",
+        "대출? 친인척 도움?",
+        "배우자 재취업?"
+      ],
+      "appSupport": false,
+      "comment": "앱에서 대안 제시 없음"
+    },
+    "emergencyExpense": {
+      "scenario": "자녀 의료비 ₩2,000,000 발생",
+      "currentRunway": 6.0,
+      "newRunway": 5.6,
+      "impact": "-0.4개월",
+      "emotionalReaction": "😱 긴급 지출 반영 어려움",
+      "appSupport": false,
+      "comment": "실시간 자산 조정 불가"
+    },
+    "overallAssessment": {
+      "doesAppReduceStress": false,
+      "doesAppIncreaseStress": true,
+      "reason": "숫자만 제시, 해결책 없음 → 불확실성 증가"
+    }
+  },
+  "targetAudienceEvaluation": {
+    "singleJobSeeker": {
+      "score": 7.5,
+      "recommendation": "권장 가능",
+      "reason": "단순 계산으로 충분"
+    },
+    "marriedNoChildren": {
+      "score": 6.5,
+      "recommendation": "조건부 권장",
+      "reason": "예비비 옵션 필요"
+    },
+    "marriedWithChildren": {
+      "score": 5.5,
+      "recommendation": "개선 필수",
+      "reason": "가족 특수성 미반영, 신뢰성 부족"
+    }
+  },
+  "recommendationsForLaunch": {
+    "currentState": {
+      "readyForLaunch": "조건부",
+      "targetAudience": "독신 구직자",
+      "notRecommendedFor": "기혼자/부양 책임자"
+    },
+    "minimumViableImprovements": [
+      "예비비 20% 옵션 추가",
+      "위험 기준 명시 (색깔 + 수치)",
+      "보수적 계산 토글"
+    ],
+    "afterImprovements": {
+      "expectedScore": 8.5,
+      "readyForLaunch": "적극 권장",
+      "targetAudience": "모든 구직자 (독신 + 기혼)"
+    }
+  },
+  "completionCriteria": {
+    "onboardingCompleted": true,
+    "dashboardChecked": true,
+    "marriedPerspectiveFeedback": true,
+    "psychologicalImpactAssessed": true,
+    "conservativeCalculationNeed": true
+  },
+  "metadata": {
+    "reportVersion": "1.0",
+    "detailedReport": "minjae-persona-detailed-report.md",
+    "executiveSummary": "minjae-persona-executive-summary.md",
+    "screenshots": "screenshots/minjae-*.png",
+    "testScript": "test-minjae-persona.js"
+  }
+}

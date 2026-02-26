@@ -1,0 +1,24 @@
+{
+  "persona": "이민재 (36세, 기혼, PM, 구직중)",
+  "testDate": "2026-02-23T11:31:30.144Z",
+  "steps": [
+    {
+      "step": 1,
+      "action": "온보딩 시작",
+      "timestamp": 1771846293868
+    },
+    {
+      "step": 2,
+      "action": "구직자 선택 완료",
+      "timestamp": 1771846296380
+    }
+  ],
+  "feedback": {
+    "scores": {},
+    "positives": [],
+    "improvements": [],
+    "psychologicalImpact": "",
+    "features": []
+  },
+  "error": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('input[type=\"number\"], input[inputmode=\"numeric\"]').first()\n    - waiting for\" http://localhost:3000/onboarding/\" navigation to finish...\n    - navigated to \"http://localhost:3000/onboarding/\"\n"
+}

@@ -57,7 +57,7 @@ export function RunwayChart({ scenarios, height = 400 }: RunwayChartProps) {
 
   // Merge monthly data from all scenarios
   const chartData = useMemo(() => {
-    if (results.length === 0) return [];
+    if (!results || results.length === 0) return [];
 
     const maxMonths = Math.max(...results.map(r => r.result.runway));
     const data: Array<{ month: number; [key: string]: number }> = [];
@@ -79,7 +79,7 @@ export function RunwayChart({ scenarios, height = 400 }: RunwayChartProps) {
 
   // Custom tooltip
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || payload.length === 0) return null;
+    if (!active || !payload || !payload?.length) return null;
 
     return (
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3">
@@ -112,7 +112,7 @@ export function RunwayChart({ scenarios, height = 400 }: RunwayChartProps) {
     return `$${value}`;
   };
 
-  if (scenarios.length === 0) {
+  if (!scenarios || scenarios.length === 0) {
     return (
       <div
         className="flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-lg"

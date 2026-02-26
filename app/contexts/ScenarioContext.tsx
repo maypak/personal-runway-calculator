@@ -167,7 +167,7 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
       const newMode = !prev;
       
       // Reset selection when entering comparison mode
-      if (newMode && selectedScenarios.length === 0 && scenarios.length >= 2) {
+      if (newMode && selectedScenarios?.length === 0 && scenarios?.length >= 2) {
         // Auto-select first 2 scenarios
         const autoSelect = scenarios.slice(0, 2).map(s => s.id);
         setSelectedScenarios(autoSelect);
@@ -182,7 +182,7 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
    */
   const selectForComparison = (ids: string[]) => {
     // Limit to max 3 scenarios for comparison
-    if (ids.length > 3) {
+    if (ids?.length > 3) {
       console.warn('⚠️ [ScenarioContext] Max 3 scenarios for comparison');
       setSelectedScenarios(ids.slice(0, 3));
       return;

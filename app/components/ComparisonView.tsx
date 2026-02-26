@@ -11,7 +11,7 @@ interface ComparisonViewProps {
 }
 
 export default function ComparisonView({ scenarios, onClose }: ComparisonViewProps) {
-  if (scenarios.length === 0) {
+  if (!scenarios || scenarios.length === 0) {
     return null;
   }
 
@@ -266,7 +266,7 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                       key={scenario.id}
                       className="py-4 px-4 text-center text-text-tertiary"
                     >
-                      {scenario.oneTimeExpenses.length > 0
+                      {scenario.oneTimeExpenses?.length > 0
                         ? `${scenario.oneTimeExpenses.length} item${
                             scenario.oneTimeExpenses.length > 1 ? 's' : ''
                           }`
@@ -285,7 +285,7 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                       key={scenario.id}
                       className="py-4 px-4 text-center text-text-tertiary"
                     >
-                      {scenario.recurringItems.length > 0
+                      {scenario.recurringItems?.length > 0
                         ? `${scenario.recurringItems.length} item${
                             scenario.recurringItems.length > 1 ? 's' : ''
                           }`
@@ -359,7 +359,7 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                   (a, b) => (b.calculatedRunway || 0) - (a.calculatedRunway || 0)
                 );
                 const best = sortedByRunway[0];
-                const worst = sortedByRunway[sortedByRunway.length - 1];
+                const worst = sortedByRunway[sortedByRunway?.length - 1];
                 const runwayDiff = (best.calculatedRunway || 0) - (worst.calculatedRunway || 0);
 
                 const hasIncome = scenarios.some(s => s.monthlyIncome > 0);
@@ -368,7 +368,7 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                 const insights: string[] = [];
 
                 // Runway comparison
-                if (scenarios.length > 1 && runwayDiff > 0) {
+                if (scenarios?.length > 1 && runwayDiff > 0) {
                   const years = Math.floor(runwayDiff / 12);
                   const months = Math.floor(runwayDiff % 12);
                   const timeDiff = years > 0 ? `${years}y ${months}m` : `${months}m`;
@@ -383,7 +383,7 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                     .filter(s => s.calculatedBreakevenMonth !== null)
                     .sort((a, b) => (a.calculatedBreakevenMonth || 0) - (b.calculatedBreakevenMonth || 0));
                   
-                  if (breakevenScenarios.length > 0) {
+                  if (breakevenScenarios?.length > 0) {
                     const fastest = breakevenScenarios[0];
                     insights.push(
                       `⚡ ${fastest.name} reaches break-even fastest (Month ${fastest.calculatedBreakevenMonth})`
@@ -394,11 +394,11 @@ export default function ComparisonView({ scenarios, onClose }: ComparisonViewPro
                 // Income analysis
                 if (hasIncome) {
                   const incomeScenarios = scenarios.filter(s => s.monthlyIncome > 0);
-                  if (incomeScenarios.length === 1) {
+                  if (incomeScenarios?.length === 1) {
                     insights.push(
                       `💼 Only ${incomeScenarios[0].name} has income - reduces burn rate significantly`
                     );
-                  } else if (incomeScenarios.length > 1) {
+                  } else if (incomeScenarios?.length > 1) {
                     const maxIncome = Math.max(...incomeScenarios.map(s => s.monthlyIncome));
                     const withMaxIncome = incomeScenarios.find(s => s.monthlyIncome === maxIncome);
                     insights.push(
