@@ -13,6 +13,7 @@ import { useRunwayStore } from '../../lib/stores/runwayStore';
 import RunwayDisplay from './RunwayDisplay';
 import ScenarioComparison from './ScenarioComparison';
 import GoalSettingP0 from './GoalSettingP0';
+import ShareButton from './ShareButton';
 
 export default function RunwayDashboard() {
   const router = useRouter();
@@ -51,6 +52,9 @@ export default function RunwayDashboard() {
     return null;
   }
   
+  // Calculate runway for share button
+  const runway = basicData.balance / basicData.monthlyExpenses;
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
       {/* Header */}
@@ -64,6 +68,16 @@ export default function RunwayDashboard() {
           </div>
           
           <div className="flex items-center gap-2 flex-shrink-0">
+            {/* P1: Share Button */}
+            <div className="hidden sm:block">
+              <ShareButton
+                runway={runway}
+                balance={basicData.balance}
+                monthlyExpenses={basicData.monthlyExpenses}
+                situation={basicData.situationType}
+              />
+            </div>
+            
             <button
               onClick={() => router.push('/settings')}
               className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"

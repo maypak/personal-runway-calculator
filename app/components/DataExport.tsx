@@ -5,6 +5,7 @@ import { useRunwayStore } from '@/lib/stores/runwayStore';
 import { downloadCSV, downloadJSON } from '@/lib/storage/localStorage';
 import { Download, FileText, FileJson, CheckCircle, AlertCircle } from 'lucide-react';
 import { InfoTooltip } from '@/components/ui/InfoTooltip';
+import { trackDataExport } from '@/lib/analytics/tracking';
 
 export default function DataExport() {
   const { data } = useRunwayStore();
@@ -24,6 +25,7 @@ export default function DataExport() {
 
     try {
       downloadCSV(data);
+      trackDataExport('csv');
       setExportStatus({
         type: 'success',
         message: 'CSV file downloaded successfully!'
@@ -49,6 +51,7 @@ export default function DataExport() {
 
     try {
       downloadJSON(data);
+      trackDataExport('json');
       setExportStatus({
         type: 'success',
         message: 'JSON file downloaded successfully!'

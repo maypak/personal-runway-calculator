@@ -8,6 +8,7 @@ import { ScenarioProvider } from './contexts/ScenarioContext';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LocaleTracker } from './components/LocaleTracker';
+import KakaoSDK from './components/KakaoSDK';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -98,6 +99,7 @@ export default function RootLayout({
           </I18nProvider>
         </ErrorBoundary>
         <Analytics />
+        <KakaoSDK />
       </body>
     </html>
   );

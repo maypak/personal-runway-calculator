@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]: 시작하기 - Personal Runway Calculator
+  - generic [ref=e12]:
+    - generic [ref=e15]:
+      - generic [ref=e16]: Step 1 of 3
+      - generic [ref=e17]: 당신의 상황은?
+    - generic [ref=e25]:
+      - heading "당신의 상황을 선택해주세요" [level=2] [ref=e26]
+      - generic [ref=e27]:
+        - button "💼 프리랜서 불규칙한 수입을 관리하고 런웨이를 예측하고 싶어요" [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]: 💼
+            - generic [ref=e31]:
+              - heading "프리랜서" [level=3] [ref=e32]
+              - paragraph [ref=e33]: 불규칙한 수입을 관리하고 런웨이를 예측하고 싶어요
+        - button "🔍 구직자 제한된 예산으로 얼마나 버틸 수 있을지 궁금해요" [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: 🔍
+            - generic [ref=e37]:
+              - heading "구직자" [level=3] [ref=e38]
+              - paragraph [ref=e39]: 제한된 예산으로 얼마나 버틸 수 있을지 궁금해요
+        - button "🚀 창업가 번아웃 전에 런웨이를 체크하고 싶어요" [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]: 🚀
+            - generic [ref=e43]:
+              - heading "창업가" [level=3] [ref=e44]
+              - paragraph [ref=e45]: 번아웃 전에 런웨이를 체크하고 싶어요
+        - button "⚡ 빠른 계산 간단하게 런웨이만 확인하고 싶어요" [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]: ⚡
+            - generic [ref=e49]:
+              - heading "빠른 계산" [level=3] [ref=e50]
+              - paragraph [ref=e51]: 간단하게 런웨이만 확인하고 싶어요
+      - paragraph [ref=e52]: 🔒 데이터는 기기에만 저장됩니다
+      - button "다음 →" [disabled] [ref=e54]
+```
