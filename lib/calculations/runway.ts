@@ -204,3 +204,59 @@ export function calculateAverageIncome(incomes: number[]): number {
   const sum = incomes.reduce((acc, income) => acc + income, 0);
   return sum / incomes.length;
 }
+
+/**
+ * P0: Scenario calculation types
+ */
+export interface Scenario {
+  name: string;
+  type: 'expense_adjustment' | 'balance_increase';
+  value: number; // -0.2 for -20%, +10000000 for +10M
+  icon?: string;
+}
+
+export interface ScenarioResult {
+  name: string;
+  months: number;
+  endDate: Date | null;
+  balance: number;
+  monthlyExpenses: number;
+  icon?: string;
+  status: 'safe' | 'warning' | 'danger';
+}
+
+/**
+ * P0: Calculate runway for a specific scenario
+ * 
+ * @param balance - 현재 자산
+ * @param monthlyExpenses - 월 평균 지출
+ * @param scenario - 시나리오 설정
+ * @returns 시나리오 결과
+ */
+export function calculateScenario(
+  balance: number,
+  monthlyExpenses: number,
+  scenario: Scenario
+): ScenarioResult {
+  let adjustedBalance = balance;
+  let adjustedExpenses = monthlyExpenses;
+
+  if (scenario.type === 'expense_adjustment') {
+    adjustedExpenses = monthlyExpenses * (1 + scenario.value);
+  } else if (scenario.type === 'balance_increase') {
+    adjustedBalance = balance + scenario.value;
+  }
+
+  const months = adjustedBalance / adjustedExpenses;
+  const endDate = calculateRunwayEndDate(months);
+
+  return {
+    name: scenario.name,
+    months: parseFloat(months.toFixed(1)),
+    endDate,
+    balance: adjustedBalance,
+    monthlyExpenses: adjustedExpenses,
+    icon: scenario.icon,
+    status: months >= 6 ? 'safe' : months >= 4 ? 'warning' : 'danger',
+  };
+}

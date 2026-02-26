@@ -11,6 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRunwayStore } from '../../lib/stores/runwayStore';
 import RunwayDisplay from './RunwayDisplay';
+import ScenarioComparison from './ScenarioComparison';
+import GoalSettingP0 from './GoalSettingP0';
 
 export default function RunwayDashboard() {
   const router = useRouter();
@@ -63,6 +65,15 @@ export default function RunwayDashboard() {
           
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
+              onClick={() => router.push('/settings')}
+              className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"
+              title="설정"
+              aria-label="설정"
+            >
+              <span className="hidden sm:inline">⚙️ 설정</span>
+              <span className="sm:hidden">⚙️</span>
+            </button>
+            <button
               onClick={() => router.push('/onboarding')}
               className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"
               title="다시 시작"
@@ -79,23 +90,25 @@ export default function RunwayDashboard() {
       <main className="max-w-6xl mx-auto px-4 py-8 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Main Runway Display */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
             <RunwayDisplay
               balance={basicData.balance}
               monthlyExpenses={basicData.monthlyExpenses}
               monthlyIncome={basicData.monthlyIncome}
             />
             
-            {/* Coming Soon Notice */}
-            <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 shadow-md border border-blue-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <span>🚀</span>
-                <span>곧 출시 예정</span>
-              </h3>
-              <p className="text-gray-700 text-sm">
-                시나리오 분석, 데이터 내보내기, 목표 설정 등 더 많은 기능이 곧 추가됩니다.
-              </p>
-            </div>
+            {/* P0: Scenario Comparison */}
+            <ScenarioComparison
+              balance={basicData.balance}
+              monthlyExpenses={basicData.monthlyExpenses}
+            />
+            
+            {/* P0: Goal Setting */}
+            <GoalSettingP0
+              currentRunway={basicData.balance / basicData.monthlyExpenses}
+              balance={basicData.balance}
+              monthlyExpenses={basicData.monthlyExpenses}
+            />
           </div>
           
           {/* Right Column: Info Cards */}
