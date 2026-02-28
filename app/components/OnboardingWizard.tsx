@@ -227,7 +227,7 @@ export default function OnboardingWizard({
                     autoFocus
                     className="w-full pl-10 sm:pl-12 pr-6 py-3 sm:py-4 text-2xl sm:text-3xl font-bold text-center
                       bg-surface-card border-2 border-primary rounded-xl
-                      text-text-primary placeholder:text-text-tertiary
+                      !text-gray-900 placeholder:text-text-tertiary
                       focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary
                       transition-all duration-200"
                   />
@@ -270,7 +270,7 @@ export default function OnboardingWizard({
                     autoFocus
                     className="w-full pl-10 sm:pl-12 pr-6 py-3 sm:py-4 text-2xl sm:text-3xl font-bold text-center
                       bg-surface-card border-2 border-primary rounded-xl
-                      text-text-primary placeholder:text-text-tertiary
+                      !text-gray-900 placeholder:text-text-tertiary
                       focus:outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary
                       transition-all duration-200"
                   />
