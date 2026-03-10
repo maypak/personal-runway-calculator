@@ -147,5 +147,51 @@
       "label": "Tip:",
       "text": "Hover over any term with an info icon (ⓘ) for explanations."
     }
+  },
+  "scenarioComparison": {
+    "title": "Scenario Comparison",
+    "preset": "Preset",
+    "presetTitle": "Select Preset",
+    "close": "Close",
+    "current": "Current",
+    "save10": "Save -10%",
+    "save20": "Save -20%",
+    "worst20": "Worst +20%",
+    "perMonth": "/ mo",
+    "months": "{{count}} months",
+    "addCustom": "Add Custom Scenario",
+    "maxScenarios": "Maximum {{max}} scenarios allowed",
+    "deleteConfirm": "Delete this scenario?"
+  },
+  "goalSetting": {
+    "title": "Goal Setting",
+    "set": "Set Goal",
+    "unset": "Remove Goal",
+    "targetLabel": "Target Runway (months)",
+    "currentRunway": "Current Runway",
+    "target": "Target",
+    "gap": "Gap",
+    "surplus": "(surplus)",
+    "shortage": "(shortage)",
+    "status": {
+      "safe": "Safe",
+      "tight": "Tight",
+      "danger": "Danger",
+      "unknown": "Unknown"
+    },
+    "suggestions": "💡 Suggestions to reach your goal:",
+    "suggestionsAction": "→ Reach goal",
+    "empty": "Set a goal to compare with your current runway and get action recommendations.",
+    "currentStatus": "Current Status"
+  },
+  "tips": {
+    "title": "Runway Management Tips",
+    "checkMonthly": "Check your runway regularly (monthly recommended)",
+    "cutExpenses": "Reduce expenses to extend your runway",
+    "increaseIncome": "Add income streams to reduce burn rate"
+  },
+  "buttons": {
+    "settings": "Settings",
+    "restart": "Restart"
   }
 }

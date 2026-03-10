@@ -15,10 +15,12 @@ import ScenarioComparison from './ScenarioComparison';
 import GoalSettingP0 from './GoalSettingP0';
 import ShareButton from './ShareButton';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useI18n } from '../contexts/I18nContext';
 
 export default function RunwayDashboard() {
   const router = useRouter();
   const { getBasicData, hydrated } = useRunwayStore();
+  const { t, locale } = useI18n();
   const [isLoading, setIsLoading] = useState(true);
   const [basicData, setBasicData] = useState<ReturnType<typeof getBasicData>>(null);
   
@@ -85,19 +87,19 @@ export default function RunwayDashboard() {
             <button
               onClick={() => router.push('/settings')}
               className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"
-              title="설정"
-              aria-label="설정"
+              title={t('dashboard.buttons.settings')}
+              aria-label={t('dashboard.buttons.settings')}
             >
-              <span className="hidden sm:inline">⚙️ 설정</span>
+              <span className="hidden sm:inline">⚙️ {t('dashboard.buttons.settings')}</span>
               <span className="sm:hidden">⚙️</span>
             </button>
             <button
               onClick={() => router.push('/onboarding')}
               className="min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all whitespace-nowrap"
-              title="다시 시작"
-              aria-label="다시 시작"
+              title={t('dashboard.buttons.restart')}
+              aria-label={t('dashboard.buttons.restart')}
             >
-              <span className="hidden xs:inline">다시 시작</span>
+              <span className="hidden xs:inline">{t('dashboard.buttons.restart')}</span>
               <span className="xs:hidden">🔄</span>
             </button>
           </div>
@@ -135,24 +137,24 @@ export default function RunwayDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
               <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                 <span>📋</span>
-                <span>당신의 상황</span>
+                <span>{t('onboarding.situation.title')}</span>
               </h3>
               <div className="space-y-2 text-gray-700">
                 <p className="flex items-center gap-2">
-                  <span className="font-medium">타입:</span>
+                  <span className="font-medium">{t('common.common.type') || 'Type'}:</span>
                   <span className="capitalize">
-                    {basicData.situationType === 'freelancer' && '💼 프리랜서'}
-                    {basicData.situationType === 'job-seeker' && '🔍 구직자'}
-                    {basicData.situationType === 'startup' && '🚀 창업가'}
-                    {basicData.situationType === 'quick' && '⚡ 빠른 계산'}
+                    {basicData.situationType === 'freelancer' && `💼 ${t('onboarding.situation.freelancer.title')}`}
+                    {basicData.situationType === 'job-seeker' && `🔍 ${t('onboarding.situation.job-seeker.title')}`}
+                    {basicData.situationType === 'startup' && `🚀 ${t('onboarding.situation.startup.title')}`}
+                    {basicData.situationType === 'quick' && `⚡ ${t('onboarding.situation.quick.title')}`}
                   </span>
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="font-medium">변동 소득:</span>
-                  <span>{basicData.hasVariableIncome ? '✅ 있음' : '❌ 없음'}</span>
+                  <span className="font-medium">{t('onboarding.step3.variableIncome').split('(')[0].trim()}:</span>
+                  <span>{basicData.hasVariableIncome ? '✅' : '❌'}</span>
                 </p>
                 <p className="text-sm text-gray-500 mt-3">
-                  생성일: {new Date(basicData.createdAt).toLocaleDateString('ko-KR')}
+                  {new Date(basicData.createdAt).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US')}
                 </p>
               </div>
             </div>
@@ -161,20 +163,20 @@ export default function RunwayDashboard() {
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 shadow-md border border-blue-200">
               <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                 <span>💡</span>
-                <span>런웨이 관리 팁</span>
+                <span>{t('dashboard.tips.title')}</span>
               </h3>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
                   <span>•</span>
-                  <span>정기적으로 런웨이를 확인하세요 (월 1회 권장)</span>
+                  <span>{t('dashboard.tips.checkMonthly')}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span>•</span>
-                  <span>3개월 미만일 경우 즉시 행동 계획을 세우세요</span>
+                  <span>{t('dashboard.tips.cutExpenses')}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span>•</span>
-                  <span>시나리오 분석으로 "what-if" 상황을 미리 준비하세요</span>
+                  <span>{t('dashboard.tips.increaseIncome')}</span>
                 </li>
               </ul>
             </div>
@@ -183,10 +185,10 @@ export default function RunwayDashboard() {
             <div className="bg-green-50 rounded-xl p-6 shadow-md border border-green-200">
               <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <span>🔒</span>
-                <span>100% 로컬 저장</span>
+                <span>{t('onboarding.situation.privacy')}</span>
               </h3>
               <p className="text-sm text-gray-700">
-                모든 데이터는 브라우저에만 저장됩니다. 서버 업로드 없음.
+                {t('onboarding.situation.privacy')}
               </p>
             </div>
           </div>

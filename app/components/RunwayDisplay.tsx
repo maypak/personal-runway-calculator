@@ -17,6 +17,7 @@ import {
   getRunwayMessage,
   formatCurrency,
 } from '../../lib/calculations/runway';
+import { useI18n } from '../contexts/I18nContext';
 
 interface RunwayDisplayProps {
   balance: number;
@@ -31,11 +32,11 @@ export default function RunwayDisplay({
   monthlyIncome = 0,
   locale = 'ko',
 }: RunwayDisplayProps) {
-  // Calculate runway
+  const { t, locale: currentLocale } = useI18n();
   const runway = calculateRunway(balance, monthlyExpenses, monthlyIncome);
   const endDate = calculateRunwayEndDate(runway);
   const { color, bgColor, emoji } = getRunwayColor(runway);
-  const message = getRunwayMessage(runway, locale);
+  const message = getRunwayMessage(runway, currentLocale);
   
   return (
     <div
@@ -45,7 +46,7 @@ export default function RunwayDisplay({
       {/* Header */}
       <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
         <span className="text-4xl">{emoji}</span>
-        <span>당신의 재정 런웨이</span>
+        <span>{t('dashboard.header.title')}</span>
       </h2>
       
       {/* Big Number */}
@@ -71,7 +72,7 @@ export default function RunwayDisplay({
         {/* End Date */}
         {endDate && (
           <p className="text-xl font-semibold text-gray-700">
-            {formatDateKorean(endDate)}까지
+            {formatDateKorean(endDate)}
           </p>
         )}
       </div>
@@ -79,13 +80,13 @@ export default function RunwayDisplay({
       {/* Financial Summary */}
       <div className="space-y-3 mb-6 text-gray-700">
         <div className="flex justify-between items-center p-3 bg-white bg-opacity-60 rounded-lg">
-          <span className="font-medium">월 평균 지출:</span>
+          <span className="font-medium">{t('dashboard.stats.monthlyBurn')}:</span>
           <span className="font-bold text-lg">{formatCurrency(monthlyExpenses)}</span>
         </div>
         
         {monthlyIncome > 0 && (
           <div className="flex justify-between items-center p-3 bg-white bg-opacity-60 rounded-lg">
-            <span className="font-medium">월 평균 수입:</span>
+            <span className="font-medium">{t('dashboard.stats.totalIncome')}:</span>
             <span className="font-bold text-lg text-green-600">
               {formatCurrency(monthlyIncome)}
             </span>
@@ -93,7 +94,7 @@ export default function RunwayDisplay({
         )}
         
         <div className="flex justify-between items-center p-3 bg-white bg-opacity-60 rounded-lg">
-          <span className="font-medium">현재 자산:</span>
+          <span className="font-medium">{t('dashboard.stats.remainingFunds')}:</span>
           <span className="font-bold text-lg">{formatCurrency(balance)}</span>
         </div>
       </div>
