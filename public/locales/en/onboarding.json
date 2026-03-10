@@ -44,5 +44,40 @@
       "title": "Quick Calculate",
       "description": "I just want a simple runway estimate"
     }
+  },
+  "step2": {
+    "title": "What are your current assets?",
+    "label": "Total assets (bank + savings + cash)",
+    "placeholder": "2500000",
+    "hint": "Include only cash you can use immediately",
+    "preview": {
+      "title": "Live Runway Preview",
+      "based": "Based on current input:",
+      "until": "until"
+    },
+    "prev": "← Back",
+    "next": "Next →"
+  },
+  "step3": {
+    "title": "What's your average monthly spending?",
+    "label": "Monthly average expenses",
+    "placeholder": "850000",
+    "hint": "Include rent, food, utilities, etc.",
+    "variableIncome": "I have variable income (freelancer/entrepreneur)",
+    "recentIncome": "Enter your income for the last 3 months",
+    "avgIncome": "Average income: {{amount}}",
+    "runway": {
+      "title": "Your Runway",
+      "expenses": "Monthly expenses: {{amount}}",
+      "income": "Monthly avg income: {{amount}}",
+      "assets": "Current assets: {{amount}}"
+    },
+    "months": [
+      "Month 1",
+      "Month 2",
+      "Month 3"
+    ],
+    "prev": "← Back",
+    "complete": "Go to Dashboard →"
   }
 }

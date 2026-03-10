@@ -44,5 +44,40 @@
       "title": "빠른 계산",
       "description": "간단하게 런웨이만 확인하고 싶어요"
     }
+  },
+  "step2": {
+    "title": "현재 가지고 계신 자산은?",
+    "label": "총 자산 (은행 + 예금 + 현금)",
+    "placeholder": "2500000",
+    "hint": "즉시 사용 가능한 현금만 포함하세요",
+    "preview": {
+      "title": "실시간 런웨이 미리보기",
+      "based": "현재 입력값 기준:",
+      "until": "까지"
+    },
+    "prev": "← 이전",
+    "next": "다음 →"
+  },
+  "step3": {
+    "title": "한 달 평균 지출은 얼마인가요?",
+    "label": "월 평균 지출",
+    "placeholder": "850000",
+    "hint": "월세, 식비, 공과금 등 고정 지출 포함",
+    "variableIncome": "변동 소득이 있어요 (프리랜서/창업가)",
+    "recentIncome": "최근 3개월 수입을 입력해주세요",
+    "avgIncome": "평균 수입: {{amount}}",
+    "runway": {
+      "title": "당신의 런웨이",
+      "expenses": "월 평균 지출: {{amount}}",
+      "income": "월 평균 수입: {{amount}}",
+      "assets": "현재 자산: {{amount}}"
+    },
+    "months": [
+      "1월",
+      "2월",
+      "3월"
+    ],
+    "prev": "← 이전",
+    "complete": "대시보드로 →"
   }
 }
