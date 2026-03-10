@@ -23,5 +23,26 @@
   "progress": {
     "step": "{{current}}/{{total}} 단계",
     "skip": "나중에 하기"
+  },
+  "situation": {
+    "title": "당신의 상황을 선택해주세요",
+    "privacy": "🔒 데이터는 기기에만 저장됩니다",
+    "next": "다음 →",
+    "freelancer": {
+      "title": "프리랜서",
+      "description": "불규칙한 수입을 관리하고 런웨이를 예측하고 싶어요"
+    },
+    "job-seeker": {
+      "title": "구직자",
+      "description": "제한된 예산으로 얼마나 버틸 수 있을지 궁금해요"
+    },
+    "startup": {
+      "title": "창업가",
+      "description": "번아웃 전에 런웨이를 체크하고 싶어요"
+    },
+    "quick": {
+      "title": "빠른 계산",
+      "description": "간단하게 런웨이만 확인하고 싶어요"
+    }
   }
 }

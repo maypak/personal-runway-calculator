@@ -8,6 +8,7 @@
 'use client';
 
 import React from 'react';
+import { useI18n } from '../../contexts/I18nContext';
 
 interface Step1Props {
   selected: string | null;
@@ -15,63 +16,46 @@ interface Step1Props {
   onNext: () => void;
 }
 
-const situations = [
-  {
-    id: 'freelancer' as const,
-    emoji: '💼',
-    title: '프리랜서',
-    description: '불규칙한 수입을 관리하고 런웨이를 예측하고 싶어요',
-  },
-  {
-    id: 'job-seeker' as const,
-    emoji: '🔍',
-    title: '구직자',
-    description: '제한된 예산으로 얼마나 버틸 수 있을지 궁금해요',
-  },
-  {
-    id: 'startup' as const,
-    emoji: '🚀',
-    title: '창업가',
-    description: '번아웃 전에 런웨이를 체크하고 싶어요',
-  },
-  {
-    id: 'quick' as const,
-    emoji: '⚡',
-    title: '빠른 계산',
-    description: '간단하게 런웨이만 확인하고 싶어요',
-  },
-];
+const situationIds = ['freelancer', 'job-seeker', 'startup', 'quick'] as const;
+const situationEmojis = {
+  'freelancer': '💼',
+  'job-seeker': '🔍',
+  'startup': '🚀',
+  'quick': '⚡',
+};
 
 export default function Step1Situation({ selected, onSelect, onNext }: Step1Props) {
+  const { t } = useI18n();
+
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8">
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-semibold text-center mb-8 text-gray-900">
-        당신의 상황을 선택해주세요
+        {t('onboarding.situation.title')}
       </h2>
       
       {/* Cards */}
       <div className="space-y-4 mb-8">
-        {situations.map((situation) => (
+        {situationIds.map((id) => (
           <button
-            key={situation.id}
-            onClick={() => onSelect(situation.id)}
+            key={id}
+            onClick={() => onSelect(id)}
             className={`
               min-h-[44px] w-full p-6 rounded-xl text-left transition-all duration-200
               ${
-                selected === situation.id
+                selected === id
                   ? 'border-2 border-orange-500 bg-orange-50 shadow-lg'
                   : 'border-2 border-gray-200 bg-white hover:border-orange-500 hover:shadow-md'
               }
             `}
           >
             <div className="flex items-start gap-4">
-              <span className="text-4xl flex-shrink-0">{situation.emoji}</span>
+              <span className="text-4xl flex-shrink-0">{situationEmojis[id]}</span>
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                  {situation.title}
+                  {t(`onboarding.situation.${id}.title`)}
                 </h3>
-                <p className="text-gray-600">{situation.description}</p>
+                <p className="text-gray-600">{t(`onboarding.situation.${id}.description`)}</p>
               </div>
             </div>
           </button>
@@ -80,7 +64,7 @@ export default function Step1Situation({ selected, onSelect, onNext }: Step1Prop
       
       {/* Privacy Notice */}
       <p className="text-sm text-gray-500 text-center mb-6">
-        🔒 데이터는 기기에만 저장됩니다
+        {t('onboarding.situation.privacy')}
       </p>
       
       {/* Next Button */}
@@ -97,7 +81,7 @@ export default function Step1Situation({ selected, onSelect, onNext }: Step1Prop
             }
           `}
         >
-          다음 →
+          {t('onboarding.situation.next')}
         </button>
       </div>
     </div>

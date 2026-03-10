@@ -23,5 +23,26 @@
   "progress": {
     "step": "Step {{current}} of {{total}}",
     "skip": "Skip for now"
+  },
+  "situation": {
+    "title": "Choose your situation",
+    "privacy": "🔒 Data is stored on your device only",
+    "next": "Next →",
+    "freelancer": {
+      "title": "Freelancer",
+      "description": "I want to manage irregular income and predict my runway"
+    },
+    "job-seeker": {
+      "title": "Job Seeker",
+      "description": "I want to know how long I can last on a limited budget"
+    },
+    "startup": {
+      "title": "Entrepreneur",
+      "description": "I want to check my runway before burning out"
+    },
+    "quick": {
+      "title": "Quick Calculate",
+      "description": "I just want a simple runway estimate"
+    }
   }
 }
