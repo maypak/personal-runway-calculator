@@ -141,7 +141,7 @@ export default function RunwayDashboard() {
               </h3>
               <div className="space-y-2 text-gray-700">
                 <p className="flex items-center gap-2">
-                  <span className="font-medium">{t('common.common.type') || 'Type'}:</span>
+                  <span className="font-medium">{locale === 'en' ? 'Type' : '타입'}:</span>
                   <span className="capitalize">
                     {basicData.situationType === 'freelancer' && `💼 ${t('onboarding.situation.freelancer.title')}`}
                     {basicData.situationType === 'job-seeker' && `🔍 ${t('onboarding.situation.job-seeker.title')}`}

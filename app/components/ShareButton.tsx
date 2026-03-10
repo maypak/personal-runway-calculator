@@ -14,6 +14,7 @@ import { Share2 } from 'lucide-react';
 import ShareModal from './ShareModal';
 import { shareToKakao } from '@/lib/share/kakao';
 import { trackShare } from '@/lib/analytics/tracking';
+import { useI18n } from '../contexts/I18nContext';
 
 interface ShareButtonProps {
   runway: number;
@@ -28,11 +29,14 @@ export default function ShareButton({
   monthlyExpenses,
   situation,
 }: ShareButtonProps) {
+  const { t, locale } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const shareUrl = 'https://personal-runway-calculator.vercel.app';
-  const shareText = `나의 재정 런웨이: ${runway.toFixed(1)}개월! Personal Runway Calculator로 확인해보세요 🎯`;
+  const shareText = locale === 'en'
+    ? `My financial runway: ${runway.toFixed(1)} months! Check yours with Personal Runway Calculator 🎯`
+    : `나의 재정 런웨이: ${runway.toFixed(1)}개월! Personal Runway Calculator로 확인해보세요 🎯`;
 
   const handleKakao = () => {
     shareToKakao({ runway, balance, monthlyExpenses });
@@ -71,10 +75,10 @@ export default function ShareButton({
       <button
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg"
-        aria-label="공유하기"
+        aria-label={locale === 'en' ? 'Share' : '공유하기'}
       >
         <Share2 className="w-4 h-4" />
-        <span>공유하기</span>
+        <span>{locale === 'en' ? 'Share' : '공유하기'}</span>
       </button>
 
       <ShareModal

@@ -42,7 +42,7 @@ export default function Step3Expenses({
   onComplete,
   onPrev,
 }: Step3Props) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [expensesInput, setExpensesInput] = useState(monthlyExpenses.toString());
   const [incomeInputs, setIncomeInputs] = useState<string[]>(
     recentIncomes.length > 0 ? recentIncomes.map((i) => i.toString()) : ['', '', '']
@@ -160,7 +160,7 @@ export default function Step3Expenses({
           
           <div className="text-center mb-4">
             <p className="text-5xl md:text-6xl font-bold mb-2" style={{ color }}>
-              {formatRunwayMonths(runway)}
+              {formatRunwayMonths(runway, locale)}
             </p>
             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-3">
               <div
@@ -169,7 +169,7 @@ export default function Step3Expenses({
               />
             </div>
             {endDate && (
-              <p className="text-lg text-gray-700">{formatDateKorean(endDate)}까지</p>
+              <p className="text-lg text-gray-700">{formatDateKorean(endDate, locale)}</p>
             )}
           </div>
           

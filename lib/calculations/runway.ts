@@ -151,11 +151,14 @@ export function getRunwayMessage(
  * @param date - 날짜
  * @returns "2026년 8월 15일" 형식
  */
-export function formatDateKorean(date: Date): string {
+export function formatDateKorean(date: Date, locale: string = 'ko'): string {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   
+  if (locale === 'en') {
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
   return `${year}년 ${month}월 ${day}일`;
 }
 
@@ -163,12 +166,17 @@ export function formatDateKorean(date: Date): string {
  * 런웨이 개월수 포맷팅
  * 
  * @param runwayMonths - 런웨이 (개월)
- * @returns "5.8개월" 형식
+ * @param locale - 언어 코드
+ * @returns "5.8개월" or "5.8 months"
  */
-export function formatRunwayMonths(runwayMonths: number): string {
+export function formatRunwayMonths(runwayMonths: number, locale: string = 'ko'): string {
+  if (locale === 'en') {
+    if (runwayMonths === Infinity) return '∞ months';
+    if (runwayMonths <= 0) return '0 months';
+    return `${runwayMonths.toFixed(1)} months`;
+  }
   if (runwayMonths === Infinity) return '무한';
   if (runwayMonths <= 0) return '0개월';
-  
   return `${runwayMonths.toFixed(1)}개월`;
 }
 

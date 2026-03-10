@@ -55,7 +55,7 @@ export default function RunwayDisplay({
           className="text-6xl md:text-7xl font-extrabold mb-4"
           style={{ color }}
         >
-          {formatRunwayMonths(runway)}
+          {formatRunwayMonths(runway, currentLocale)}
         </p>
         
         {/* Progress Bar */}
@@ -72,7 +72,7 @@ export default function RunwayDisplay({
         {/* End Date */}
         {endDate && (
           <p className="text-xl font-semibold text-gray-700">
-            {formatDateKorean(endDate)}
+            {formatDateKorean(endDate, currentLocale)}
           </p>
         )}
       </div>

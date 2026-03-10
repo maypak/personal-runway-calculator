@@ -26,7 +26,7 @@ export default function Step2Assets({
   onNext,
   onPrev,
 }: Step2Props) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [inputValue, setInputValue] = useState(balance.toString());
   
   useEffect(() => {
@@ -87,11 +87,11 @@ export default function Step2Assets({
           <div className="text-center">
             <p className="text-sm text-gray-600 mb-2">{t('onboarding.step2.preview.based')}</p>
             <p className="text-4xl font-bold text-orange-600 mb-2">
-              {formatRunwayMonths(previewRunway)}
+              {formatRunwayMonths(previewRunway, locale)}
             </p>
             {previewEndDate && (
               <p className="text-gray-700">
-                {formatDateKorean(previewEndDate)}{t('onboarding.step2.preview.until')}
+                {formatDateKorean(previewEndDate, locale)}{locale === 'ko' ? t('onboarding.step2.preview.until') : ''}
               </p>
             )}
           </div>

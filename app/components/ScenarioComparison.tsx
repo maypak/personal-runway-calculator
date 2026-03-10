@@ -21,7 +21,7 @@ const STORAGE_KEY = 'personal_runway_custom_scenarios';
 const MAX_CUSTOM_SCENARIOS = 10;
 
 export default function ScenarioComparison({ balance, monthlyExpenses }: ScenarioComparisonProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [customScenarios, setCustomScenarios] = useState<CustomScenario[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
@@ -178,11 +178,11 @@ export default function ScenarioComparison({ balance, monthlyExpenses }: Scenari
                 </div>
                 <div className="text-right flex-shrink-0">
                   <div className="text-2xl font-bold">
-                    {t('dashboard.scenarioComparison.months').replace('{{count}}', result.months.toFixed(1))}
+                    {locale === 'en' ? `${result.months.toFixed(1)} months` : `${result.months.toFixed(1)}개월`}
                   </div>
                   {result.endDate && (
                     <div className="text-xs opacity-80">
-                      {formatDateKorean(result.endDate)}
+                      {formatDateKorean(result.endDate, locale)}
                     </div>
                   )}
                 </div>
