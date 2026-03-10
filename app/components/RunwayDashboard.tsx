@@ -132,7 +132,7 @@ export default function RunwayDashboard() {
           </div>
           
           {/* Right Column: Info Cards */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:sticky lg:top-8 lg:self-start">
             {/* Situation Card */}
             <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
               <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
