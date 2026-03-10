@@ -193,5 +193,9 @@
   "buttons": {
     "settings": "설정",
     "restart": "다시 시작"
+  },
+  "privacy": {
+    "privacyTitle": "100% 로컬 저장",
+    "privacyDesc": "모든 데이터는 브라우저에만 저장됩니다. 서버 업로드 없음."
   }
 }

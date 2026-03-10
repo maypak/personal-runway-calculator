@@ -183,12 +183,12 @@ export default function RunwayDashboard() {
             
             {/* Privacy Notice */}
             <div className="bg-green-50 rounded-xl p-6 shadow-md border border-green-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2 flex-wrap">
                 <span>🔒</span>
-                <span>{t('onboarding.situation.privacy')}</span>
+                <span>{t('dashboard.privacy.privacyTitle')}</span>
               </h3>
               <p className="text-sm text-gray-700">
-                {t('onboarding.situation.privacy')}
+                {t('dashboard.privacy.privacyDesc')}
               </p>
             </div>
           </div>
