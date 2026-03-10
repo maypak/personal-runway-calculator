@@ -22,7 +22,10 @@
   },
   "progress": {
     "step": "Step {{current}} of {{total}}",
-    "skip": "Skip for now"
+    "skip": "Skip for now",
+    "step1Label": "Your situation?",
+    "step2Label": "Current assets?",
+    "step3Label": "Monthly expenses?"
   },
   "situation": {
     "title": "Choose your situation",

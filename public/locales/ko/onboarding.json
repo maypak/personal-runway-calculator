@@ -22,7 +22,10 @@
   },
   "progress": {
     "step": "{{current}}/{{total}} 단계",
-    "skip": "나중에 하기"
+    "skip": "나중에 하기",
+    "step1Label": "당신의 상황은?",
+    "step2Label": "현재 자산은?",
+    "step3Label": "월 지출은?"
   },
   "situation": {
     "title": "당신의 상황을 선택해주세요",

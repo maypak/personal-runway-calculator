@@ -14,12 +14,14 @@ import Step1Situation from './Step1Situation';
 import Step2Assets from './Step2Assets';
 import Step3Expenses from './Step3Expenses';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useI18n } from '../../contexts/I18nContext';
 
 type SituationType = 'freelancer' | 'job-seeker' | 'startup' | 'quick';
 
 export default function OnboardingFlow() {
   const router = useRouter();
   const { saveBasicData } = useRunwayStore();
+  const { t } = useI18n();
   
   // Current step
   const [step, setStep] = useState(1);
@@ -78,9 +80,9 @@ export default function OnboardingFlow() {
               Step {step} of 3
             </span>
             <span className="text-sm font-semibold text-gray-800">
-              {step === 1 && '당신의 상황은?'}
-              {step === 2 && '현재 자산은?'}
-              {step === 3 && '월 지출은?'}
+              {step === 1 && t('onboarding.progress.step1Label')}
+              {step === 2 && t('onboarding.progress.step2Label')}
+              {step === 3 && t('onboarding.progress.step3Label')}
             </span>
           </div>
           
@@ -115,9 +117,9 @@ export default function OnboardingFlow() {
           {/* Mobile Title */}
           <div className="md:hidden mt-2 text-center">
             <span className="text-sm font-semibold text-gray-800">
-              {step === 1 && '당신의 상황은?'}
-              {step === 2 && '현재 자산은?'}
-              {step === 3 && '월 지출은?'}
+              {step === 1 && t('onboarding.progress.step1Label')}
+              {step === 2 && t('onboarding.progress.step2Label')}
+              {step === 3 && t('onboarding.progress.step3Label')}
             </span>
           </div>
         </div>
