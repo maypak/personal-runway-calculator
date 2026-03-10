@@ -13,6 +13,7 @@ import { useRunwayStore } from '../../../lib/stores/runwayStore';
 import Step1Situation from './Step1Situation';
 import Step2Assets from './Step2Assets';
 import Step3Expenses from './Step3Expenses';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 type SituationType = 'freelancer' | 'job-seeker' | 'startup' | 'quick';
 
@@ -67,6 +68,10 @@ export default function OnboardingFlow() {
       {/* Progress Bar (sticky) */}
       <div className="sticky top-0 bg-white shadow-sm z-10 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4">
+          {/* Language Switcher */}
+          <div className="flex justify-end mb-2">
+            <LanguageSwitcher />
+          </div>
           {/* Desktop Progress */}
           <div className="hidden md:flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">
