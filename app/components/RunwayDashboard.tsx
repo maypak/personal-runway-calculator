@@ -14,6 +14,7 @@ import RunwayDisplay from './RunwayDisplay';
 import ScenarioComparison from './ScenarioComparison';
 import GoalSettingP0 from './GoalSettingP0';
 import ShareButton from './ShareButton';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function RunwayDashboard() {
   const router = useRouter();
@@ -68,6 +69,9 @@ export default function RunwayDashboard() {
           </div>
           
           <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {/* P1: Share Button */}
             <div className="hidden sm:block">
               <ShareButton
