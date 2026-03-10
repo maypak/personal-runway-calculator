@@ -63,17 +63,24 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = (key: string, params?: Record<string, string | number>): string => {
     // Support namespace:key.subkey format (e.g., "auth:hero.title")
+    // Also auto-detect namespace if first segment matches a known namespace (e.g., "onboarding.situation.title")
     const [namespaceOrKey, ...restKeys] = key.split(':');
     let namespace = 'common';
     let keys: string[] = [];
     
     if (restKeys.length > 0) {
-      // Has namespace prefix
+      // Has explicit namespace prefix (e.g., "auth:hero.title")
       namespace = namespaceOrKey;
       keys = restKeys[0].split('.');
     } else {
-      // No namespace, treat first part as key
-      keys = namespaceOrKey.split('.');
+      // Auto-detect namespace from first dot-segment
+      const dotParts = namespaceOrKey.split('.');
+      if (dotParts.length > 1 && NAMESPACES.includes(dotParts[0])) {
+        namespace = dotParts[0];
+        keys = dotParts.slice(1);
+      } else {
+        keys = dotParts;
+      }
     }
     
     // Navigate through the message object
