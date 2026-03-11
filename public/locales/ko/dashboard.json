@@ -197,5 +197,24 @@
   "privacy": {
     "privacyTitle": "100% 로컬 저장",
     "privacyDesc": "모든 데이터는 브라우저에만 저장됩니다. 서버 업로드 없음."
+  },
+  "addScenario": {
+    "title": "새 시나리오 추가",
+    "close": "닫기",
+    "name": "시나리오 이름",
+    "namePlaceholder": "예: 브릿지 펀딩",
+    "type": "유형",
+    "balanceIncrease": "자산 증가",
+    "balanceIncreaseDesc": "펀딩, 상여금 등",
+    "expenseAdjustment": "지출 변경",
+    "expenseAdjustmentDesc": "절약, 증가 등",
+    "amount": "금액 (원)",
+    "percent": "변경률 (%)",
+    "amountHint": "예: 10,000,000 = 천만원",
+    "percentHint": "양수: 지출 증가 | 음수: 지출 감소 (절약)",
+    "icon": "아이콘",
+    "cancel": "취소",
+    "add": "추가하기",
+    "validation": "이름과 금액을 입력해주세요"
   }
 }

@@ -197,5 +197,24 @@
   "privacy": {
     "privacyTitle": "100% Local Storage",
     "privacyDesc": "All data stays in your browser. Nothing is uploaded to a server."
+  },
+  "addScenario": {
+    "title": "Add New Scenario",
+    "close": "Close",
+    "name": "Scenario Name",
+    "namePlaceholder": "e.g. Bridge Funding",
+    "type": "Type",
+    "balanceIncrease": "Asset Increase",
+    "balanceIncreaseDesc": "Funding, bonus, etc.",
+    "expenseAdjustment": "Expense Change",
+    "expenseAdjustmentDesc": "Save more or spend more",
+    "amount": "Amount (₩)",
+    "percent": "Change Rate (%)",
+    "amountHint": "e.g. 10,000,000 = ₩10M",
+    "percentHint": "Positive: more spending | Negative: savings",
+    "icon": "Icon",
+    "cancel": "Cancel",
+    "add": "Add",
+    "validation": "Please enter a name and amount"
   }
 }
